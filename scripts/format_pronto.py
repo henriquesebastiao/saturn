@@ -8,7 +8,7 @@ def process_file(input_file):
         for line in infile:
             numbers = line.strip().split()
             for number in numbers:
-                outfile.write(f"{number},\n")
+                outfile.write(f"0x{number},\n")
 
     print(f"The formatted text was written to {output_file}")
 

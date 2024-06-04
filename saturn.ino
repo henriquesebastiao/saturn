@@ -269,7 +269,8 @@ void irTvMenuLoop() {
       isSwitching = true;
       currentProc = 4;
     } else if (irTvMenu[cursor].command == 7) {
-      sendIrRawCode(irPowerCodesRawPanasonic58JX800Series);
+      sendIrRawCodes();
+      sendIrProntoCodes();
     }
   }
 }
@@ -328,23 +329,61 @@ void dimTimer(){
   screen_dim_current = uptime() + screen_dim_time + 2;
 }
 
-void sendIrRawCode(uint16_t rawData[]) {
-  int size = sizeof(rawData) / sizeof(uint16_t);
+void sendIrRawCodes() {
+  int size_all_codes = sizeof(allIrPowerCodesRaw) / sizeof(uint16_t*);
+  Serial.println("\nSize of all codes: " + String(size_all_codes));
   bool endingEarly = false;
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size_all_codes; i++) {
+    int size = allIrPowerCodesRawLength[i];
     DISPLAY.fillScreen(BG_COLOR);
     DISPLAY.setTextSize(LARGE_TEXT);
-    DISPLAY.setCursor(0, 0);
-    DISPLAY.println("Power");
-    irsend.sendRaw(rawData, size, 38);
-    delay(40);
-    digitalWrite(IR_SEND_PIN, HIGH);
-    if (checkSelectPress()){
-      Serial.println("STOPPING PREMATURELY");
-      endingEarly = true;
-      break;
-      currentProc = 5;
+    DISPLAY.drawString("POWER", DISPLAY_CENTER_X, 50);
+    DISPLAY.setTextSize(MEDIUM_TEXT);
+    DISPLAY.drawString("<- p/ voltar", DISPLAY_CENTER_X, 80);
+    irsend.sendRaw(allIrPowerCodesRaw[i], size, 38);
+    Serial.println("\nSize of IR code: " + String(size));
+    Serial.println("Sent IR codes:");
+    for (int j = 0; j < size; j++) {
+      Serial.print(allIrPowerCodesRaw[i][j]);
+      Serial.print(", ");
     }
+    delay(40);
+  }
+  digitalWrite(IR_SEND_PIN, HIGH);
+  delay(1000);
+  if (checkSelectPress()){
+    Serial.println("STOPPING PREMATURELY");
+    endingEarly = true;
+    currentProc = 5;
+  }
+}
+
+void sendIrProntoCodes() {
+  int size_all_codes = sizeof(allIrPowerCodesPronto) / sizeof(uint16_t*);
+  Serial.println("\nSize of all codes: " + String(size_all_codes));
+  bool endingEarly = false;
+  for (int i = 0; i < size_all_codes; i++) {
+    int size = allIrPowerCodesProntoLength[i];
+    DISPLAY.fillScreen(BG_COLOR);
+    DISPLAY.setTextSize(LARGE_TEXT);
+    DISPLAY.drawString("POWER", DISPLAY_CENTER_X, 50);
+    DISPLAY.setTextSize(MEDIUM_TEXT);
+    DISPLAY.drawString("<- p/ voltar", DISPLAY_CENTER_X, 80);
+    irsend.sendPronto(allIrPowerCodesPronto[i], size);
+    Serial.println("\nSize of IR code: " + String(size));
+    Serial.println("Sent IR codes:");
+    for (int j = 0; j < size; j++) {
+      Serial.print(allIrPowerCodesPronto[i][j]);
+      Serial.print(", ");
+    }
+    delay(40);
+  }
+  digitalWrite(IR_SEND_PIN, HIGH);
+  delay(1000);
+  if (checkSelectPress()){
+    Serial.println("STOPPING PREMATURELY");
+    endingEarly = true;
+    currentProc = 5;
   }
 }
 
@@ -368,6 +407,15 @@ void setup() {
   DISPLAY.drawString("Cardputer", DISPLAY_CENTER_X, 75);
   DISPLAY.setTextSize(SMALL_TEXT);
   DISPLAY.drawString(SATURN_VERSION, DISPLAY_CENTER_X, 95);
+
+  Serial.println("\nSaturn " + String(SATURN_VERSION) + " started");
+  Serial.println("Hello, world!");
+  Serial.println("IR Send Pin: " + String(IR_SEND_PIN));
+  #if defined(LANGUAGE_EN_US)
+    Serial.println("Language: English (US)");
+  #else
+    Serial.println("Language: Portuguese (BR)");
+  #endif
 
   // Beep on boot, similar to Mikrotik boot sound
   #if defined(SOUND)

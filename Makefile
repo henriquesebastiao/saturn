@@ -18,9 +18,21 @@ monitor:
 format-raw:
 	python scripts/format_raw.py -f dev/input.txt
 
+format-pronto:
+	python scripts/format_pronto.py -f dev/input.txt
+
+format-ir:
+	./scripts/format_ir.sh
+
+black:
+	black .
+
 .PHONY: html-lint
 .PHONY: upload
 .PHONY: compile
 .PHONY: merge
 .PHONY: monitor
 .PHONY: format-raw
+.PHONY: format-pronto
+.PHONY: format-ir
+.PHONY: black
