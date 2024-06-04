@@ -144,7 +144,7 @@ void switcherButtonProc() {
 }
 
 void checkMenuPress() {
-  if (M5Cardputer.Keyboard.isKeyPressed(',') || M5Cardputer.Keyboard.isKeyPressed('`')){
+  if (M5Cardputer.Keyboard.isKeyPressed('`')) {  // Return to the main menu by pressing ESC
     dimTimer();
     if (portalActive) {
       portalActive = false;
@@ -152,6 +152,19 @@ void checkMenuPress() {
     isSwitching = true;
     rstOverride = false;
     currentProc = 1;
+  } else if (M5Cardputer.Keyboard.isKeyPressed(',')) {  // Return to the previous menu by pressing ,
+    dimTimer();
+    if (portalActive) {
+      portalActive = false;
+    }
+    isSwitching = true;
+    rstOverride = false;
+
+    if (currentProc == 5) {
+      currentProc = 4;
+    } else {
+      currentProc = 1;
+    }
     delay(100);
   }
 }
