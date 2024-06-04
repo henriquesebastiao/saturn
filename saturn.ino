@@ -1,5 +1,5 @@
 // Saturn Firmware for the M5 Stack Cardputer
-// Created by: Henrique Sebastião
+// By: Henrique Sebastião (contato@henriquesebastiao.com)
 // https://github.com/henriquesebastiao/saturn
 
 // This code contains a lot of logic borrowed from https://github.com/n0xa/m5stick-nemo
@@ -24,7 +24,6 @@ struct QrCode {
   String url;
 };
 
-// Main Menu
 Menu mainMenu[] = {
   {TXT_IR, 4},
   {"QR Codes", 2},
@@ -39,15 +38,22 @@ Menu irDevicesMenu[] = {
 int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
 
 Menu irTvMenu[] = {
-  {TXT_POWER, 7},
-  {"Vol +", 8},  // TODO
-  {"Vol -", 9},  // TODO
-  {TXT_MUTE, 10},  // TODO
+  {"Power", 7},
+  {TXT_MUTE, 10},
+  {"Volume +", 8},
+  {"Volume -", 9},
+  {"Menu", 18},
+  {TXT_CHANNEL_UP, 11},
+  {TXT_CHANNEL_DOWN, 12},
+  {TXT_UP, 13},
+  {TXT_DOWN, 14},
+  {TXT_LEFT, 15},
+  {TXT_RIGHT, 16},
+  {"Enter", 17},
   {TXT_BACK, 0},
 };
 int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
 
-// QR Codes Menu
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
   {TXT_INTERSTELLAR, "https://youtu.be/JuSsvM8B4Jc"},
@@ -58,6 +64,13 @@ QrCode qrMenu[] = {
   {TXT_BACK, ""},
 };
 int qrMenuSize = sizeof(qrMenu) / sizeof(QrCode);
+
+Menu settingsMenu[] = {
+  {TXT_BATTERY_INFO, 19},
+  {TXT_BACK, 0},
+};
+
+// -=-=-= FUNCTIONS OF DRAWING MENUS =-=-=-
 
 void drawMenu(Menu thisMenu[], int size) {
   DISPLAY.fillScreen(BG_COLOR);
@@ -197,6 +210,8 @@ bool checkSelectPress() {
   return false;
 }
 
+// -=-=-= MENU FUNCTIONS =-=-=-
+
 void mainMenuSetup() {
   cursor = 0;
   rstOverride = true;
@@ -268,9 +283,32 @@ void irTvMenuLoop() {
     if (irTvMenu[cursor].command == 0) {
       isSwitching = true;
       currentProc = 4;
-    } else if (irTvMenu[cursor].command == 7) {
-      sendIrRawCodes();
-      sendIrProntoCodes();
+    } else if (irTvMenu[cursor].command == 7) {  // Power
+      // sendIrRawCodes(allIrPowerCodesRawTV, allIrPowerCodesRawTVLength, "POWER");
+      sendIrProntoCodes(allIrPowerCodesProntoTV, allIrPowerCodesProntoTVLength, "POWER");
+    } else if (irTvMenu[cursor].command == 10) {  // Mute
+      // sendIrRawCodes(allIrMuteCodesRawTV, allIrMuteCodesRawTVLength, TXT_MUTE_TXT_UP);
+      sendIrProntoCodes(allIrMuteCodesProntoTV, allIrMuteCodesProntoTVLength, TXT_MUTE_TXT_UPPER);
+    } else if (irTvMenu[cursor].command == 8) {  // Volume +
+      sendIrProntoCodes(allIrVolumeUpCodesProntoTV, allIrVolumeUpCodesProntoTVLength, "VOL +");
+    } else if (irTvMenu[cursor].command == 9) {  // Volume -
+      sendIrProntoCodes(allIrVolumeDownCodesProntoTV, allIrVolumeDownCodesProntoTVLength, "VOL -");
+    } else if (irTvMenu[cursor].command == 11) {  // Channel +
+      sendIrProntoCodes(allIrChannelUpCodesProntoTV, allIrChannelUpCodesProntoTVLength, TXT_CHANNEL_UP_UPPER);
+    } else if (irTvMenu[cursor].command == 12) {  // Channel -
+      sendIrProntoCodes(allIrChannelDownCodesProntoTV, allIrChannelDownCodesProntoTVLength, TXT_CHANNEL_DOWN_UPPER);
+    } else if (irTvMenu[cursor].command == 13) {  // Up
+      sendIrProntoCodes(allIrUpCodesProntoTV, allIrUpCodesProntoTVLength, TXT_UP_UPPER);
+    } else if (irTvMenu[cursor].command == 14) {  // Down
+      sendIrProntoCodes(allIrDownCodesProntoTV, allIrDownCodesProntoTVLength, TXT_DOWN_UPPER);
+    } else if (irTvMenu[cursor].command == 15) {  // Left
+      sendIrProntoCodes(allIrLeftCodesProntoTV, allIrLeftCodesProntoTVLength, TXT_LEFT_UPPER);
+    } else if (irTvMenu[cursor].command == 16) {  // Right
+      sendIrProntoCodes(allIrRightCodesProntoTV, allIrRightCodesProntoTVLength, TXT_RIGHT_UPPER);
+    } else if (irTvMenu[cursor].command == 17) {  // Enter
+      sendIrProntoCodes(allIrEnterCodesProntoTV, allIrEnterCodesProntoTVLength, "ENTER");
+    } else if (irTvMenu[cursor].command == 18) {  // Menu
+      sendIrProntoCodes(allIrMenuCodesProntoTV, allIrMenuCodesProntoTVLength, "MENU");
     }
   }
 }
@@ -290,7 +328,7 @@ void qrMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    if (qrMenu[cursor].url.length() < 1){  // TODO
+    if (qrMenu[cursor].url.length() < 1){
       currentProc = 1;
       isSwitching = true;
     }else if ( activeQR == false ) {
@@ -329,22 +367,28 @@ void dimTimer(){
   screen_dim_current = uptime() + screen_dim_time + 2;
 }
 
-void sendIrRawCodes() {
-  int size_all_codes = sizeof(allIrPowerCodesRaw) / sizeof(uint16_t*);
+// -=-=-= IR FUNCTIONS =-=-=-
+
+void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
+  int size_all_codes = sizeof(codes) / sizeof(uint16_t*);
+
   Serial.println("\nSize of all codes: " + String(size_all_codes));
   bool endingEarly = false;
+
   for (int i = 0; i < size_all_codes; i++) {
-    int size = allIrPowerCodesRawLength[i];
+    int size = sizes[i];
     DISPLAY.fillScreen(BG_COLOR);
     DISPLAY.setTextSize(LARGE_TEXT);
-    DISPLAY.drawString("POWER", DISPLAY_CENTER_X, 50);
+    DISPLAY.drawString(name, DISPLAY_CENTER_X, 50);
     DISPLAY.setTextSize(MEDIUM_TEXT);
     DISPLAY.drawString("<- p/ voltar", DISPLAY_CENTER_X, 80);
-    irsend.sendRaw(allIrPowerCodesRaw[i], size, 38);
+
+    irsend.sendRaw(codes[i], size, 38);
+
     Serial.println("\nSize of IR code: " + String(size));
     Serial.println("Sent IR codes:");
     for (int j = 0; j < size; j++) {
-      Serial.print(allIrPowerCodesRaw[i][j]);
+      Serial.print(codes[i][j]);
       Serial.print(", ");
     }
     delay(40);
@@ -358,22 +402,26 @@ void sendIrRawCodes() {
   }
 }
 
-void sendIrProntoCodes() {
-  int size_all_codes = sizeof(allIrPowerCodesPronto) / sizeof(uint16_t*);
+void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
+  int size_all_codes = sizeof(codes) / sizeof(uint16_t*);
+
   Serial.println("\nSize of all codes: " + String(size_all_codes));
   bool endingEarly = false;
+  
   for (int i = 0; i < size_all_codes; i++) {
-    int size = allIrPowerCodesProntoLength[i];
+    int size = sizes[i];
     DISPLAY.fillScreen(BG_COLOR);
     DISPLAY.setTextSize(LARGE_TEXT);
-    DISPLAY.drawString("POWER", DISPLAY_CENTER_X, 50);
+    DISPLAY.drawString(name, DISPLAY_CENTER_X, 50);
     DISPLAY.setTextSize(MEDIUM_TEXT);
     DISPLAY.drawString("<- p/ voltar", DISPLAY_CENTER_X, 80);
-    irsend.sendPronto(allIrPowerCodesPronto[i], size);
+
+    irsend.sendPronto(codes[i], size);
+
     Serial.println("\nSize of IR code: " + String(size));
     Serial.println("Sent IR codes:");
     for (int j = 0; j < size; j++) {
-      Serial.print(allIrPowerCodesPronto[i][j]);
+      Serial.print(codes[i][j]);
       Serial.print(", ");
     }
     delay(40);
@@ -386,6 +434,109 @@ void sendIrProntoCodes() {
     currentProc = 5;
   }
 }
+
+void settingsMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(settingsMenu, sizeof(settingsMenu) / sizeof(Menu));
+  delay(500);
+}
+
+void settingsMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % (sizeof(settingsMenu) / sizeof(Menu));
+    drawMenu(settingsMenu, sizeof(settingsMenu) / sizeof(Menu));
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    if (settingsMenu[cursor].command == 19) {
+      isSwitching = true;
+      currentProc = 19;
+    } else if (settingsMenu[cursor].command == 0) {
+      isSwitching = true;
+      currentProc = 1;
+    }
+  }
+}
+
+// -=-=-= BATTERY INFO =-=-=-
+
+uint8_t oldBattery = 0;
+
+void batteryDrawMenu(uint8_t battery) {
+  // Battery bar color based on percentage
+  uint16_t batteryBarColor = MAIN_COLOR;
+  if(battery < 20) {
+    batteryBarColor = RED;
+  } else if(battery < 60) {
+    batteryBarColor = ORANGE;
+  } else {
+    batteryBarColor = MAIN_COLOR;
+  }
+  // Draw battery bar
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.drawRect(10, 10, 220, 100, batteryBarColor);
+  DISPLAY.fillRect(10, 10, (220 * battery / 100), 100, batteryBarColor);
+
+  // Battery percentage
+  DISPLAY.setTextColor(BLACK);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.setCursor(90, 60, 1);
+  DISPLAY.print(battery);
+  DISPLAY.println("%");
+
+  // Exit text
+  DISPLAY.setCursor(10, 120, 1);
+  DISPLAY.setTextColor(WHITE);
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.println(TXT_EXIT);
+  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+}
+
+int getBatteryVoltage() {
+    return M5.Power.getBatteryLevel();
+  }
+
+void batterySetup() {
+  rstOverride = false;
+  pinMode(VBAT_PIN, INPUT);
+  uint8_t battery = ((((analogRead(VBAT_PIN)) - 1842) * 100) / 738);
+  batteryDrawMenu(battery);
+  delay(500); // Prevent switching after menu loads up
+  /*
+    Used minimum 3,0V and maximum 4,2V for battery. So it may show wrong values. Needs testing.
+    It only shows decent values when disconnected from charger, due to HW limitations.
+    Equation: Bat% = ((Vadc - 1842) / (2580 - 1842)) * 100. Where: 4,2V = 2580, 3,0V = 1842.
+  */
+}
+
+void batteryLoop() {
+  // Read 30 battery values to calculate the average (avoiding unprecise and close values)
+  uint16_t batteryValues = 0;
+  for(uint8_t i = 0; i < 30; i++) { // 30 iterations X 100ms = 3 seconds for each refresh
+    delay(100);
+    batteryValues += ((((analogRead(VBAT_PIN)) - 1842) * 100) / 738);
+    M5Cardputer.update();
+    if(M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) { // If any key is pressed
+      rstOverride = false;
+      isSwitching = true;
+      currentProc = 1;
+      break;
+    }
+  }
+
+  if(!isSwitching) { // If is not switching, calculate battery average
+    uint8_t battery = batteryValues / 30; // Iteration times
+    Serial.printf("Battery Level: %d\n", battery);
+    if(battery != oldBattery) { // Only draw a new screen if value is different
+      oldBattery = battery;
+      batteryDrawMenu(battery);
+    }
+  }
+}
+
+// -=-=-= SETUP AND LOOP =-=-=-
 
 void setup() {
   auto cfg = M5.config();
@@ -451,13 +602,16 @@ void loop() {
         qrMenuSetup();
         break;
       case 3:
-        // settingsMenuSetup(); // TODO
+        settingsMenuSetup();
         break;
       case 4:
         irDevicesMenuSetup();
         break;
       case 5:
         irTvMenuSetup();
+        break;
+      case 19:
+        batterySetup();
         break;
     }
   }
@@ -470,13 +624,16 @@ void loop() {
       qrMenuLoop();
       break;
     case 3:
-      // settingsMenuLoop(); // TODO
+      settingsMenuLoop();
       break;
     case 4:
       irDevicesMenuLoop();
       break;
     case 5:
       irTvMenuLoop();
+      break;
+    case 19:
+      batteryLoop();
       break;
   }
 }

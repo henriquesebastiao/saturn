@@ -12,7 +12,7 @@
 #define HEIGHT_MENU_ITEMS 4  // Height of the menu items
 
 // Interactions
-#define SOUND
+//#define SOUND
 
 // Languages
 //#define LANGUAGE_EN_US
@@ -27,6 +27,9 @@
 #define IR_SEND_PIN 44
 #define IR_REPEAT 3
 #define ACTIVE_LOW_IR
+
+// Battery Settings
+#define VBAT_PIN 10
 
 int cursor = 0;
 bool rstOverride = false;
