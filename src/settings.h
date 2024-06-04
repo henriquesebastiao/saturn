@@ -1,5 +1,5 @@
 // Info
-#define SATURN_VERSION "1.0.0"
+#define SATURN_VERSION "dev"
 
 // Style
 #define MAIN_COLOR CYAN
