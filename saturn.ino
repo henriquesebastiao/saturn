@@ -21,10 +21,26 @@ struct QrCode {
 
 // Main Menu
 Menu mainMenu[] = {
+  {TXT_IR, 4},
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
 int mainMenuSize = sizeof(mainMenu) / sizeof(Menu);
+
+Menu irDevicesMenu[] = {
+  {"TV", 5},
+  {TXT_BACK, 0},
+};
+int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
+
+Menu irTvMenu[] = {
+  {TXT_POWER, 7},  // TODO
+  {"Vol +", 8},  // TODO
+  {"Vol -", 9},  // TODO
+  {TXT_MUTE, 10},  // TODO
+  {TXT_BACK, 0},
+};
+int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
 
 // QR Codes Menu
 QrCode qrMenu[] = {
@@ -184,6 +200,53 @@ void mainMenuLoop() {
   }
 }
 
+void irDevicesMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(irDevicesMenu, irDevicesMenuSize);
+  delay(500);
+}
+
+void irDevicesMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % irDevicesMenuSize;
+    drawMenu(irDevicesMenu, irDevicesMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    if (irDevicesMenu[cursor].command == 0) {
+      isSwitching = true;
+      currentProc = 1;
+    } else if (irDevicesMenu[cursor].command == 5) {
+      isSwitching = true;
+      currentProc = 5;
+    }
+  }
+}
+
+void irTvMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(irTvMenu, irTvMenuSize);
+  delay(500);
+}
+
+void irTvMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % irTvMenuSize;
+    drawMenu(irTvMenu, irTvMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    if (irTvMenu[cursor].command == 0) {
+      isSwitching = true;
+      currentProc = 4;
+    }    
+  }
+}
+
 void qrMenuSetup() {
   cursor = 0;
   rstOverride = true;
@@ -199,7 +262,7 @@ void qrMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    if (qrMenu[cursor].url.length() < 1){
+    if (qrMenu[cursor].url.length() < 1){  // TODO
       currentProc = 1;
       isSwitching = true;
     }else if ( activeQR == false ) {
@@ -247,20 +310,31 @@ void setup() {
   // Boot screen
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextColor(MAIN_COLOR);
-  DISPLAY.setTextSize(4);
+  DISPLAY.setTextSize(LARGE_TEXT);
   DISPLAY.drawString("Saturn", DISPLAY_CENTER_X, 45);
-  DISPLAY.setTextSize(2);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
   DISPLAY.drawString("Cardputer", DISPLAY_CENTER_X, 75);
-  DISPLAY.setTextSize(1);
-  DISPLAY.drawString("v1.0.0", DISPLAY_CENTER_X, 95);
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.drawString(SATURN_VERSION, DISPLAY_CENTER_X, 95);
 
   // Beep on boot, similar to Mikrotik boot sound
-  delay(500);
-  M5Cardputer.Speaker.tone(5050, 90);
-  delay(220);
-  M5Cardputer.Speaker.tone(5050, 90);
-  delay(500);
+  #if defined(SOUND)
+    delay(500);
+    M5Cardputer.Speaker.tone(5050, 90);
+    delay(220);
+    M5Cardputer.Speaker.tone(5050, 90);
+    delay(500);
+  #else
+    delay(1400);  // Silence Mode
+  #endif
 }
+
+// Proccesses
+// 1 - Main Menu
+// 2 - QR Codes
+// 3 - Settings
+// 4 - IR Devices
+// 5 - IR TV
 
 void loop() {
   // Background processes
@@ -272,10 +346,18 @@ void loop() {
     switch (currentProc) {
       case 1:
         mainMenuSetup();
-        // currentProc = 2;
         break;
       case 2:
         qrMenuSetup();
+        break;
+      case 3:
+        // settingsMenuSetup(); // TODO
+        break;
+      case 4:
+        irDevicesMenuSetup();
+        break;
+      case 5:
+        irTvMenuSetup();
         break;
     }
   }
@@ -286,6 +368,15 @@ void loop() {
       break;
     case 2:
       qrMenuLoop();
+      break;
+    case 3:
+      // settingsMenuLoop(); // TODO
+      break;
+    case 4:
+      irDevicesMenuLoop();
+      break;
+    case 5:
+      irTvMenuLoop();
       break;
   }
 }
