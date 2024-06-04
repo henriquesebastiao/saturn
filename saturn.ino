@@ -5,9 +5,14 @@
 // This code contains a lot of logic borrowed from https://github.com/n0xa/m5stick-nemo
 
 #include <M5Cardputer.h>
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
 
 #include "src/settings.h"
 #include "src/language.h"
+#include "src/infrared.h"
+
+IRsend irsend(IR_SEND_PIN);
 
 struct Menu {
   char name[20];
@@ -34,7 +39,7 @@ Menu irDevicesMenu[] = {
 int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
 
 Menu irTvMenu[] = {
-  {TXT_POWER, 7},  // TODO
+  {TXT_POWER, 7},
   {"Vol +", 8},  // TODO
   {"Vol -", 9},  // TODO
   {TXT_MUTE, 10},  // TODO
@@ -241,6 +246,13 @@ void irDevicesMenuLoop() {
 void irTvMenuSetup() {
   cursor = 0;
   rstOverride = true;
+
+  #if defined(IR_SEND_PIN)
+    irsend.begin();
+  #endif
+  // Hack: Set IRLED high to turn it off after setup. Otherwise it stays on (active low)
+  digitalWrite(IR_SEND_PIN, HIGH);
+
   drawMenu(irTvMenu, irTvMenuSize);
   delay(500);
 }
@@ -256,7 +268,9 @@ void irTvMenuLoop() {
     if (irTvMenu[cursor].command == 0) {
       isSwitching = true;
       currentProc = 4;
-    }    
+    } else if (irTvMenu[cursor].command == 7) {
+      sendIrRawCode(irPowerCodesRawPanasonic58JX800Series);
+    }
   }
 }
 
@@ -314,11 +328,36 @@ void dimTimer(){
   screen_dim_current = uptime() + screen_dim_time + 2;
 }
 
+void sendIrRawCode(uint16_t rawData[]) {
+  int size = sizeof(rawData) / sizeof(uint16_t);
+  bool endingEarly = false;
+  for (int i = 0; i < size; i++) {
+    DISPLAY.fillScreen(BG_COLOR);
+    DISPLAY.setTextSize(LARGE_TEXT);
+    DISPLAY.setCursor(0, 0);
+    DISPLAY.println("Power");
+    irsend.sendRaw(rawData, size, 38);
+    delay(40);
+    digitalWrite(IR_SEND_PIN, HIGH);
+    if (checkSelectPress()){
+      Serial.println("STOPPING PREMATURELY");
+      endingEarly = true;
+      break;
+      currentProc = 5;
+    }
+  }
+}
+
 void setup() {
   auto cfg = M5.config();
   M5Cardputer.begin(cfg);
   M5Cardputer.Display.setRotation(1);
   DISPLAY.setTextDatum(middle_center);
+
+  #if defined(IR_SEND_PIN)
+    pinMode(IR_SEND_PIN, OUTPUT);
+    digitalWrite(IR_SEND_PIN, HIGH);
+  #endif
   
   // Boot screen
   DISPLAY.fillScreen(BG_COLOR);

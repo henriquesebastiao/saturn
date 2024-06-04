@@ -4,3 +4,6 @@
 
 # Build files
 build/
+
+# Development
+dev/

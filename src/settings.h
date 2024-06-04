@@ -22,7 +22,11 @@
 #define DISPLAY M5Cardputer.Display
 #define BACKLIGHT 38
 #define MINBRIGHT 165
-#define IRLED 44
+
+// IR Settings
+#define IR_SEND_PIN 44
+#define IR_REPEAT 3
+#define ACTIVE_LOW_IR
 
 int cursor = 0;
 bool rstOverride = false;

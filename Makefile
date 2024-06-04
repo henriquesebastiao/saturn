@@ -15,8 +15,12 @@ merge:
 monitor:
 	arduino-cli monitor --port $(PORT)
 
+format-raw:
+	python scripts/format_raw.py -f dev/input.txt
+
 .PHONY: html-lint
 .PHONY: upload
 .PHONY: compile
 .PHONY: merge
 .PHONY: monitor
+.PHONY: format-raw
