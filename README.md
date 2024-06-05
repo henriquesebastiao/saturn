@@ -9,7 +9,7 @@ Saturn aims to be a simple and functional firmware that implements several funct
 
 This project is still in its initial phase and is being developed for my own learning, therefore, it may not generate the expected result at some point. The code is still under development and may contain bugs and flaws. If you find something that doesn't seem to be working correctly, don't hesitate to open an issue reporting the error you experienced. I will do my best to help you.
 
-## Features present
+## Features
 
 ### Infrared
 
@@ -35,6 +35,14 @@ Implementation of the main remote control buttons for some types of devices.
 - `LEFT`
 - `RIGHT`
 - `ENTER`
+
+### Wi-Fi
+
+#### Beacon attack
+
+- Beacon funny SSIDs (en-US)
+- Beacon funny SSIDs (pt-BR)
+- Beacon random SSIDs
 
 ## How to install
 
