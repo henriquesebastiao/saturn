@@ -11,11 +11,12 @@
 #include "src/settings.h"
 #include "src/language.h"
 #include "src/infrared.h"
+#include "src/beacon.h"
 
 IRsend irsend(IR_SEND_PIN);
 
 struct Menu {
-  char name[20];
+  char name[25];
   int command;
 };
 
@@ -26,6 +27,7 @@ struct QrCode {
 
 Menu mainMenu[] = {
   {TXT_IR, 4},
+  {"Wi-Fi", 20},
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
@@ -53,6 +55,14 @@ Menu irTvMenu[] = {
   {TXT_BACK, 0},
 };
 int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
+
+Menu wifiMenu[] = {
+  {TXT_WIFI_BEACON_FUNNY, 1},
+  {TXT_WIFI_BEACON_FUNNY_BR, 2},
+  {TXT_BEACON_ATTACK_RND, 3},
+  {TXT_BACK, 0},
+};
+int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -313,6 +323,130 @@ void irTvMenuLoop() {
   }
 }
 
+// -=-=-= Wi-Fi MENU =-=-=-
+
+void wifiMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(wifiMenu, wifiMenuSize);
+  delay(500);
+}
+
+void wifiMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % wifiMenuSize;
+    drawMenu(wifiMenu, wifiMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    int option = wifiMenu[cursor].command;
+    rstOverride = false;
+    currentProc = 21;
+    isSwitching = true;
+    switch(option) {
+      case 0:
+        currentProc = 1;
+        break;
+      case 1:
+        beaconType = 1;
+        break;
+      case 2:
+        beaconType = 2;
+        break;
+      case 3:
+        beaconType = 3;
+        break;
+    }
+  }
+}
+
+// -=-=-= BEACON =-=-=-
+
+void wifiBeaconSetup() {
+  // Create empty SSID
+  for (int i = 0; i < 32; i++)
+    emptySSID[i] = ' ';
+  // For random generator
+  randomSeed(1);
+
+  // Set packetSize
+  packetSize = sizeof(beaconPacket);
+  if (wpa2) {
+    beaconPacket[34] = 0x31;
+  } else {
+    beaconPacket[34] = 0x21;
+    packetSize -= 26;
+  }
+
+  //change WiFi mode
+  WiFi.mode(WIFI_MODE_STA);
+
+  // set channel
+  esp_wifi_set_channel(channels[0], WIFI_SECOND_CHAN_NONE);
+
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.drawString(TXT_BEACON_ATTACK_1, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_BEACON_ATTACK_2, DISPLAY_CENTER_X, 80);
+  delay(1500);
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setCursor(0, 0);
+  DISPLAY.print(TXT_BEACON_ATTACK);
+
+  int ct = 0;
+  const char *str;
+  switch(beaconType) {
+  case 1:
+    for(str = funnySSIDs; *str; ++str) ct += *str == '\n';
+    DISPLAY.printf(" - %d SSIDs:\n", ct);
+    DISPLAY.print(funnySSIDs);
+    break;
+  case 2:
+    for(str = funnySSIDsBR; *str; ++str) ct += *str == '\n';
+    DISPLAY.printf(" - %d SSIDs:\n", ct);
+    DISPLAY.print(funnySSIDsBR);
+    break;
+  case 3:
+    DISPLAY.printf(TXT_RND_SSID, ct);
+    break;
+  }
+  DISPLAY.setTextSize(SMALL_TEXT);
+  currentProc = 21;
+}
+
+void wifiBeaconLoop() {
+  int i = 0;
+  int len = 0;
+  switch(beaconType) {
+    case 1:
+      len = sizeof(funnySSIDs);
+      while(i < len){
+        i++;
+      }
+      beaconSpamList(funnySSIDs);
+      break;
+    case 2:
+      len = sizeof(funnySSIDsBR);
+      while(i < len){
+        i++;
+      }
+      beaconSpamList(funnySSIDsBR);
+      break;
+    case 3:
+      char* randoms = randomSSID();
+      len = sizeof(randoms);
+      while(i < len){
+        i++;
+      }
+      beaconSpamList(randoms);
+      break;
+  }
+}
+
+// -=-=-= QR CODES =-=-=-
+
 void qrMenuSetup() {
   cursor = 0;
   rstOverride = true;
@@ -407,7 +541,7 @@ void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
 
   Serial.println("\nSize of all codes: " + String(size_all_codes));
   bool endingEarly = false;
-  
+
   for (int i = 0; i < size_all_codes; i++) {
     int size = sizes[i];
     DISPLAY.fillScreen(BG_COLOR);
@@ -586,6 +720,7 @@ void setup() {
 // 3 - Settings
 // 4 - IR Devices
 // 5 - IR TV
+// 23 - Wi-Fi Beacon
 
 void loop() {
   // Background processes
@@ -613,6 +748,12 @@ void loop() {
       case 19:
         batterySetup();
         break;
+      case 20:
+        wifiMenuSetup();
+        break;
+      case 21:
+        wifiBeaconSetup();
+        break;
     }
   }
 
@@ -634,6 +775,12 @@ void loop() {
       break;
     case 19:
       batteryLoop();
+      break;
+    case 20:
+      wifiMenuLoop();
+      break;
+    case 21:
+      wifiBeaconLoop();
       break;
   }
 }

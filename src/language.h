@@ -21,6 +21,13 @@
     #define TXT_BATTERY_INFO "Battery Info"
     #define TXT_BATTERY "Battery: "
     #define TXT_EXIT "Press any key to exit"
+    #define TXT_WIFI_BEACON_FUNNY "Beacon Funny"
+    #define TXT_WIFI_BEACON_FUNNY_BR "Beacon Funny (BR)"
+    #define TXT_BEACON_ATTACK "Beacon Attack"
+    #define TXT_BEACON_ATTACK_1 "Beacon"
+    #define TXT_BEACON_ATTACK_2 "Attack"
+    #define TXT_RND_SSID " - Random SSIDs\n"
+    #define TXT_BEACON_ATTACK_RND "Beacon Random"
 #endif
 
 #if defined(LANGUAGE_PT_BR)
@@ -46,4 +53,11 @@
     #define TXT_BATTERY_INFO "Status da Bateria"
     #define TXT_BATTERY "Bateria: "
     #define TXT_EXIT "Pressione qualquer tecla para sair"
+    #define TXT_WIFI_BEACON_FUNNY "Beacon Engracado"
+    #define TXT_WIFI_BEACON_FUNNY_BR "Beacon Eng. (BR)"
+    #define TXT_BEACON_ATTACK "Beacon Ataque"
+    #define TXT_BEACON_ATTACK_1 "Ataque"
+    #define TXT_BEACON_ATTACK_2 "Beacon"
+    #define TXT_RND_SSID " - Random SSIDs\n"
+    #define TXT_BEACON_ATTACK_RND "Beacon Aleatorio"
 #endif
