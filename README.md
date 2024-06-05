@@ -1,6 +1,6 @@
 # Saturn
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
 [![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
 
 Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
