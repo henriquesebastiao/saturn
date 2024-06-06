@@ -1,3 +1,7 @@
+// Settings
+#define CARDPUTER
+#define SDCARD
+
 // Info
 #define SATURN_VERSION "dev"
 
@@ -12,7 +16,7 @@
 #define HEIGHT_MENU_ITEMS 4  // Height of the menu items
 
 // Interactions
-//#define SOUND
+#define SOUND
 
 // Languages
 //#define LANGUAGE_EN_US
@@ -31,10 +35,28 @@
 // Battery Settings
 #define VBAT_PIN 10
 
+// SD Card Settings
+#define SD_CLK_PIN 40
+#define SD_MISO_PIN 39
+#define SD_MOSI_PIN 14
+#define SD_CS_PIN 12
+
+// DEAUTH Vars
+uint8_t channel;
+String apMac = String("");
+bool target_deauth_flg = false;
+bool target_deauth = false;
+int deauth_tick = 0;
+bool clone_flg = false;
+
 int cursor = 0;
+int wifict = 0;
 bool rstOverride = false;
 bool isSwitching = true;
 int currentProc = 1;
 bool portalActive = false;
+const byte PortalTickTimer = 1000;
 int brightness = 100;
 bool activeQR = false;
+wifi_ap_record_t ap_record;
+String apSsidName = String("");
