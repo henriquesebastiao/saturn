@@ -9,6 +9,7 @@
 // Manufacturers implemented:
 // - Samsung
 // - Philips
+// - Toshiba
 
 // Buttons implemented:
 // - Power

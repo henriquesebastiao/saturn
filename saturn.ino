@@ -593,12 +593,12 @@ void wifiScanResultLoop(){
       break;
     }
 
-    String channel = TXT_WIFI_CHANNEL + String(numberChannel) + " - " + frequency;
+    String channelInfo = TXT_WIFI_CHANNEL + String(numberChannel) + " - " + frequency;
     String crypt = TXT_WIFI_CRYPT + encryptType;
     String bssid = "MAC: " + WiFi.BSSIDstr(cursor);
     String signal = TXT_WIFI_SIGNAL + String(WiFi.RSSI(cursor)) + "dBm";
 
-    String infos[4] = {channel, crypt, bssid, signal};
+    String infos[4] = {channelInfo, crypt, bssid, signal};
 
     for (int i = 0; i < 4; i++) {
       DISPLAY.drawString(infos[i], DISPLAY_CENTER_X, y_info);
@@ -612,7 +612,6 @@ void wifiScanResultLoop(){
     DISPLAY.drawRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
     DISPLAY.drawString(TXT_HOLD_ATTACK, DISPLAY_CENTER_X, 120);
 
-    // DISPLAY.printf(" %-19s\n", TXT_HOLD_ATTACK);
     DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
    if(checkSelectPress()){
       apMac=WiFi.BSSIDstr(cursor);
@@ -677,7 +676,7 @@ void wifiAttackMenuLoop() {
         isSwitching = true;
         clone_flg=true;
         target_deauth_flg=false;
-        currentProc = 25;  // TODO -> PORTAL
+        currentProc = 25;
         break;
       case 1:
         rstOverride = false;
@@ -692,7 +691,7 @@ void wifiAttackMenuLoop() {
         clone_flg=true;
         target_deauth_flg=true;
         target_deauth=true;
-        currentProc = 25;
+        currentProc = 25;  // Combined TODO
         break;
       case 5:
         currentProc = 20;
@@ -701,24 +700,38 @@ void wifiAttackMenuLoop() {
   }
 }
 
+// -=-=-= DEAUTH =-=-=-
+
 void deauthSetup(){
   // Start the Access point service as Hidden
   WiFi.mode(WIFI_AP);
   WiFi.softAP(apSsidName, emptyString, channel, 1, 4, false);
   IPAddress apIP = WiFi.softAPIP();
 
+  Serial.printf("\nStart DEAUTH AP: %s\n", apSsidName.c_str());
+  Serial.printf("Channel: %d\n\n", channel);
 
   DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setCursor(0, 0);
-  DISPLAY.setTextSize(LARGE_TEXT);
-  DISPLAY.setTextColor(RED, BG_COLOR);
-  DISPLAY.println("Deauth Atk");
-  DISPLAY.setTextSize(SMALL_TEXT);
-  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
-  DISPLAY.print("\nSSID: " + apSsidName);
-  DISPLAY.print("\n");
-  DISPLAY.printf(TXT_WF_CHANN, channel);
-  DISPLAY.print("> " + apMac);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
+  DISPLAY.setTextColor(BG_COLOR);
+
+  DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, RED);
+  DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, RED);
+  DISPLAY.drawString(TXT_WIFI_DEAUTH, DISPLAY_CENTER_X, 20);
+
+
+  DISPLAY.setTextSize(1.5);
+  DISPLAY.setTextColor(MAIN_COLOR);
+  DISPLAY.drawString("SSID: " + apSsidName, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_WF_CHANN + String(channel), DISPLAY_CENTER_X, 65);
+  DISPLAY.drawString("MAC: " + apMac, DISPLAY_CENTER_X, 80);
+
+  DISPLAY.setTextSize(MEDIUM_TEXT);
+  DISPLAY.setTextColor(BLACK);
+  DISPLAY.fillRoundRect(5, 100, DISPLAY.width() - 10, 30, 10, RED);
+  DISPLAY.drawRoundRect(5, 100, DISPLAY.width() - 10, 30, 10, RED);
+  DISPLAY.drawString(TXT_DEAUTH_STOP, DISPLAY_CENTER_X, 115);
+
   memcpy(deauth_frame, deauth_frame_default, sizeof(deauth_frame_default));
   wsl_bypasser_send_deauth_frame(&ap_record, channel);
 
@@ -728,30 +741,8 @@ void deauthSetup(){
 }
 
 void deauthLoop(){
-  if (target_deauth == true) {
-    wsl_bypasser_send_raw_frame(deauth_frame, sizeof(deauth_frame_default));
-    DISPLAY.setTextSize(SMALL_TEXT);
-    DISPLAY.setTextColor(RED, BG_COLOR);
-    DISPLAY.setCursor(1, 115);
-    DISPLAY.println(TXT_DEAUTH_STOP);
-    DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
-  } else{
-    DISPLAY.setTextSize(SMALL_TEXT);
-    DISPLAY.setTextColor(RED, BG_COLOR);
-    DISPLAY.setCursor(1, 115);
-    DISPLAY.println(TXT_DEAUTH_START);
-    DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
-  }
-
+  wsl_bypasser_send_raw_frame(deauth_frame, sizeof(deauth_frame_default));  // Send deauth frame
   delay(100);
-
-  if (checkSelectPress()){
-    target_deauth = !target_deauth;
-    DISPLAY.setCursor(1, 115);
-    DISPLAY.println("......................");
-    delay(500);
-  }
-
   if (checkNextPress()){
     WiFi.mode(WIFI_MODE_STA);
     rstOverride = false;
@@ -796,9 +787,8 @@ void portalLoop(){
         DISPLAY.setTextSize(SMALL_TEXT);
         DISPLAY.setTextColor(RED, BG_COLOR);
         DISPLAY.setCursor(1, 115);
-        DISPLAY.println(TXT_DEAUTH_STOP);
         DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
-      } else{
+      } else {
         DISPLAY.setTextSize(SMALL_TEXT);
         DISPLAY.setTextColor(RED, BG_COLOR);
         DISPLAY.setCursor(1, 115);

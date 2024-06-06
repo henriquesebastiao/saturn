@@ -66,6 +66,7 @@ void wsl_bypasser_send_deauth_frame(const wifi_ap_record_t *ap_record, uint8_t c
     Serial.print(ap_record->bssid[j], HEX);
     if (j < 5) Serial.print(":");
     }
+    Serial.println("\n");
     esp_wifi_set_channel(chan, WIFI_SECOND_CHAN_NONE);
     delay(50);
     memcpy(&deauth_frame[10], ap_record->bssid, 6);
