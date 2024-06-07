@@ -50,7 +50,7 @@ Implementation of the main remote control buttons for some types of devices.
 
 - AppleJuice
 - Swift Pair
-- Androd Spam
+- Android Spam
 - SourApple Crash
 - BT Maelstrom
 
