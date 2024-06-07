@@ -20,6 +20,7 @@
 #include "src/sd.h"
 #include "src/portal.h"
 #include "src/applejuice.h"
+#include "src/sounds.h"
 
 IRsend irsend(IR_SEND_PIN);
 
@@ -39,6 +40,7 @@ Menu mainMenu[] = {
   {TXT_IR, 4},
   {"WiFi", 20},
   {"Bluetooth", 27},
+  {TXT_SOUNDS, 31},
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
@@ -128,6 +130,15 @@ Menu appleJuiceMenu[] = {
   {TXT_BACK, 0},
 };
 int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
+
+Menu soundMenu[] = {
+  {"Super Mario Bross", 1},
+  {TXT_IMPERIAL_MARCH_SOUND, 2},
+  {"Aha Take On Me", 3},
+  {"Jingle Bells", 4},
+  {TXT_BACK, 0},
+};
+int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -1358,6 +1369,46 @@ void bluetoothMaelstromLoop(){
   }
 }
 
+// -=-=-= SOUNDS =-=-=-
+
+void soundMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(soundMenu, soundMenuSize);
+  delay(500);
+}
+
+void soundMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % soundMenuSize;
+    drawMenu(soundMenu, soundMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    int option = soundMenu[cursor].command;
+    rstOverride = false;
+    isSwitching = true;
+    switch(option) {
+      case 0:
+        currentProc = 1;
+        break;
+      case 1:
+        superMarioBrossSound();
+        break;
+      case 2:
+        imperialMarchSound();
+        break;
+      case 3:
+        ahaTakeOnMeSound();
+        break;
+      case 4:
+        jingleBellsSound();
+        break;
+    }
+  }
+}
+
 // -=-=-= QR CODES =-=-=-
 
 void qrMenuSetup() {
@@ -1716,6 +1767,9 @@ void loop() {
       case 30:
         bluetoothMaelstromSetup();
         break;
+      case 31:
+        soundMenuSetup();
+        break;
     }
   }
 
@@ -1770,6 +1824,9 @@ void loop() {
       break;
     case 30:
       bluetoothMaelstromLoop();
+      break;
+    case 31:
+      soundMenuLoop();
       break;
   }
 }
