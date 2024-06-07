@@ -3,7 +3,7 @@
 #define SDCARD
 
 // Info
-#define SATURN_VERSION "dev"
+#define SATURN_VERSION "v1.0.0"
 
 // Style
 #define MAIN_COLOR CYAN
@@ -48,6 +48,14 @@ bool target_deauth_flg = false;
 bool target_deauth = false;
 int deauth_tick = 0;
 bool clone_flg = false;
+
+//BLUETOOTH Vars
+int advtime = 0;
+int ajDelay = 1000;
+bool sourApple = false;
+bool swiftPair = false;
+bool androidPair = false;
+bool maelstrom = false;
 
 int cursor = 0;
 int wifict = 0;

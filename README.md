@@ -17,9 +17,9 @@ Implementation of the main remote control buttons for some types of devices.
 
 #### Devices supported
 
-- TVs (Samsung, Philips)
+- TVs (Samsung, Philips, Toshiba)
 
-> Currently, tests have only been carried out on a Samsung TV.
+> Currently, tests have only been carried out on a Samsung TV. Contributions are welcome to add support for new manufacturers and devices.
 
 #### Buttons implemented
 
@@ -38,11 +38,21 @@ Implementation of the main remote control buttons for some types of devices.
 
 ### Wi-Fi
 
-#### Beacon attack
+- Beacon Attacks
+  - Funny SSIDs (en-US)
+  - Funny SSIDs (pt-BR)
+  - Random SSIDs
+- Deauth Attack
+- Portal Clone
+- Deauth + Portal Clone
 
-- Beacon funny SSIDs (en-US)
-- Beacon funny SSIDs (pt-BR)
-- Beacon random SSIDs
+### Bluetooth
+
+- AppleJuice
+- Swift Pair
+- Androd Spam
+- SourApple Crash
+- BT Maelstrom
 
 ## How to install
 

@@ -3,12 +3,12 @@
 // Retaining the Portuguese translations since this project has a large
 // fan base in Brazil. Shouts to CyberJulio as well.
 
-#define DEFAULT_AP_SSID_NAME "Free WiFi"
-#define SD_CREDS_PATH "/portal-creds.txt"
+#define DEFAULT_AP_SSID_NAME TXT_DEFAULT_AP_SSID_NAME
+#define SD_CREDS_PATH "/saturn-portal-creds.txt"
 
 
-#if defined(LANGUAGE_EN_US) && defined(LANGUAGE_PT_BR) && defined(LANGUAGE_IT_IT) && defined(LANGUAGE_FR_FR)
-#error "Please define only one language: LANGUAGE_EN_US, LANGUAGE_PT_BR, LANGUAGE_IT_IT or LANGUAGE_FR_FR"
+#if defined(LANGUAGE_EN_US) && defined(LANGUAGE_PT_BR)
+#error "Please define only one language: LANGUAGE_EN_US, LANGUAGE_PT_BR"
 #endif
 
 #if defined(LANGUAGE_EN_US)
@@ -272,15 +272,15 @@ void blinkLed() {
 #endif
 
 void shutdownWebServer() {
-  Serial.println("POARTAL -> Stopping DNS");
+  Serial.println("PORTAL -> Stopping DNS");
   dnsServer.stop();
-  Serial.println("POARTAL -> Closing Webserver");
+  Serial.println("PORTAL -> Closing Webserver");
   webServer.close();
-  Serial.println("POARTAL -> Stopping Webserver");
+  Serial.println("PORTAL -> Stopping Webserver");
   webServer.stop();
-  Serial.println("POARTAL -> Setting WiFi to STA mode");
+  Serial.println("PORTAL -> Setting WiFi to STA mode");
   WiFi.mode(WIFI_MODE_STA);
-  Serial.println("POARTAL -> Resetting SSID");
+  Serial.println("PORTAL -> Resetting SSID");
   getSSID();
 }
 
