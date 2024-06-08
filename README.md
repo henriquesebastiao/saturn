@@ -3,6 +3,8 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
 [![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
 
+<img src="img/boot-screen.jpg" width="300">
+
 Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
 
 ### An advance warning
@@ -38,6 +40,9 @@ Implementation of the main remote control buttons for some types of devices.
 
 ### Wi-Fi
 
+<img src="img/wifi-signal-level.jpg" width="300">
+
+- Signal Level (with feedback beep sounds)
 - Beacon Attacks
   - Funny SSIDs (en-US)
   - Funny SSIDs (pt-BR)
@@ -53,6 +58,18 @@ Implementation of the main remote control buttons for some types of devices.
 - Android Spam
 - SourApple Crash
 - BT Maelstrom
+
+### Sounds
+
+Musics played with beep sounds.
+
+- `Mario Bros`
+- `Crazy Train`
+- `Imperial March`
+- `Aha Take On Me`
+- `Jingle Bells`
+- `Star Wars`
+- `Nokia Ringtone`
 
 ## How to install
 
