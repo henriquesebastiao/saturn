@@ -80,6 +80,7 @@ Menu wifiMenu[] = {
 int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
 
 Menu wifiAttackMenu[] = {
+  {TXT_SIGNAL_LEVEL, 3},
   {TXT_WIFI_PORTAL, 0},
   {TXT_WIFI_DEAUTH, 1},
   {TXT_WIFI_COMBINED, 2},
@@ -133,9 +134,12 @@ int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
 
 Menu soundMenu[] = {
   {"Super Mario Bross", 1},
+  {"Crazy Train", 5},
   {TXT_IMPERIAL_MARCH_SOUND, 2},
   {"Aha Take On Me", 3},
   {"Jingle Bells", 4},
+  {"Star Wars", 6},
+  {"Nokia Ringtone", 7},
   {TXT_BACK, 0},
 };
 int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
@@ -769,10 +773,84 @@ void wifiAttackMenuLoop() {
         target_deauth=true;
         currentProc = 25;  // Combined TODO
         break;
+      case 3:  // Signal Level
+        currentProc = 32;
+        break;
       case 5:
         currentProc = 20;
         break;
     }
+  }
+}
+
+void wifiSignalLevelSetup() {
+  rstOverride = true;
+  
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
+  DISPLAY.drawString(TXT_SIGNAL_LEVEL, DISPLAY_CENTER_X, 50);
+  delay(500);
+}
+
+void wifiSignalLevelLoop() {
+  // Reescan networks
+  int networks = WiFi.scanNetworks();
+  for (int i = 0; i < networks; i++) {
+    if (WiFi.BSSIDstr(i) == apMac) {
+      cursor = i;
+      break;
+    }
+  }
+
+  int signalLevel = WiFi.RSSI(cursor);
+  int signalFeedbackDuration = 100;
+  String signal = String(WiFi.RSSI(cursor)) + "dbm";
+  String ssid = WiFi.SSID(cursor);
+  String channel = String(WiFi.channel(cursor));
+
+  DISPLAY.fillScreen(BG_COLOR);
+
+  DISPLAY.setTextSize(MEDIUM_TEXT);
+  DISPLAY.setTextColor(BG_COLOR);
+  DISPLAY.fillRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+  DISPLAY.drawRoundRect(5, 4, DISPLAY.width() - 10, 30, 10, MAIN_COLOR);
+  DISPLAY.drawString(TXT_SIGNAL_LEVEL, DISPLAY_CENTER_X, 20);
+  DISPLAY.setTextColor(MAIN_COLOR);
+  DISPLAY.setTextSize(1.5);
+  DISPLAY.drawString(ssid, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_WF_CHANN + channel, DISPLAY_CENTER_X, 65);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.drawString(signal, DISPLAY_CENTER_X, 100);
+
+  int frequency;
+
+  if (signalLevel > -25) {
+    frequency = 5500;
+  } else if (signalLevel > -30) {
+    frequency = 5000;
+  } else if (signalLevel > -45) {
+    frequency = 4500;
+  } else if (signalLevel > -50) {
+    frequency = 4000;
+  } else if (signalLevel > -60) {
+    frequency = 3500;
+  } else if (signalLevel > -70) {
+    frequency = 3000;
+  } else if (signalLevel > -80) {
+    frequency = 2000;
+  } else if (signalLevel > -90) {
+    frequency = 1000;
+  } else {
+    frequency = 500;
+  }
+
+  M5Cardputer.Speaker.tone(frequency, signalFeedbackDuration);
+
+  // delay(200);
+  if (checkNextPress() || checkESCPress() || checkSelectPress()) {
+    rstOverride = false;
+    isSwitching = true;
+    currentProc = 23;
   }
 }
 
@@ -1405,6 +1483,15 @@ void soundMenuLoop() {
       case 4:
         jingleBellsSound();
         break;
+      case 5:
+        ozzyOsbornCrazyTrainSound();
+        break;
+      case 6:
+        starWarsSound();
+        break;
+      case 7:
+        nokiaSound();
+        break;
     }
   }
 }
@@ -1770,6 +1857,9 @@ void loop() {
       case 31:
         soundMenuSetup();
         break;
+      case 32:
+        wifiSignalLevelSetup();
+        break;
     }
   }
 
@@ -1827,6 +1917,9 @@ void loop() {
       break;
     case 31:
       soundMenuLoop();
+      break;
+    case 32:
+      wifiSignalLevelLoop();
       break;
   }
 }

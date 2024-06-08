@@ -61,6 +61,7 @@
     #define TXT_DEFAULT_AP_SSID_NAME "Free WiFi"
     #define TXT_SOUNDS "Sounds"
     #define TXT_IMPERIAL_MARCH_SOUND "Imperial March"
+    #define TXT_SIGNAL_LEVEL "Signal Level"
 #endif
 
 #if defined(LANGUAGE_PT_BR)
@@ -126,4 +127,5 @@
     #define TXT_DEFAULT_AP_SSID_NAME "WiFi Livre"
     #define TXT_SOUNDS "Sons"
     #define TXT_IMPERIAL_MARCH_SOUND "Marcha Imperial"
+    #define TXT_SIGNAL_LEVEL "Nivel de Sinal"
 #endif

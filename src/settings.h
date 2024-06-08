@@ -68,3 +68,4 @@ int brightness = 100;
 bool activeQR = false;
 wifi_ap_record_t ap_record;
 String apSsidName = String("");
+String bssidToCheck;
