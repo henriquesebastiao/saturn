@@ -824,7 +824,9 @@ void wifiSignalLevelLoop() {
 
   int frequency;
 
-  if (signalLevel > -25) {
+  if (signalLevel == 0) {
+    frequency = 100;
+  } else if (signalLevel > -25) {
     frequency = 5500;
   } else if (signalLevel > -30) {
     frequency = 5000;
