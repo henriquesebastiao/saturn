@@ -24,6 +24,8 @@
 
 // Aliases
 #define DISPLAY M5Cardputer.Display
+#define SPEAKER M5Cardputer.Speaker
+#define MIC M5Cardputer.Mic
 #define BACKLIGHT 38
 #define MINBRIGHT 165
 
@@ -49,13 +51,24 @@ bool target_deauth = false;
 int deauth_tick = 0;
 bool clone_flg = false;
 
-//BLUETOOTH Vars
+// BLUETOOTH Vars
 int advtime = 0;
 int ajDelay = 1000;
 bool sourApple = false;
 bool swiftPair = false;
 bool androidPair = false;
 bool maelstrom = false;
+
+// VOICE RECORDER Vars
+static constexpr const size_t record_number = 256;
+static constexpr const size_t record_length = 240;
+static constexpr const size_t record_size = record_number * record_length;
+static constexpr const size_t record_samplerate = 17000;
+static int16_t prev_y[record_length];
+static int16_t prev_h[record_length];
+static size_t rec_record_idx  = 2;
+static size_t draw_record_idx = 0;
+static int16_t *rec_data;
 
 int cursor = 0;
 int wifict = 0;

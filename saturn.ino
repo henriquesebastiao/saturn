@@ -41,6 +41,7 @@ Menu mainMenu[] = {
   {"WiFi", 20},
   {"Bluetooth", 27},
   {TXT_SOUNDS, 31},
+  {TXT_VOICE_RECORDER, 33},
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
@@ -846,7 +847,7 @@ void wifiSignalLevelLoop() {
     frequency = 500;
   }
 
-  M5Cardputer.Speaker.tone(frequency, signalFeedbackDuration);
+  SPEAKER.tone(frequency, signalFeedbackDuration);
 
   // delay(200);
   if (checkNextPress() || checkESCPress() || checkSelectPress()) {
@@ -1498,6 +1499,134 @@ void soundMenuLoop() {
   }
 }
 
+// -=-=-= VOICE RECORDER =-=-=-
+
+void voiceRecorderSetup() {
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.startWrite();
+  // DISPLAY.setRotation(1);
+  DISPLAY.setTextDatum(top_center);
+  // DISPLAY.setTextColor(WHITE);
+  // DISPLAY.setFont(&fonts::FreeSansBoldOblique12pt7b);
+  DISPLAY.setTextColor(MAIN_COLOR);
+  rec_data = (typeof(rec_data))heap_caps_malloc(record_size * sizeof(int16_t), MALLOC_CAP_8BIT);
+  memset(rec_data, 0, record_size * sizeof(int16_t));
+  SPEAKER.setVolume(255);
+
+  /// Since the microphone and speaker cannot be used at the same time,
+  /// turn
+  /// off the speaker here.
+  SPEAKER.end();
+  MIC.begin();
+  DISPLAY.fillCircle(70, 15, 8, RED);
+  DISPLAY.drawString("REC", 120, 10);
+}
+
+void voiceRecorderLoop() {
+  M5Cardputer.update();
+  if (MIC.isEnabled()) {
+    static constexpr int shift = 6;
+    auto data                  = &rec_data[rec_record_idx * record_length];
+    if (MIC.record(data, record_length, record_samplerate)) {
+      data = &rec_data[draw_record_idx * record_length];
+
+      int32_t w = DISPLAY.width();
+
+      if (w > record_length - 1) {
+        w = record_length - 1;
+      }
+
+      for (int32_t x = 0; x < w; ++x) {
+        DISPLAY.writeFastVLine(x, prev_y[x], prev_h[x], TFT_BLACK);
+        int32_t y1 = (data[x] >> shift);
+        int32_t y2 = (data[x + 1] >> shift);
+
+        if (y1 > y2) {
+          int32_t tmp = y1;
+          y1 = y2;
+          y2 = tmp;
+        }
+
+        int32_t y = ((DISPLAY.height()) >> 1) + y1;
+        int32_t h = ((DISPLAY.height()) >> 1) + y2 + 1 - y;
+        prev_y[x] = y;
+        prev_h[x] = h;
+        DISPLAY.writeFastVLine(x, prev_y[x], prev_h[x], MAIN_COLOR);
+      }
+
+      DISPLAY.display();
+      DISPLAY.fillCircle(70, 15, 8, RED);
+      DISPLAY.drawString("REC", 120, 10);
+
+      if (++draw_record_idx >= record_number) {
+        draw_record_idx = 0;
+      }
+
+      if (++rec_record_idx >= record_number) {
+        rec_record_idx = 0;
+      }
+    }
+  }
+
+  if (M5Cardputer.BtnA.wasHold()) {
+    auto cfg = MIC.config();
+    cfg.noise_filter_level = (cfg.noise_filter_level + 8) & 255;
+    MIC.config(cfg);
+    DISPLAY.clear();
+    DISPLAY.fillCircle(70, 15, 8, GREEN);
+    DISPLAY.drawString("NF:" + String(cfg.noise_filter_level), 120, 3);
+  } else if (M5Cardputer.Keyboard.isKeyPressed('/')) {
+    if (SPEAKER.isEnabled()) {
+      DISPLAY.clear();
+
+      while (MIC.isRecording()) {
+        delay(1);
+      }
+
+      /// Since the microphone and speaker cannot be used at the same
+      /// time, turn off the microphone here.
+      MIC.end();
+      SPEAKER.begin();
+
+      DISPLAY.fillTriangle(70 - 8, 15 - 8, 70 - 8, 15 + 8, 70 + 8, 15, 0x1c9f);
+      DISPLAY.drawString("PLAY", 120, 10);
+      int start_pos = rec_record_idx * record_length;
+
+      if (start_pos < record_size) {
+        SPEAKER.playRaw(&rec_data[start_pos], record_size - start_pos, record_samplerate, false, 1, 0);
+      }
+
+      if (start_pos > 0) {
+        SPEAKER.playRaw(rec_data, start_pos, record_samplerate, false, 1, 0);
+      }
+
+      do {
+        delay(1);
+        M5Cardputer.update();
+      } while (SPEAKER.isPlaying());
+
+      /// Since the microphone and speaker cannot be used at the same
+      /// time, turn off the speaker here.
+      SPEAKER.end();
+      MIC.begin();
+
+      DISPLAY.clear();
+      DISPLAY.fillCircle(70, 15, 8, RED);
+      DISPLAY.drawString("REC", 120, 10);
+    }
+  }
+
+  if (checkESCPress()) {
+    if (MIC.isRecording()) {
+      MIC.end();
+    }
+    heap_caps_free(rec_data);
+    currentProc = 1;
+    isSwitching = true;
+    DISPLAY.setTextDatum(middle_center);
+  }
+}
+
 // -=-=-= QR CODES =-=-=-
 
 void qrMenuSetup() {
@@ -1717,7 +1846,7 @@ void batteryLoop() {
 void setup() {
   auto cfg = M5.config();
   M5Cardputer.begin(cfg);
-  M5Cardputer.Display.setRotation(1);
+  DISPLAY.setRotation(1);
   DISPLAY.setTextDatum(middle_center);
 
   #if defined(IR_SEND_PIN)
@@ -1752,9 +1881,9 @@ void setup() {
 
     // Beep on boot, similar to Mikrotik boot sound
     delay(500);
-    M5Cardputer.Speaker.tone(5050, 90);
+    SPEAKER.tone(5050, 90);
     delay(220);
-    M5Cardputer.Speaker.tone(5050, 90);
+    SPEAKER.tone(5050, 90);
     delay(500);
   #else
     Serial.println("Silent Mode: YES");
@@ -1795,6 +1924,9 @@ void setup() {
 // 28 - AppleJuice
 // 29 - AppleJuice Advertising
 // 30 - Bluetooth Maelstrom
+// 31 - Sounds
+// 32 - Wi-Fi Signal Level
+// 33 - Voice Recorder
 
 void loop() {
   // Background processes
@@ -1862,6 +1994,9 @@ void loop() {
       case 32:
         wifiSignalLevelSetup();
         break;
+      case 33:
+        voiceRecorderSetup();
+        break;
     }
   }
 
@@ -1922,6 +2057,9 @@ void loop() {
       break;
     case 32:
       wifiSignalLevelLoop();
+      break;
+    case 33:
+      voiceRecorderLoop();
       break;
   }
 }
