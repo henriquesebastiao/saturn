@@ -1456,6 +1456,8 @@ void soundMenuSetup() {
   cursor = 0;
   rstOverride = true;
   drawMenu(soundMenu, soundMenuSize);
+  SPEAKER.setVolume(255);
+  SPEAKER.begin();
   delay(500);
 }
 
