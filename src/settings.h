@@ -3,7 +3,7 @@
 #define SDCARD
 
 // Info
-#define SATURN_VERSION "v1.0.0"
+#define SATURN_VERSION "v1.2.0"
 
 // Style
 #define MAIN_COLOR CYAN
