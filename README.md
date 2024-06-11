@@ -1,11 +1,17 @@
-# Saturn
+<h1>
+  <a href="https://github.com/henriquesebastiao/saturn/" target="blank"><img src="img/logo.png" width="298" alt="Saturn Logo" /></a>
+</h1>
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
 [![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
 
-<img src="img/boot-screen.jpg" width="300">
+<p>
+  Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
+</p>
 
-Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
+<p>
+  <img src="img/boot-screen.jpg" alt="Typesense Demo" width="300" />
+</p>
 
 ### An advance warning
 
@@ -70,6 +76,15 @@ Musics played with beep sounds.
 - `Jingle Bells`
 - `Star Wars`
 - `Nokia Ringtone`
+- `The Simpsons`
+- `Pacman`
+- `DOOM`
+- `Shape of You`
+- `Game of Thrones`
+
+### Voice Recorder
+
+Record your voice and play it back.
 
 ## How to install
 

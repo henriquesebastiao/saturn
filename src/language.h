@@ -62,6 +62,7 @@
     #define TXT_SOUNDS "Sounds"
     #define TXT_IMPERIAL_MARCH_SOUND "Imperial March"
     #define TXT_SIGNAL_LEVEL "Signal Level"
+    #define TXT_VOICE_RECORDER "Voice Recorder"
 #endif
 
 #if defined(LANGUAGE_PT_BR)
@@ -128,4 +129,5 @@
     #define TXT_SOUNDS "Sons"
     #define TXT_IMPERIAL_MARCH_SOUND "Marcha Imperial"
     #define TXT_SIGNAL_LEVEL "Nivel de Sinal"
+    #define TXT_VOICE_RECORDER "Gravador de Voz"
 #endif
