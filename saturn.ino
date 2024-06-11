@@ -146,7 +146,6 @@ Menu soundMenu[] = {
   {"DOOM", 10},
   {"Shape Of You", 11},
   {"Game Of Thrones", 12},
-  {"Tokyo Drift", 13},
   {TXT_BACK, 0},
 };
 int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
@@ -795,7 +794,11 @@ void wifiSignalLevelSetup() {
   
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(MEDIUM_TEXT);
-  DISPLAY.drawString(TXT_SIGNAL_LEVEL, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_SIGNAL_LEVEL, DISPLAY_CENTER_X, 70);
+  auto spk_cfg = SPEAKER.config();
+  SPEAKER.config(spk_cfg);
+  SPEAKER.begin();
+  SPEAKER.setVolume(64);
   delay(500);
 }
 
@@ -1462,8 +1465,10 @@ void soundMenuSetup() {
   cursor = 0;
   rstOverride = true;
   drawMenu(soundMenu, soundMenuSize);
-  SPEAKER.setVolume(255);
+  auto spk_cfg = SPEAKER.config();
+  SPEAKER.config(spk_cfg);
   SPEAKER.begin();
+  SPEAKER.setVolume(255);
   delay(500);
 }
 
@@ -1518,11 +1523,9 @@ void soundMenuLoop() {
       case 12:
         gameOfThronesSound();
         break;
-      case 13:
-        tokyoDriftSound();
-        break;
     }
   }
+  SPEAKER.end();
 }
 
 // -=-=-= VOICE RECORDER =-=-=-
