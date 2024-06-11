@@ -1,11 +1,19 @@
-# Saturn
+<p align="center">
+  <a href="https://github.com/henriquesebastiao/saturn/" target="blank"><img src="img/logo.png" width="298" alt="Saturn Logo" /></a>
+</p>
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
-[![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
+<p align="center">
+  Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
+</p>
 
-<img src="img/boot-screen.jpg" width="300">
+<p align="center">
+ <a href="https://github.com/henriquesebastiao/saturn/tags"><img src="https://img.shields.io/badge/version-1.0.0-blue"></a>
+  <a href="https://github.com/henriquesebastiao/saturn/blob/main/LICENSE"><img src="https://img.shields.io/github/license/henriquesebastiao/saturn"></a>
+<p>
 
-Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
+<p align="center">
+  <img src="img/boot-screen.jpg" alt="Typesense Demo" width="300" />
+</p>
 
 ### An advance warning
 
