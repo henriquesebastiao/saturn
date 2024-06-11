@@ -950,14 +950,536 @@ int nokiaDurationsSize = sizeof(nokiaDurations) / sizeof(int);
 
 void nokiaSound() {
     for (int note = 0; note < nokiaDurationsSize; note++) {
-        //to calculate the note duration, take one second divided by the note type.
-        //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
         int duration = 1000 / nokiaDurations[note];
         M5Cardputer.Speaker.tone(nokiaMelody[note], duration);
 
-        //to distinguish the notes, set a minimum time between them.
-        //the note's duration + 30% seems to work well:
         int pauseBetweenNotes = duration * 1.30;
         delay(pauseBetweenNotes);
     }
+}
+
+int theSimpsonsMelody[] = {
+  NOTE_C4, NOTE_E4, NOTE_FS4, REST, NOTE_A4,
+  NOTE_G4, NOTE_E4, NOTE_C4, NOTE_A3,
+  NOTE_FS3, NOTE_FS3, NOTE_FS3, NOTE_G3, REST,
+  NOTE_FS3, NOTE_FS3, NOTE_FS3, NOTE_G3, NOTE_AS3,
+  NOTE_B3, REST
+};
+
+int theSimpsonsDurations[] = {
+  2, 4, 4, 32, 8,
+  2, 4, 4, 8,
+  8, 8, 8, 4, 2,
+  8, 8, 8, 4, 2,
+  2, 2
+};
+int theSimpsonsDurationSize = sizeof(theSimpsonsDurations) / sizeof(int);
+
+void theSimpsonsSound() {
+  for (int note = 0; note < theSimpsonsDurationSize; note++) {
+    int duration = 1000 / theSimpsonsDurations[note];
+    M5Cardputer.Speaker.tone(theSimpsonsMelody[note], duration);
+
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+  }
+}
+
+int pacmanMelody[] = {
+  NOTE_B4, NOTE_B5, NOTE_FS5, NOTE_DS5,
+  NOTE_B5, NOTE_FS5, NOTE_DS5, NOTE_C5,
+  NOTE_C6, NOTE_G6, NOTE_E6, NOTE_C6, NOTE_G6, NOTE_E6,
+  
+  NOTE_B4, NOTE_B5, NOTE_FS5, NOTE_DS5, NOTE_B5,
+  NOTE_FS5, NOTE_DS5, NOTE_DS5, NOTE_E5, NOTE_F5,
+  NOTE_F5, NOTE_FS5, NOTE_G5, NOTE_G5, NOTE_GS5, NOTE_A5, NOTE_B5
+};
+
+int pacmanDurations[] = {
+  16, 16, 16, 16,
+  32, 16, 8, 16,
+  16, 16, 16, 32, 16, 8,
+  
+  16, 16, 16, 16, 32,
+  16, 8, 32, 32, 32,
+  32, 32, 32, 32, 32, 16, 8
+};
+int pacmanDurationSize = sizeof(pacmanDurations) / sizeof(int);
+
+void pacmanSound()
+{
+  for (int note = 0; note < pacmanDurationSize; note++) {
+    int duration = 1000 / pacmanDurations[note];
+    M5Cardputer.Speaker.tone(pacmanMelody[note], duration);
+
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+  }
+}
+
+int doomMelody[] = {
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_FS3, NOTE_D3, NOTE_B2, NOTE_A3, NOTE_FS3, NOTE_B2, NOTE_D3, NOTE_FS3, NOTE_A3, NOTE_FS3, NOTE_D3, NOTE_B2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_B3, NOTE_G3, NOTE_E3, NOTE_G3, NOTE_B3, NOTE_E4, NOTE_G3, NOTE_B3, NOTE_E4, NOTE_B3, NOTE_G4, NOTE_B4,
+  
+  NOTE_A2, NOTE_A2, NOTE_A3, NOTE_A2, NOTE_A2, NOTE_G3, NOTE_A2, NOTE_A2, 
+  NOTE_F3, NOTE_A2, NOTE_A2, NOTE_DS3, NOTE_A2, NOTE_A2, NOTE_E3, NOTE_F3,
+  NOTE_A2, NOTE_A2, NOTE_A3, NOTE_A2, NOTE_A2, NOTE_G3, NOTE_A2, NOTE_A2,
+  NOTE_F3, NOTE_A2, NOTE_A2, NOTE_DS3,
+  
+  NOTE_A2, NOTE_A2, NOTE_A3, NOTE_A2, NOTE_A2, NOTE_G3, NOTE_A2, NOTE_A2, 
+  NOTE_F3, NOTE_A2, NOTE_A2, NOTE_DS3, NOTE_A2, NOTE_A2, NOTE_E3, NOTE_F3,
+  NOTE_A2, NOTE_A2, NOTE_A3, NOTE_A2, NOTE_A2, NOTE_G3, NOTE_A2, NOTE_A2,
+  NOTE_A3, NOTE_F3, NOTE_D3, NOTE_A3, NOTE_F3, NOTE_D3, NOTE_C4, NOTE_A3, NOTE_F3, NOTE_A3, NOTE_F3, NOTE_D3,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_CS3, NOTE_CS3, NOTE_CS4, NOTE_CS3, NOTE_CS3, NOTE_B3, NOTE_CS3, NOTE_CS3, 
+  NOTE_A3, NOTE_CS3, NOTE_CS3, NOTE_G3, NOTE_CS3, NOTE_CS3, NOTE_GS3, NOTE_A3,
+  NOTE_B2, NOTE_B2, NOTE_B3, NOTE_B2, NOTE_B2, NOTE_A3, NOTE_B2, NOTE_B2,
+  NOTE_G3, NOTE_B2, NOTE_B2, NOTE_F3,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_B3, NOTE_G3, NOTE_E3, NOTE_G3, NOTE_B3, NOTE_E4, NOTE_G3, NOTE_B3, NOTE_E4, NOTE_B3, NOTE_G4, NOTE_B4,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_FS3, NOTE_DS3, NOTE_B2, NOTE_FS3, NOTE_DS3, NOTE_B2, NOTE_G3, NOTE_D3, NOTE_B2, NOTE_DS4, NOTE_DS3, NOTE_B2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_E4, NOTE_B3, NOTE_G3, NOTE_G4, NOTE_E4, NOTE_G3, NOTE_B3, NOTE_D4, NOTE_E4, NOTE_G4, NOTE_E4, NOTE_G3,  
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_A2, NOTE_A2, NOTE_A3, NOTE_A2, NOTE_A2, NOTE_G3, NOTE_A2, NOTE_A2, 
+  NOTE_F3, NOTE_A2, NOTE_A2, NOTE_DS3, NOTE_A2, NOTE_A2, NOTE_E3, NOTE_F3,
+  NOTE_A2, NOTE_A2, NOTE_A3, NOTE_A2, NOTE_A2, NOTE_G3, NOTE_A2, NOTE_A2,
+  NOTE_A3, NOTE_F3, NOTE_D3, NOTE_A3, NOTE_F3, NOTE_D3, NOTE_C4, NOTE_A3, NOTE_F3, NOTE_A3, NOTE_F3, NOTE_D3,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2,
+  
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2, 
+  NOTE_C3, NOTE_E2, NOTE_E2, NOTE_AS2, NOTE_E2, NOTE_E2, NOTE_B2, NOTE_C3,
+  NOTE_E2, NOTE_E2, NOTE_E3, NOTE_E2, NOTE_E2, NOTE_D3, NOTE_E2, NOTE_E2,
+  NOTE_B3, NOTE_G3, NOTE_E3, NOTE_B2, NOTE_E3, NOTE_G3, NOTE_C4, NOTE_B3, NOTE_G3, NOTE_B3, NOTE_G3, NOTE_E3
+};
+
+int doomDurations[] = {
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 2,
+  
+  8, 8, 8, 8, 8, 8, 8, 8, 
+  8, 8, 8, 8, 8, 8, 8, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16
+};
+int doomDurationsSize = sizeof(doomDurations) / sizeof(int);
+
+void doomSound() {
+  for (int note = 0; note < doomDurationsSize; note++) {
+    int duration = 1000 / doomDurations[note];
+    M5Cardputer.Speaker.tone(doomMelody[note], duration);
+
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+  }
+}
+
+int shapeOfYouMelody[] = {
+  NOTE_CS4, NOTE_E4, NOTE_CS4, NOTE_CS4, NOTE_E4,
+  NOTE_CS4, NOTE_CS4, NOTE_E4, NOTE_CS4, NOTE_DS4,
+  NOTE_CS4, NOTE_CS4, NOTE_E4, NOTE_CS4,
+  NOTE_B3,
+  NOTE_CS4, NOTE_E4, NOTE_CS4, NOTE_CS4, NOTE_E4,
+  NOTE_CS4, NOTE_DS4, NOTE_CS4, NOTE_E4,
+  NOTE_B3,
+  NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4,
+  NOTE_E4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_GS4,
+  NOTE_GS4, NOTE_E4, NOTE_FS4, NOTE_B4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4,
+  NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_FS4,
+  NOTE_E4, NOTE_CS4, NOTE_CS4, NOTE_GS4, NOTE_GS4,
+  NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4,
+  NOTE_GS4, NOTE_B4, NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_E4, NOTE_GS4,
+  NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_B4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_FS4,
+  NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4,
+  NOTE_E4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4,
+  NOTE_GS3, NOTE_B3,
+  NOTE_CS4, NOTE_CS4, NOTE_FS4, NOTE_GS4, NOTE_E4, NOTE_FS4,
+  NOTE_B3,
+  NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_CS4, NOTE_E4, NOTE_GS4,
+  NOTE_FS4, NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_B4, NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4,
+  NOTE_E4, NOTE_CS4, NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,
+  NOTE_FS4, NOTE_E4, NOTE_CS4, NOTE_CS4,
+  NOTE_B3,
+  NOTE_CS4, NOTE_CS4, NOTE_FS4, NOTE_GS4, NOTE_E4, NOTE_FS4, NOTE_FS4,
+  NOTE_B3,
+  NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_CS4, NOTE_E4, NOTE_GS4, NOTE_FS4,
+  NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_B4, NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_E4,
+  NOTE_CS4, NOTE_B4, NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_E4,
+  NOTE_CS4, NOTE_CS4,
+  NOTE_GS3, NOTE_B3,
+  NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_FS4,
+  NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_E4, NOTE_FS4|
+  NOTE_CS4, NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_CS4,
+  NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_FS4, NOTE_E4, NOTE_FS4, NOTE_GS4,
+  NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_CS4,
+  NOTE_FS4, NOTE_GS4, NOTE_B4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_FS4,
+  NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_FS4,
+  NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_CS4, NOTE_E4,
+  NOTE_FS4, NOTE_E4, NOTE_FS4, NOTE_E4, NOTE_FS4, NOTE_GS4,
+  NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4, NOTE_E4,
+  NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_GS4,
+  NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_CS4,
+  NOTE_CS4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_FS4, NOTE_GS4,
+  NOTE_GS4, NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4,
+  NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4, NOTE_E4,
+  NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_GS4,
+  NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4, NOTE_E4, NOTE_FS4, NOTE_CS4, NOTE_CS4,
+  NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4, NOTE_FS4, NOTE_GS4, NOTE_CS4, NOTE_E4, NOTE_FS4,
+  NOTE_CS4,
+};
+
+int shapeOfYouDurations[] = {
+  2,2,4,2,2,4,2,2,4,2,2,2,2,2,2,2,2,4,2,2,4,2,2,2,2,8,8,4,4,8,8,8,8,8,8,8,2,8,8,4,2,8,8,4,8,8,8,4,4,8,8,8,8,8,4,8,4,8,8,8,8,4,2,8,8,8,8,4,8,8,8,8,8,8,2,8,4,8,8,8,8,8,2,4,8,8,2,4,8,8,8,8,8,8,2,8,8,4,4,4,8,8,2,4,4,2,4,2,2,4,8,8,8,2,2,8,4,8,4,4,4,4,8,8,8,8,2,8,8,4,8,8,4,2,8,4,8,4,4,4,4,2,2,2,2,4,8,8,8,2,2,2,4,8,4,4,4,4,8,8,8,8,2,8,8,4,8,8,4,2,8,8,4,8,8,4,2,2,4,2,8,8,4,8,8,4,8,8,2,8,8,4,8,8,4,8,8,2,8,8,4,4,4,8,8,2,8,8,4,8,8,8,4,8,2,4,4,8,8,4,4,8,2,8,8,4,4,4,8,8,4,8,8,8,8,8,8,4,4,4,4,8,2,8,8,4,8,8,8,4,8,4,4,4,4,4,4,4,2,8,8,4,8,8,8,4,8,4,4,4,4,4,4,4,2,8,8,4,8,8,8,4,8,4,4,4,4,4,4,4,2,8,8,4,8,8,8,4,8,4,8,8,8,8,8,8,4,4,4,4,2
+};
+int shapeOfYouDurationsSize = sizeof(shapeOfYouDurations) / sizeof(int);
+
+void shapeOfYouSound()
+{
+  for (int note = 0; note < shapeOfYouDurationsSize; note++) {
+    int duration = 1000 / shapeOfYouDurations[note];
+    M5Cardputer.Speaker.tone(shapeOfYouMelody[note], duration);
+
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+  }
+}
+
+int gameOfThronesMelody[] = {
+  NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+  NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+  NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4,
+  NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4,
+  NOTE_G4, NOTE_C4,
+  
+  NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+  NOTE_D4,
+  NOTE_F4, NOTE_AS3,
+  NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3,
+  NOTE_DS4, NOTE_D4, NOTE_C4,
+  
+  NOTE_G4, NOTE_C4,
+  
+  NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+  NOTE_D4,
+  NOTE_F4, NOTE_AS3,
+  NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3,
+  NOTE_DS4, NOTE_D4, NOTE_C4,
+  NOTE_G4, NOTE_C4,
+  NOTE_DS4, NOTE_F4, NOTE_G4,  NOTE_C4, NOTE_DS4, NOTE_F4,
+  
+  NOTE_D4,
+  NOTE_F4, NOTE_AS3,
+  NOTE_D4, NOTE_DS4, NOTE_D4, NOTE_AS3,
+  NOTE_C4,
+  NOTE_C5,
+  NOTE_AS4,
+  NOTE_C4,
+  NOTE_G4,
+  NOTE_DS4,
+  NOTE_DS4, NOTE_F4,
+  NOTE_G4,
+  
+  NOTE_C5,
+  NOTE_AS4,
+  NOTE_C4,
+  NOTE_G4,
+  NOTE_DS4,
+  NOTE_DS4, NOTE_D4,
+  NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4,
+  NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4,
+  
+  REST, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5,
+  NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5
+};
+
+int gameOfThronesDurations[] = {
+  8, 8, 16, 16, 8, 8, 16, 16,
+  8, 8, 16, 16, 8, 8, 16, 16,
+  8, 8, 16, 16, 8, 8, 16, 16,
+  8, 8, 16, 16, 8, 8, 16, 16,
+  4, 4,
+  
+  16, 16, 4, 4, 16, 16,
+  1,
+  4, 4,
+  16, 16, 4, 4,
+  16, 16, 1,
+  
+  4, 4,
+  
+  16, 16, 4, 4, 16, 16,
+  1,
+  4, 4,
+  16, 16, 4, 4,
+  16, 16, 1,
+  4, 4,
+  16, 16, 4, 4, 16, 16,
+  
+  2,
+  4, 4,
+  8, 8, 8, 8,
+  1,
+  2,
+  2,
+  2,
+  2,
+  2,
+  4, 4,
+  1,
+  
+  2,
+  2,
+  2,
+  2,
+  2,
+  4, 4,
+  8, 8, 16, 16, 8, 8, 16, 16,
+  8, 8, 16, 16, 8, 8, 16, 16,
+  
+  4, 16, 16, 8, 8, 16, 16,
+  8, 16, 16, 16, 8, 8, 16, 16
+};
+int gameOfThronesDurationsSize = sizeof(gameOfThronesDurations) / sizeof(int);
+
+void gameOfThronesSound()
+{
+  for (int note = 0; note < gameOfThronesDurationsSize; note++) {
+    int duration = 1000 / gameOfThronesDurations[note];
+    M5Cardputer.Speaker.tone(gameOfThronesMelody[note], duration);
+
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+  }
+}
+
+int tokyoDriftMelody[] = {
+  NOTE_AS4, REST, NOTE_AS4, REST, NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_AS4, NOTE_B4, NOTE_DS5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_AS4, NOTE_B4, NOTE_DS5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_AS4, NOTE_B4, NOTE_DS5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_AS4, NOTE_B4, NOTE_DS5,
+  NOTE_F5, REST, NOTE_F5, REST,
+  NOTE_GS5, NOTE_FS5, NOTE_F5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_GS5, NOTE_FS5, NOTE_F5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_AS4, NOTE_B4, NOTE_DS5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  NOTE_AS4, NOTE_B4, NOTE_DS5,
+  NOTE_AS4, REST, NOTE_AS4, REST,
+  REST
+};
+
+int tokyoDriftDurations[] = {
+  4, 4, 4, 4, 4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  3, 3, 4,
+  4, 4, 4, 4,
+  1
+};
+int tokyoDriftDurationsSize = sizeof(tokyoDriftDurations) / sizeof(int);
+
+void tokyoDriftSound()
+{
+  for (int note = 0; note < tokyoDriftDurationsSize; note++) {
+    int duration = 1000 / tokyoDriftDurations[note];
+    M5Cardputer.Speaker.tone(tokyoDriftMelody[note], duration);
+
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+  }
 }

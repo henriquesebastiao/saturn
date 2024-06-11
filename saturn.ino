@@ -141,6 +141,12 @@ Menu soundMenu[] = {
   {"Jingle Bells", 4},
   {"Star Wars", 6},
   {"Nokia Ringtone", 7},
+  {"The Simpsons", 8},
+  {"Pacman", 9},
+  {"DOOM", 10},
+  {"Shape Of You", 11},
+  {"Game Of Thrones", 12},
+  {"Tokyo Drift", 13},
   {TXT_BACK, 0},
 };
 int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
@@ -1496,6 +1502,24 @@ void soundMenuLoop() {
         break;
       case 7:
         nokiaSound();
+        break;
+      case 8:
+        theSimpsonsSound();
+        break;
+      case 9:
+        pacmanSound();
+        break;
+      case 10:
+        doomSound();
+        break;
+      case 11:
+        shapeOfYouSound();
+        break;
+      case 12:
+        gameOfThronesSound();
+        break;
+      case 13:
+        tokyoDriftSound();
         break;
     }
   }
