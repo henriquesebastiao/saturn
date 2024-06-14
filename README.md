@@ -108,13 +108,23 @@ Record your voice and play it back.
 
 Saturn has different compilation versions, versions with different languages ​​(pt-BR, en-US) and "silent" versions. The compiled silent versions present in GitHub releases are named with the suffix `silent`, they do not emit any sound during firmware execution.
 
+### Install from M5Burner
+
+This is the absolute easiest way to get Saturn
+
+- Launch M5Burner.
+- Select "Cardputer" from the menu on the left.
+- Use the search at the top of the app to look for "Saturn". My official builds will be uploaded by "henriquesebastiao" and have photos.
+- Click Download.
+- Click Burn.
+
 ### Install `.bin` files manually with `esptool.py`
 
 - Install ESP-IDF tools per the [Espressif Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/)
 - Open the `esp-idf` CMD tool (on Windows) - on Mac or Linux, `esp-idf.py` and `esptool.py` should be in the system path.
 - `esptool.py --port COMPORT -b 115200 write_flash -z 0x0 Saturn-VERSION.bin`
-    - port may be a COM port e.g. `COM4`, `COM11` on Windows. On Mac and Linux it will usually be in `/dev` such as `/dev/ttyUSB0`, `/dev/ttyACM0` or `/dev/cu.usbserial-3`
-    - `Saturn-VERSION.bin` should be a version you downloaded from a GitHub Release -- preferably the latest available.
+  - port may be a COM port e.g. `COM4`, `COM11` on Windows. On Mac and Linux it will usually be in `/dev` such as `/dev/ttyUSB0`, `/dev/ttyACM0` or `/dev/cu.usbserial-3`
+  - `Saturn-VERSION.bin` should be a version you downloaded from a GitHub Release -- preferably the latest available.
 
 ## Building from Source
 
@@ -124,12 +134,12 @@ If you want to customize Saturn or contribute to the project, you should be fami
 - Install the M5Stack boards for Arduino IDE: In File -> Preferences, paste this URL into the "Boards Manager URLs" text box. Use commas between URLs if there are already URLs present.  https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
 - If M5Stack -> M5Cardputer doesn't show up under Tools -> Boards, then use Tools -> Boards -> Boards Manager and search for M5Stack. This will install support for most of the M5Stack boards including the Cardputer.
 - Install necessary libraries. In Sketch -> Include Library -> Library Manager, search for and install the following libraries and any dependencies they require:
-    - M5Cardputer
-    - IRRemoteESP8266
-- Switch partition schemes. `Tools` -> `Partition Scheme` -> `No OTA (Large APP)` - sometimes this option is labeled `Huge APP` 
+  - M5Cardputer
+  - IRRemoteESP8266
+- Switch partition schemes. `Tools` -> `Partition Scheme` -> `No OTA (Large APP)` - sometimes this option is labeled `Huge APP`
 - Configuration
-    - The code should compile cleanly and work on an M5Stick C Plus out of the box from the main branch or a release tag.
-    - Uncomment only the one appropriate `#define` option or compiler errors will occur. 
+  - The code should compile cleanly and work on an M5Stick C Plus out of the box from the main branch or a release tag.
+  - Uncomment only the one appropriate `#define` option or compiler errors will occur. 
 - Compile and upload the project
 
 
@@ -184,7 +194,7 @@ Things I'd like help on:
 
 - Testing on different devices and reporting your feedback.
 - Infrared
-    - Add support for new manufacturers and also new device types, such as air conditioners, sound systems, etc.
+  - Add support for new manufacturers and also new device types, such as air conditioners, sound systems, etc.
 
 ### How the project is organized?
 
