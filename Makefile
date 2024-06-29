@@ -31,7 +31,7 @@ black:
 	black .
 
 lint:
-	cppcheck --error-exitcode=1 --language=c++ src/*.h
+	cppcheck --error-exitcode=1 --force --language=c++ src/*.h
 
 .PHONY: html-lint
 .PHONY: upload

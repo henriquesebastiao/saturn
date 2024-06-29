@@ -4,20 +4,19 @@ on: [push, pull_request]
 jobs:
   lint:
     name: Lint
+    strategy:
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-          
-      - name: cppcheck
-        uses: deep5050/cppcheck-action@main
+      - uses: actions/checkout@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
-          enable: warning,performance
-          force_language: c++
-          
-        
-      - name: Publish Report    
-        uses: mikeal/publish-to-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: 'main'
+          submodules: recursive
+
+      - name: Install cppcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
+
+      - name: Run cppcheck
+        run: |
+          cppcheck --error-exitcode=1 --force --language=c++ src/*.h
