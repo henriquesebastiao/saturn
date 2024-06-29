@@ -20,5 +20,5 @@ jobs:
                 - name: M5Cardputer
                 - name: IRRemoteESP8266
             sketch-paths: |
-                - saturn
+                - .
             verbose: true
