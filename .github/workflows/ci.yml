@@ -9,12 +9,13 @@ jobs:
     steps:
       - name: Compile Sketch
         uses: actions/checkout@v2
-        
+
       - uses: arduino/compile-sketches@v1
         with:
             fqbn: "m5stack:esp32:m5stack_cardputer"
             platforms: |
                 - name: "m5stack:esp32"
+                  source-url: https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
             libraries: |
                 - name: M5Cardputer
                 - name: IRRemoteESP8266
