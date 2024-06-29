@@ -6,11 +6,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+
     steps:
       - name: Compile Sketch
         uses: actions/checkout@v4
 
-      - uses: arduino/compile-sketches@v1
+      - uses: arduino/compile-sketches@main
         with:
             fqbn: "m5stack:esp32:m5stack_cardputer"
             platforms: |
@@ -20,5 +23,8 @@ jobs:
               - source-path: ./
               - name: M5Cardputer
               - name: IRRemoteESP8266
+              - source-url: https://github.com/m5stack/M5Unified.git
+              - source-url: https://github.com/m5stack/M5Cardputer.git
+              - source-url: https://github.com/crankyoldgit/IRremoteESP8266.git
             sketch-paths: ./
             verbose: true
