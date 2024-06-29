@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml)
 [![Build](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml)
-[![Version](https://img.shields.io/badge/version-1.2.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
+[![Version](https://img.shields.io/badge/version-1.2.1-blue)](https://github.com/henriquesebastiao/saturn/tags)
 [![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
 
 <p>

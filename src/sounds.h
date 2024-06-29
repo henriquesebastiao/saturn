@@ -1,936 +1,278 @@
 #include "pitches.h"
 
-void superMarioBrossSound() {
-  delay(150);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(510, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(770, 100);
-  delay(550);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(575);
-  M5Cardputer.Speaker.tone(510, 100);
-  delay(450);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(400);
-  M5Cardputer.Speaker.tone(320, 100);
-  delay(500);
-  M5Cardputer.Speaker.tone(440, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(480, 80);
-  delay(330);
-  M5Cardputer.Speaker.tone(450, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(200);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(200);
-  M5Cardputer.Speaker.tone(760, 50);
-  delay(150);
-  M5Cardputer.Speaker.tone(860, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(700, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(760, 50);
-  delay(350);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(520, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(580, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(480, 80);
-  delay(500);
-  M5Cardputer.Speaker.tone(510, 100);
-  delay(450);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(400);
-  M5Cardputer.Speaker.tone(320, 100);
-  delay(500);
-  M5Cardputer.Speaker.tone(440, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(480, 80);
-  delay(330);
-  M5Cardputer.Speaker.tone(450, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(200);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(200);
-  M5Cardputer.Speaker.tone(760, 50);
-  delay(150);
-  M5Cardputer.Speaker.tone(860, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(700, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(760, 50);
-  delay(350);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(520, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(580, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(480, 80);
-  delay(500);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(760, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(720, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(680, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(620, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(650, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(570, 100);
-  delay(220);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(760, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(720, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(680, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(620, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(650, 200);
-  delay(300);
-  M5Cardputer.Speaker.tone(1020, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(1020, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(1020, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(760, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(720, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(680, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(620, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(650, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(570, 100);
-  delay(420);
-  M5Cardputer.Speaker.tone(585, 100);
-  delay(450);
-  M5Cardputer.Speaker.tone(550, 100);
-  delay(420);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(36);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(760, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(720, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(680, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(620, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(650, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(570, 100);
-  delay(220);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(760, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(720, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(680, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(620, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(650, 200);
-  delay(300);
-  M5Cardputer.Speaker.tone(1020, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(1020, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(1020, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(760, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(720, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(680, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(620, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(650, 150);
-  delay(300);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(430, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(570, 100);
-  delay(420);
-  M5Cardputer.Speaker.tone(585, 100);
-  delay(450);
-  M5Cardputer.Speaker.tone(550, 100);
-  delay(420);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(36);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 60);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 60);
-  delay(350);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(580, 80);
-  delay(350);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(430, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(380, 80);
-  delay(600);
-  M5Cardputer.Speaker.tone(500, 60);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 60);
-  delay(350);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(580, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(550);
-  M5Cardputer.Speaker.tone(870, 80);
-  delay(325);
-  M5Cardputer.Speaker.tone(760, 80);
-  delay(600);
-  M5Cardputer.Speaker.tone(500, 60);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(500, 60);
-  delay(350);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(580, 80);
-  delay(350);
-  M5Cardputer.Speaker.tone(660, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(500, 80);
-  delay(300);
-  M5Cardputer.Speaker.tone(430, 80);
-  delay(150);
-  M5Cardputer.Speaker.tone(380, 80);
-  delay(600);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(150);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(510, 100);
-  delay(100);
-  M5Cardputer.Speaker.tone(660, 100);
-  delay(300);
-  M5Cardputer.Speaker.tone(770, 100);
-  delay(550);
-  M5Cardputer.Speaker.tone(380, 100);
-  delay(575);
+bool checkExitPress() {
+  M5Cardputer.update();
+  if (M5Cardputer.Keyboard.isKeyPressed(KEY_ENTER) ||
+      M5Cardputer.Keyboard.isKeyPressed('`')) {
+    return true;
+  }
+  return false;
 }
+
+struct Melody {
+  int note;
+  int duration;
+};
+
+Melody superMarioMelody[] = {
+    {660, 100}, {660, 100}, {510, 100}, {660, 100}, {770, 100}, {380, 100},
+    {510, 100}, {380, 100}, {320, 100}, {440, 100}, {480, 80},  {450, 100},
+    {430, 100}, {380, 100}, {660, 80},  {760, 50},  {860, 100}, {700, 80},
+    {760, 50},  {660, 80},  {520, 80},  {580, 80},  {480, 80},  {510, 100},
+    {380, 100}, {320, 100}, {440, 100}, {480, 80},  {450, 100}, {430, 100},
+    {380, 100}, {660, 80},  {760, 50},  {860, 100}, {700, 80},  {760, 50},
+    {660, 80},  {520, 80},  {580, 80},  {480, 80},  {500, 100}, {760, 100},
+    {720, 100}, {680, 100}, {620, 150}, {650, 150}, {380, 100}, {430, 100},
+    {500, 100}, {430, 100}, {500, 100}, {570, 100}, {500, 100}, {760, 100},
+    {720, 100}, {680, 100}, {620, 150}, {650, 200}, {1020, 80}, {1020, 80},
+    {1020, 80}, {380, 100}, {500, 100}, {760, 100}, {720, 100}, {680, 100},
+    {620, 150}, {650, 150}, {380, 100}, {430, 100}, {500, 100}, {430, 100},
+    {500, 100}, {570, 100}, {585, 100}, {550, 100}, {500, 100}, {380, 100},
+    {500, 100}, {500, 100}, {500, 100}, {500, 100}, {760, 100}, {720, 100},
+    {680, 100}, {620, 150}, {650, 150}, {380, 100}, {430, 100}, {500, 100},
+    {430, 100}, {500, 100}, {570, 100}, {500, 100}, {760, 100}, {720, 100},
+    {680, 100}, {620, 150}, {650, 200}, {1020, 80}, {1020, 80}, {1020, 80},
+    {380, 100}, {500, 100}, {760, 100}, {720, 100}, {680, 100}, {620, 150},
+    {650, 150}, {380, 100}, {430, 100}, {500, 100}, {430, 100}, {500, 100},
+    {570, 100}, {585, 100}, {550, 100}, {500, 100}, {380, 100}, {500, 100},
+    {500, 100}, {500, 100}, {500, 60},  {500, 80},  {500, 60},  {500, 80},
+    {580, 80},  {660, 80},  {500, 80},  {430, 80},  {380, 80},  {500, 60},
+    {500, 80},  {500, 60},  {500, 80},  {580, 80},  {660, 80},  {870, 80},
+    {760, 80},  {500, 60},  {500, 80},  {500, 60},  {500, 80},  {580, 80},
+    {660, 80},  {500, 80},  {430, 80},  {380, 80},  {660, 100}, {660, 100},
+    {660, 100}, {510, 100}, {660, 100}, {770, 100}, {380, 100},
+};
+int superMarioMelodySize = sizeof(superMarioMelody) / sizeof(Melody);
+
+int superMarioDelay[] = {
+    300, 300, 100, 300, 550, 575, 450, 400, 500, 300, 330, 150, 300, 200, 200,
+    150, 300, 150, 350, 300, 150, 150, 500, 450, 400, 500, 300, 330, 150, 300,
+    200, 200, 150, 300, 150, 350, 300, 150, 150, 500, 300, 100, 150, 150, 300,
+    300, 150, 150, 300, 150, 100, 220, 300, 100, 150, 150, 300, 300, 300, 150,
+    300, 300, 300, 100, 150, 150, 300, 300, 150, 150, 300, 150, 100, 420, 450,
+    420, 36,  300, 300, 150, 300, 300, 100, 150, 150, 300, 300, 150, 150, 300,
+    150, 100, 220, 300, 100, 150, 150, 300, 300, 300, 150, 300, 300, 300, 100,
+    150, 150, 300, 300, 150, 150, 300, 150, 100, 420, 450, 420, 36,  300, 300,
+    150, 300, 150, 300, 350, 150, 350, 150, 300, 150, 600, 150, 300, 350, 150,
+    150, 550, 325, 600, 150, 300, 350, 150, 350, 150, 300, 150, 600, 150, 300,
+    300, 100, 300, 550, 575,
+};
+
+void superMarioBrossSound() {
+  for (int note = 0; note < superMarioMelodySize; note++) {
+    M5Cardputer.Speaker.tone(superMarioMelody[note].note,
+                             superMarioMelody[note].duration);
+
+    if (checkExitPress()) {
+      return;
+    }
+
+    delay(superMarioDelay[note]);
+  }
+}
+
+Melody imperialMarchMelody[] = {
+    {500, 500}, {500, 500}, {500, 500}, {400, 500}, {600, 200}, {500, 500},
+    {400, 500}, {600, 200}, {500, 500}, {750, 500}, {750, 500}, {750, 500},
+    {810, 500}, {600, 200}, {470, 500}, {400, 500}, {600, 200}, {500, 500},
+};
+int imperialMarchMelodySize = sizeof(imperialMarchMelody) / sizeof(Melody);
+
+int imperialMarchDelay[] = {
+    500, 500, 500, 400, 100, 500, 400, 100, 1000,
+    500, 500, 500, 400, 100, 500, 400, 100, 1000,
+};
 
 void imperialMarchSound() {
-  M5Cardputer.Speaker.tone(500, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(500, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(500, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(400, 500);
-  delay(400);
-  M5Cardputer.Speaker.tone(600, 200);
-  delay(100);
-  M5Cardputer.Speaker.tone(500, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(400, 500);
-  delay(400);
-  M5Cardputer.Speaker.tone(600, 200);
-  delay(100);
-  M5Cardputer.Speaker.tone(500, 500);
-  delay(1000);
-  M5Cardputer.Speaker.tone(750, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(750, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(750, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(810, 500);
-  delay(400);
-  M5Cardputer.Speaker.tone(600, 200);
-  delay(100);
-  M5Cardputer.Speaker.tone(470, 500);
-  delay(500);
-  M5Cardputer.Speaker.tone(400, 500);
-  delay(400);
-  M5Cardputer.Speaker.tone(600, 200);
-  delay(100);
-  M5Cardputer.Speaker.tone(500, 500);
-  delay(1000);
+  for (int note = 0; note < imperialMarchMelodySize; note++) {
+    M5Cardputer.Speaker.tone(imperialMarchMelody[note].note,
+                             imperialMarchMelody[note].duration);
+
+    if (checkExitPress()) {
+      return;
+    }
+
+    delay(imperialMarchDelay[note]);
+  }
 }
+
+Melody ahaTakeOnMeMelody[] = {
+    {740, 188}, {740, 188}, {740, 188}, {587, 188}, {494, 188}, {659, 188},
+    {659, 188}, {659, 188}, {831, 188}, {831, 188}, {880, 188}, {988, 188},
+    {880, 188}, {880, 188}, {880, 188}, {659, 188}, {587, 188}, {740, 188},
+    {740, 188}, {740, 188}, {659, 188}, {659, 188}, {740, 188}, {659, 188},
+    {740, 188}, {740, 188}, {740, 188}, {587, 188}, {494, 188}, {659, 188},
+    {659, 188}, {659, 188}, {831, 188}, {831, 188}, {880, 188}, {988, 188},
+    {880, 188}, {880, 188}, {880, 188}, {659, 188}, {587, 188}, {740, 188},
+    {740, 188}, {740, 188}, {659, 188}, {659, 188}, {740, 188}, {659, 188},
+};
+int ahaTakeOnMeMelodySize = sizeof(ahaTakeOnMeMelody) / sizeof(Melody);
+
+int ahaTakeOnMeDelay[] = {
+    198, 198, 198, 198, 188, 198, 188, 198, 188, 198, 188, 198, 198,
+    198, 198, 198, 198, 198, 198, 198, 188, 198, 188, 198, 188, 198,
+    188, 198, 198, 198, 198, 198, 198, 198, 198, 198, 188, 198, 188,
+    198, 188, 198, 188, 198, 198, 198, 198, 198, 198, 198, 198, 198,
+    188, 198, 188, 198, 188, 198, 188, 198, 198, 198, 198, 19,
+};
 
 void ahaTakeOnMeSound() {
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(587, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(494, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(831, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(831, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(988, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(587, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(587, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(494, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(831, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(831, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(988, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(880, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(587, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  delay(188);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(740, 188);
-  delay(198);
-  M5Cardputer.Speaker.tone(659, 188);
-  delay(19);
+  for (int note = 0, iDelay = 0; note < ahaTakeOnMeMelodySize; note++) {
+    M5Cardputer.Speaker.tone(ahaTakeOnMeMelody[note].note,
+                             ahaTakeOnMeMelody[note].duration);
+
+    if (checkExitPress()) {
+      return;
+    }
+
+    delay(ahaTakeOnMeDelay[iDelay]);
+
+    if (ahaTakeOnMeDelay[iDelay + 1] == 188) {
+      delay(ahaTakeOnMeDelay[iDelay + 1]);
+      iDelay++;
+    }
+
+    iDelay++;
+  }
 }
+
+Melody jingleBellsMelody[] = {
+    {523, 220}, {523, 220}, {523, 300}, {523, 200}, {523, 200}, {523, 300},
+    {523, 220}, {623, 220}, {423, 220}, {473, 220}, {523, 600}, {553, 220},
+    {553, 220}, {553, 300}, {553, 220}, {523, 220}, {523, 250}, {523, 220},
+    {470, 220}, {470, 220}, {523, 300}, {470, 600},
+};
+int jingleBellsMelodySize = sizeof(jingleBellsMelody) / sizeof(Melody);
+
+int jingleBellsDelay[] = {
+    250, 250, 500, 250, 250, 500, 250, 250, 250, 250, 1000,
+    250, 250, 500, 250, 250, 500, 250, 250, 250, 350, 1000,
+};
 
 void jingleBellsSound() {
-  M5Cardputer.Speaker.tone(523, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 300);
-  delay(500);
-  M5Cardputer.Speaker.tone(523, 200);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 200);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 300);
-  delay(500);
-  M5Cardputer.Speaker.tone(523, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(623, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(423, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(473, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 600);
-  delay(1000);
-  M5Cardputer.Speaker.tone(553, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(553, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(553, 300);
-  delay(500);
-  M5Cardputer.Speaker.tone(553, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 250);
-  delay(500);
-  M5Cardputer.Speaker.tone(523, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(470, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(470, 220);
-  delay(250);
-  M5Cardputer.Speaker.tone(523, 300);
-  delay(350);
-  M5Cardputer.Speaker.tone(470, 600);
-  delay(1000);
+  for (int note = 0; note < jingleBellsMelodySize; note++) {
+    M5Cardputer.Speaker.tone(jingleBellsMelody[note].note,
+                             jingleBellsMelody[note].duration);
+
+    if (checkExitPress()) {
+      return;
+    }
+
+    delay(jingleBellsDelay[note]);
+  }
 }
+
+Melody ozzyOsbornCrazyTrainMelody[] = {
+    {370, 175}, {370, 175}, {0, 0},     {440, 175}, {440, 175}, {0, 0},
+    {330, 175}, {330, 175}, {0, 0},     {370, 175}, {370, 175}, {0, 0},
+    {587, 175}, {587, 175}, {0, 0},     {330, 175}, {330, 175}, {0, 0},
+    {370, 175}, {370, 175}, {554, 175}, {370, 175}, {587, 175}, {370, 175},
+    {554, 175}, {370, 175}, {494, 175}, {440, 175}, {415, 175}, {440, 175},
+    {494, 175}, {440, 175}, {415, 175}, {330, 175}, {370, 175}, {370, 175},
+    {554, 175}, {370, 175}, {587, 175}, {370, 175}, {554, 175}, {370, 175},
+    {494, 175}, {440, 175}, {415, 175}, {440, 175}, {494, 175}, {440, 175},
+    {415, 175}, {330, 175}, {370, 175}, {370, 175}, {554, 175}, {370, 175},
+    {587, 175}, {370, 175}, {554, 175}, {370, 175}, {494, 175}, {440, 175},
+    {415, 175}, {440, 175}, {494, 175}, {440, 175}, {415, 175}, {330, 175},
+    {370, 175}, {370, 175}, {554, 175}, {370, 175}, {587, 175}, {370, 175},
+    {554, 175}, {494, 175}, {587, 775}, {330, 775}, {440, 175}, {440, 75},
+    {440, 75},  {880, 175}, {440, 75},  {440, 75},  {440, 75},  {440, 75},
+    {784, 175}, {440, 75},  {440, 75},  {440, 75},  {440, 75},  {740, 175},
+    {440, 75},  {440, 75},  {440, 75},  {440, 75},  {659, 575}, {392, 75},
+    {415, 75},  {440, 175}, {440, 175}, {440, 75},  {440, 75},  {880, 175},
+    {440, 75},  {440, 75},  {440, 75},  {440, 75},  {784, 175}, {440, 75},
+    {440, 75},  {440, 75},  {440, 75},  {740, 175}, {440, 75},  {440, 75},
+    {440, 75},  {440, 75},  {659, 575}, {440, 375}, {659, 175}, {554, 575},
+    {0, 0},     {0, 0},     {554, 175}, {494, 175}, {440, 175}, {440, 175},
+    {440, 375}, {494, 175}, {554, 375}, {0, 0},     {880, 175}, {880, 175},
+    {880, 175}, {740, 375}, {659, 575}, {0, 0},     {659, 175}, {740, 175},
+    {659, 175}, {659, 175}, {587, 375}, {659, 175}, {587, 175}, {554, 175},
+    {440, 775}, {0, 0},     {659, 175}, {554, 575}, {0, 0},     {0, 0},
+    {494, 175}, {494, 175}, {440, 375}, {440, 375}, {494, 175}, {554, 375},
+    {0, 0},     {0, 0},     {0, 0},     {880, 175}, {880, 175}, {880, 175},
+    {880, 175}, {740, 175}, {659, 375}, {0, 0},     {659, 175}, {659, 175},
+    {740, 175}, {659, 175}, {659, 175}, {587, 375}, {659, 175}, {587, 175},
+    {554, 175}, {440, 775},
+};
+int ozzyOsbornCrazyTrainMelodySize =
+    sizeof(ozzyOsbornCrazyTrainMelody) / sizeof(Melody);
+
+int ozzyOsbornCrazyTrainDelay[] = {
+    200, 200, 1200, 200,  200, 400,  200, 200, 400, 200, 200, 1200, 200, 200,
+    400, 200, 200,  400,  200, 200,  200, 200, 200, 200, 200, 200,  200, 200,
+    200, 200, 200,  200,  200, 200,  200, 200, 200, 200, 200, 200,  200, 200,
+    200, 200, 200,  200,  200, 200,  200, 200, 200, 200, 200, 200,  200, 200,
+    200, 200, 200,  200,  200, 200,  200, 200, 200, 200, 200, 200,  200, 200,
+    200, 200, 200,  200,  800, 800,  200, 100, 100, 200, 100, 100,  100, 100,
+    200, 100, 100,  100,  100, 200,  100, 100, 100, 100, 600, 100,  100, 200,
+    200, 100, 100,  200,  100, 100,  100, 100, 200, 100, 100, 100,  100, 200,
+    100, 100, 100,  100,  600, 400,  200, 600, 800, 600, 200, 200,  200, 200,
+    400, 200, 400,  2400, 200, 200,  200, 400, 600, 600, 200, 200,  200, 200,
+    400, 200, 200,  200,  800, 1600, 200, 600, 800, 600, 200, 200,  400, 400,
+    200, 400, 800,  800,  600, 200,  200, 200, 200, 200, 400, 800,  200, 200,
+    200, 200, 200,  400,  200, 200,  200, 800,
+};
 
 void ozzyOsbornCrazyTrainSound() {
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  delay(1200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  delay(400);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  delay(400);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  delay(1200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  delay(400);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  delay(400);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(415, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(415, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(415, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(415, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(415, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(415, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(330, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(370, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 775);
-  delay(800);
-  M5Cardputer.Speaker.tone(330, 775);
-  delay(800);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(784, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(740, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(659, 575);
-  delay(600);
-  M5Cardputer.Speaker.tone(392, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(415, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(784, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(740, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(440, 75);
-  delay(100);
-  M5Cardputer.Speaker.tone(659, 575);
-  delay(600);
-  M5Cardputer.Speaker.tone(440, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 575);
-  delay(600);
-  delay(800);
-  delay(600);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 375);
-  delay(400);
-  delay(2400);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(740, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(659, 575);
-  delay(600);
-  delay(600);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(740, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 775);
-  delay(800);
-  delay(1600);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 575);
-  delay(600);
-  delay(800);
-  delay(600);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(440, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(494, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 375);
-  delay(400);
-  delay(800);
-  delay(800);
-  delay(600);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(880, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(740, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(659, 375);
-  delay(400);
-  delay(800);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(740, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 375);
-  delay(400);
-  M5Cardputer.Speaker.tone(659, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(587, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(554, 175);
-  delay(200);
-  M5Cardputer.Speaker.tone(440, 775);
-  delay(800);
+  for (int note = 0; note < ozzyOsbornCrazyTrainMelodySize; note++) {
+    Serial.printf("note: %d, duration: %d\n",
+                  ozzyOsbornCrazyTrainMelody[note].note,
+                  ozzyOsbornCrazyTrainMelody[note].duration);
+    Serial.printf("delay: %d\n", ozzyOsbornCrazyTrainDelay[note]);
+
+    if (ozzyOsbornCrazyTrainMelody[note].note == 0) {
+      delay(ozzyOsbornCrazyTrainDelay[note]);
+      continue;
+    }
+
+    M5Cardputer.Speaker.tone(ozzyOsbornCrazyTrainMelody[note].note,
+                             ozzyOsbornCrazyTrainMelody[note].duration);
+
+    if (checkExitPress()) {
+      return;
+    }
+
+    delay(ozzyOsbornCrazyTrainDelay[note]);
+  }
+  Serial.printf("done");
 }
 
+Melody starWarsMelody[] = {
+    {698, 167},  {698, 167},  {698, 167},   {932, 1000},  {1397, 1000},
+    {1245, 167}, {1175, 167}, {1047, 167},  {1865, 1000}, {1397, 500},
+    {1245, 167}, {1175, 167}, {1047, 167},  {1865, 1000}, {1397, 500},
+    {1245, 167}, {1175, 167}, {1245, 167},  {1047, 667},  {698, 167},
+    {698, 167},  {698, 167},  {932, 1000},  {1397, 1000}, {1245, 167},
+    {1175, 167}, {1047, 167}, {1865, 1000}, {1397, 500},  {1245, 167},
+    {1175, 167}, {1047, 167}, {1865, 1000}, {1397, 500},  {1245, 167},
+    {1175, 167}, {1245, 167}, {1047, 667},
+};
+int starWarsMelodySize = sizeof(starWarsMelody) / sizeof(Melody);
+
+int starWarsDelay[] = {
+    177,  177, 177,  1010, 1010, 177, 177, 177,  1010, 510, 177,  177,  177,
+    1010, 510, 177,  177,  177,  677, 333, 177,  177,  177, 1010, 1010, 177,
+    177,  177, 1010, 510,  177,  177, 177, 1010, 510,  177, 177,  177,  677,
+};
+
 void starWarsSound() {
-  M5Cardputer.Speaker.tone(698, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(698, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(698, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(932, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1397, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1175, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1047, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1865, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1397, 500);
-  delay(510);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1175, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1047, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1865, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1397, 500);
-  delay(510);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1175, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1047, 667);
-  delay(677);
-  delay(333);
-  M5Cardputer.Speaker.tone(698, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(698, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(698, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(932, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1397, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1175, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1047, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1865, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1397, 500);
-  delay(510);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1175, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1047, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1865, 1000);
-  delay(1010);
-  M5Cardputer.Speaker.tone(1397, 500);
-  delay(510);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1175, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1245, 167);
-  delay(177);
-  M5Cardputer.Speaker.tone(1047, 667);
-  delay(677);
+  for (int note = 0, iDelay = 0; note < starWarsMelodySize; note++) {
+    M5Cardputer.Speaker.tone(starWarsMelody[note].note,
+                             starWarsMelody[note].duration);
+
+    if (checkExitPress()) {
+      return;
+    }
+
+    delay(starWarsDelay[iDelay]);
+
+    if (starWarsDelay[iDelay + 1] == 333) {
+      delay(starWarsDelay[iDelay + 1]);
+      iDelay++;
+    }
+
+    iDelay++;
+  }
 }
 
 int nokiaMelody[] = {NOTE_E5,  NOTE_D5, NOTE_FS4, NOTE_GS4, NOTE_CS5,
@@ -946,6 +288,11 @@ void nokiaSound() {
     M5Cardputer.Speaker.tone(nokiaMelody[note], duration);
 
     int pauseBetweenNotes = duration * 1.30;
+
+    if (checkExitPress()) {
+      return;
+    }
+
     delay(pauseBetweenNotes);
   }
 }
@@ -965,6 +312,11 @@ void theSimpsonsSound() {
     M5Cardputer.Speaker.tone(theSimpsonsMelody[note], duration);
 
     int pauseBetweenNotes = duration * 1.30;
+
+    if (checkExitPress()) {
+      return;
+    }
+
     delay(pauseBetweenNotes);
   }
 }
@@ -989,6 +341,11 @@ void pacmanSound() {
     M5Cardputer.Speaker.tone(pacmanMelody[note], duration);
 
     int pauseBetweenNotes = duration * 1.30;
+
+    if (checkExitPress()) {
+      return;
+    }
+
     delay(pauseBetweenNotes);
   }
 }
@@ -1194,321 +551,61 @@ void doomSound() {
     M5Cardputer.Speaker.tone(doomMelody[note], duration);
 
     int pauseBetweenNotes = duration * 1.30;
+
+    if (checkExitPress()) {
+      return;
+    }
+
     delay(pauseBetweenNotes);
   }
 }
 
 int shapeOfYouMelody[] = {
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_DS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_B3,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_DS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_B3,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_GS3,
-    NOTE_B3,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_B3,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_B3,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_B3,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_GS3,
-    NOTE_B3,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4 | NOTE_CS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_B4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_GS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_FS4,
-    NOTE_E4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_GS4,
-    NOTE_CS4,
-    NOTE_E4,
-    NOTE_FS4,
-    NOTE_CS4,
+    NOTE_CS4, NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_CS4, NOTE_CS4,
+    NOTE_E4,  NOTE_CS4, NOTE_DS4, NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_CS4,
+    NOTE_B3,  NOTE_CS4, NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_CS4,
+    NOTE_DS4, NOTE_CS4, NOTE_E4,  NOTE_B3,  NOTE_E4,  NOTE_E4,  NOTE_E4,
+    NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_E4,
+    NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_GS4, NOTE_GS4,
+    NOTE_E4,  NOTE_FS4, NOTE_B4,  NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4,
+    NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_FS4,
+    NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_CS4,
+    NOTE_CS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4,
+    NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_GS4, NOTE_B4,
+    NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_E4,  NOTE_GS4, NOTE_FS4,
+    NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_B4,  NOTE_GS4, NOTE_GS4, NOTE_GS4,
+    NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4, NOTE_FS4,
+    NOTE_FS4, NOTE_FS4, NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4,
+    NOTE_CS4, NOTE_GS3, NOTE_B3,  NOTE_CS4, NOTE_CS4, NOTE_FS4, NOTE_GS4,
+    NOTE_E4,  NOTE_FS4, NOTE_B3,  NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_FS4,
+    NOTE_E4,  NOTE_CS4, NOTE_E4,  NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_FS4,
+    NOTE_CS4, NOTE_B4,  NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4, NOTE_E4,
+    NOTE_CS4, NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_FS4,
+    NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_B3,  NOTE_CS4, NOTE_CS4, NOTE_FS4,
+    NOTE_GS4, NOTE_E4,  NOTE_FS4, NOTE_FS4, NOTE_B3,  NOTE_FS4, NOTE_GS4,
+    NOTE_FS4, NOTE_E4,  NOTE_CS4, NOTE_E4,  NOTE_GS4, NOTE_FS4, NOTE_E4,
+    NOTE_FS4, NOTE_CS4, NOTE_B4,  NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4,
+    NOTE_E4,  NOTE_CS4, NOTE_B4,  NOTE_GS4, NOTE_GS4, NOTE_FS4, NOTE_FS4,
+    NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_GS3, NOTE_B3,  NOTE_E4,  NOTE_FS4,
+    NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_FS4,
+    NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_E4,
+    NOTE_FS4, NOTE_CS4, NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_CS4, NOTE_E4,
+    NOTE_E4,  NOTE_FS4, NOTE_FS4, NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_FS4,
+    NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_CS4, NOTE_CS4, NOTE_FS4, NOTE_GS4,
+    NOTE_B4,  NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_E4,
+    NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_CS4,
+    NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_FS4, NOTE_GS4,
+    NOTE_CS4, NOTE_E4,  NOTE_FS4, NOTE_E4,  NOTE_FS4, NOTE_E4,  NOTE_FS4,
+    NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_CS4, NOTE_CS4,
+    NOTE_CS4, NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_GS4,
+    NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_FS4,
+    NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_FS4,
+    NOTE_GS4, NOTE_GS4, NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_FS4, NOTE_E4,
+    NOTE_E4,  NOTE_FS4, NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_E4,
+    NOTE_FS4, NOTE_FS4, NOTE_GS4, NOTE_GS4, NOTE_E4,  NOTE_FS4, NOTE_GS4,
+    NOTE_FS4, NOTE_E4,  NOTE_E4,  NOTE_FS4, NOTE_CS4, NOTE_CS4, NOTE_CS4,
+    NOTE_CS4, NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_FS4, NOTE_GS4, NOTE_CS4,
+    NOTE_E4,  NOTE_FS4, NOTE_CS4,
 };
 
 int shapeOfYouDurations[] = {
@@ -1533,6 +630,11 @@ void shapeOfYouSound() {
     M5Cardputer.Speaker.tone(shapeOfYouMelody[note], duration);
 
     int pauseBetweenNotes = duration * 1.30;
+
+    if (checkExitPress()) {
+      return;
+    }
+
     delay(pauseBetweenNotes);
   }
 }
@@ -1593,6 +695,11 @@ void gameOfThronesSound() {
     M5Cardputer.Speaker.tone(gameOfThronesMelody[note], duration);
 
     int pauseBetweenNotes = duration * 1.30;
+
+    if (checkExitPress()) {
+      return;
+    }
+
     delay(pauseBetweenNotes);
   }
 }

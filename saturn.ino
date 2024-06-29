@@ -1497,6 +1497,7 @@ void soundMenuLoop() {
   }
   if (checkSelectPress()) {
     int option = soundMenu[cursor].command;
+    delay(500); // Prevents audio from going on and off immediately because you haven't released the button yet
     rstOverride = false;
     isSwitching = true;
     switch(option) {
