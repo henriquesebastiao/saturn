@@ -3,6 +3,7 @@
 </h1>
 
 [![Version](https://img.shields.io/badge/version-1.2.0-blue)](https://github.com/henriquesebastiao/saturn/tags)
+[![Build](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml)
 [![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
 
 <p>
