@@ -1,0 +1,23 @@
+on: [ push, pull_request ]
+
+name: CI
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Compile Sketch
+        uses: actions/checkout@v2
+        
+      - uses: arduino/compile-sketches@v1
+        with:
+            fqbn: "m5stack:esp32:m5stack_cardputer"
+            platforms: |
+                - name: "m5stack:esp32"
+            libraries: |
+                - name: M5Cardputer
+                - name: IRRemoteESP8266
+            sketch-paths: |
+                - saturn
+            verbose: true
