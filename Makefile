@@ -15,6 +15,9 @@ merge:
 monitor:
 	arduino-cli monitor --port $(PORT)
 
+format:
+	clang-format -i --style=google src/*.h
+
 format-raw:
 	python scripts/format_raw.py -f dev/input.txt
 
@@ -27,12 +30,17 @@ format-ir:
 black:
 	black .
 
+lint:
+	cppcheck --error-exitcode=1 --language=c++ src/*.h
+
 .PHONY: html-lint
 .PHONY: upload
 .PHONY: compile
 .PHONY: merge
 .PHONY: monitor
+.PHONY: format
 .PHONY: format-raw
 .PHONY: format-pronto
 .PHONY: format-ir
 .PHONY: black
+.PHONY: lint
