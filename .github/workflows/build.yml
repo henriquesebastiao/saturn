@@ -1,0 +1,117 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  compile_sketch:
+    name: Build Saturn Firmware
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+          - {
+              name: "M5Cardputer",
+              fqbn: "m5stack:esp32:m5stack_cardputer",
+              libraries: "M5Cardputer IRRemoteESP8266 M5Stack-SD-Updater M5Unified",
+              partitions: {
+                bootloader_addr: "0x0000",
+              },
+            }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+
+      - name: Install platform
+        run: |
+          set -x
+          
+          # arduino-cli core install esp32:esp32
+          arduino-cli core install m5stack:esp32 --additional-urls https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/arduino/package_m5stack_index.json
+
+          arduino-cli core search m5stack
+          arduino-cli board listall
+
+          arduino-cli lib install ${{ matrix.board.libraries }} --log-level warn --verbose
+          
+      - name: Install esptool
+        run: |
+          pip install -U esptool
+
+      - name: Setup platform.txt
+        run: |
+          baseFolder="$HOME/.arduino15/packages/m5stack/hardware/esp32"
+          
+          # Find the latest version of the folder
+          latestVersion=$(find "$baseFolder" -maxdepth 1 -type d -exec basename {} \; | sort -V | head -n 1)
+          
+          if [ -z "$latestVersion" ]; then
+              echo "No version found."
+              read -p "Press Enter to exit."
+              exit 1
+          fi
+          
+          # Full path to the file to be edited
+          file="$baseFolder/$latestVersion/platform.txt"
+          backupFile="$baseFolder/$latestVersion/platform.txt.bkp"
+          prefix="build.extra_flags.esp32"
+          option=" -w "
+          
+          prefix2="compiler.c.elf.libs.esp32"
+          option2=" -zmuldefs "
+  
+          # Use awk to insert options after the first equals sign on lines with specified prefixes
+          awk -v prefix="$prefix" -v option="$option" -v prefix2="$prefix2" -v option2="$option2" '{
+              if ($0 ~ "^" prefix) {
+                  sub(/=/, "=" option);
+                  print;
+              } else if ($0 ~ "^" prefix2) {
+                  sub(/=/, "=" option2);
+                  print;
+              } else {
+                  print;
+              }
+          }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    
+          echo "Done."
+    
+      - name: Compile ${{ matrix.board.name }} Sketch
+        run: |
+          set -x
+    
+          arduino-cli compile --fqbn ${{ matrix.board.fqbn }} -e \
+                              --build-property build.partitions=huge_app \
+                              --build-property upload.maximum_size=3145728 \
+                              ./saturn.ino
+          
+      - name: Create ${{ matrix.board.name }} Firmware Binary
+        run: |
+          set -x
+    
+          fqbn=${{ matrix.board.fqbn }}
+          directory="${fqbn//:/.}"
+    
+          esptool.py --chip esp32s3 merge_bin --output saturn.bin  \
+            ${{ matrix.board.partitions.bootloader_addr }} build/${directory}/saturn.ino.bootloader.bin \
+            0x8000 build/${directory}/saturn.ino.partitions.bin \
+            0x10000 build/${directory}/saturn.ino.bin
+    
+      - name: List all files
+        if: always()
+        continue-on-error: true
+        run: |
+          set -x
+          pwd
+          ls -all
+          tree

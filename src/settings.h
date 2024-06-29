@@ -3,7 +3,7 @@
 #define SDCARD
 
 // Info
-#define SATURN_VERSION "v1.0.0"
+#define SATURN_VERSION "v1.2.0"
 
 // Style
 #define MAIN_COLOR CYAN
@@ -13,13 +13,13 @@
 #define MEDIUM_TEXT 2
 #define LARGE_TEXT 4
 #define SPACING_MENU_ITEMS 33  // Spacing between menu items
-#define HEIGHT_MENU_ITEMS 4  // Height of the menu items
+#define HEIGHT_MENU_ITEMS 4    // Height of the menu items
 
 // Interactions
 #define SOUND
 
 // Languages
-//#define LANGUAGE_EN_US
+// #define LANGUAGE_EN_US
 #define LANGUAGE_PT_BR
 
 // Aliases
@@ -66,7 +66,7 @@ static constexpr const size_t record_size = record_number * record_length;
 static constexpr const size_t record_samplerate = 17000;
 static int16_t prev_y[record_length];
 static int16_t prev_h[record_length];
-static size_t rec_record_idx  = 2;
+static size_t rec_record_idx = 2;
 static size_t draw_record_idx = 0;
 static int16_t *rec_data;
 
