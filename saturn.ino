@@ -320,6 +320,7 @@ bool checkESCPress() {
 void mainMenuSetup() {
   cursor = 0;
   rstOverride = true;
+  digitalWrite(IR_SEND_PIN, LOW);
   drawMenu(mainMenu, mainMenuSize);
   delay(500);
 }
@@ -341,6 +342,7 @@ void mainMenuLoop() {
 void irDevicesMenuSetup() {
   cursor = 0;
   rstOverride = true;
+  digitalWrite(IR_SEND_PIN, LOW);
   drawMenu(irDevicesMenu, irDevicesMenuSize);
   delay(500);
 }
@@ -365,16 +367,16 @@ void irDevicesMenuLoop() {
 
 // -=-=-= IR TV MENU =-=-=-
 
+void irPinHigh() {
+  digitalWrite(IR_SEND_PIN, HIGH);
+}
+
 void irTvMenuSetup() {
   cursor = 0;
   rstOverride = true;
 
-  #if defined(IR_SEND_PIN)
-    irsend.begin();
-  #endif
-  // Hack: Set IRLED high to turn it off after setup. Otherwise it stays on (active low)
-  digitalWrite(IR_SEND_PIN, HIGH);
-
+  irsend.begin();
+  digitalWrite(IR_SEND_PIN, LOW);
   drawMenu(irTvMenu, irTvMenuSize);
   delay(500);
 }
@@ -383,38 +385,52 @@ void irTvMenuLoop() {
   if (checkNextPress()) {
     cursor++;
     cursor = cursor % irTvMenuSize;
+    digitalWrite(IR_SEND_PIN, LOW);
     drawMenu(irTvMenu, irTvMenuSize);
     delay(250);
   }
   if (checkSelectPress()) {
     if (irTvMenu[cursor].command == 0) {
       isSwitching = true;
+      digitalWrite(IR_SEND_PIN, LOW);
       currentProc = 4;
     } else if (irTvMenu[cursor].command == 7) {  // Power
+      irPinHigh();
       // sendIrRawCodes(allIrPowerCodesRawTV, allIrPowerCodesRawTVLength, "POWER");
       sendIrProntoCodes(allIrPowerCodesProntoTV, allIrPowerCodesProntoTVLength, "POWER");
     } else if (irTvMenu[cursor].command == 10) {  // Mute
+      irPinHigh();
       // sendIrRawCodes(allIrMuteCodesRawTV, allIrMuteCodesRawTVLength, TXT_MUTE_TXT_UP);
       sendIrProntoCodes(allIrMuteCodesProntoTV, allIrMuteCodesProntoTVLength, TXT_MUTE_TXT_UPPER);
     } else if (irTvMenu[cursor].command == 8) {  // Volume +
+      irPinHigh();
       sendIrProntoCodes(allIrVolumeUpCodesProntoTV, allIrVolumeUpCodesProntoTVLength, "VOL +");
     } else if (irTvMenu[cursor].command == 9) {  // Volume -
+      irPinHigh();
       sendIrProntoCodes(allIrVolumeDownCodesProntoTV, allIrVolumeDownCodesProntoTVLength, "VOL -");
     } else if (irTvMenu[cursor].command == 11) {  // Channel +
+      irPinHigh();
       sendIrProntoCodes(allIrChannelUpCodesProntoTV, allIrChannelUpCodesProntoTVLength, TXT_CHANNEL_UP_UPPER);
     } else if (irTvMenu[cursor].command == 12) {  // Channel -
+      irPinHigh();
       sendIrProntoCodes(allIrChannelDownCodesProntoTV, allIrChannelDownCodesProntoTVLength, TXT_CHANNEL_DOWN_UPPER);
     } else if (irTvMenu[cursor].command == 13) {  // Up
+      irPinHigh();
       sendIrProntoCodes(allIrUpCodesProntoTV, allIrUpCodesProntoTVLength, TXT_UP_UPPER);
     } else if (irTvMenu[cursor].command == 14) {  // Down
+      irPinHigh();
       sendIrProntoCodes(allIrDownCodesProntoTV, allIrDownCodesProntoTVLength, TXT_DOWN_UPPER);
     } else if (irTvMenu[cursor].command == 15) {  // Left
+      irPinHigh();
       sendIrProntoCodes(allIrLeftCodesProntoTV, allIrLeftCodesProntoTVLength, TXT_LEFT_UPPER);
     } else if (irTvMenu[cursor].command == 16) {  // Right
+      irPinHigh();
       sendIrProntoCodes(allIrRightCodesProntoTV, allIrRightCodesProntoTVLength, TXT_RIGHT_UPPER);
     } else if (irTvMenu[cursor].command == 17) {  // Enter
+      irPinHigh();
       sendIrProntoCodes(allIrEnterCodesProntoTV, allIrEnterCodesProntoTVLength, "ENTER");
     } else if (irTvMenu[cursor].command == 18) {  // Menu
+      irPinHigh();
       sendIrProntoCodes(allIrMenuCodesProntoTV, allIrMenuCodesProntoTVLength, "MENU");
     }
   }
@@ -1481,6 +1497,7 @@ void soundMenuLoop() {
   }
   if (checkSelectPress()) {
     int option = soundMenu[cursor].command;
+    delay(500); // Prevents audio from going on and off immediately because you haven't released the button yet
     rstOverride = false;
     isSwitching = true;
     switch(option) {
@@ -1737,6 +1754,7 @@ void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
   if (checkSelectPress()){
     Serial.println("STOPPING PREMATURELY");
     endingEarly = true;
+    digitalWrite(IR_SEND_PIN, LOW);
     currentProc = 5;
   }
 }
@@ -1765,6 +1783,7 @@ void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
   if (checkSelectPress()){
     Serial.println("STOPPING PREMATURELY");
     endingEarly = true;
+    digitalWrite(IR_SEND_PIN, LOW);
     currentProc = 5;
   }
 }
@@ -1878,10 +1897,8 @@ void setup() {
   DISPLAY.setRotation(1);
   DISPLAY.setTextDatum(middle_center);
 
-  #if defined(IR_SEND_PIN)
-    pinMode(IR_SEND_PIN, OUTPUT);
-    digitalWrite(IR_SEND_PIN, HIGH);
-  #endif
+  pinMode(IR_SEND_PIN, OUTPUT);
+  digitalWrite(IR_SEND_PIN, LOW);
   
   // Boot screen
   DISPLAY.fillScreen(BG_COLOR);
