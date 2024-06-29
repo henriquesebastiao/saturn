@@ -12,7 +12,7 @@ on:
 
 jobs:
   compile_sketch:
-    name: Build ${{ matrix.board.name }} Firmware
+    name: Build Saturn Firmware
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -21,7 +21,6 @@ jobs:
           - {
               name: "M5Cardputer",
               fqbn: "m5stack:esp32:m5stack_cardputer",
-              extra_flags: "-DCARDPUTER",
               libraries: "M5Cardputer IRRemoteESP8266 M5Stack-SD-Updater M5Unified",
               partitions: {
                 bootloader_addr: "0x0000",
@@ -91,13 +90,9 @@ jobs:
         run: |
           set -x
     
-              
-          extra_flags="${{ matrix.board.extra_flags }} -DNEMO_VERSION=\"${version}\" -D${language}"
-
           arduino-cli compile --fqbn ${{ matrix.board.fqbn }} -e \
                               --build-property build.partitions=huge_app \
                               --build-property upload.maximum_size=3145728 \
-                              --build-property compiler.cpp.extra_flags="${extra_flags}" \
                               ./saturn.ino
           
       - name: Create ${{ matrix.board.name }} Firmware Binary
