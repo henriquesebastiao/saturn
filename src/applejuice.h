@@ -110,7 +110,7 @@ uint8_t AppleVisionPro[23] = {0x16, 0xff, 0x4c, 0x00, 0x04, 0x04, 0x2a, 0x00,
                               0x00, 0x00, 0x0f, 0x05, 0xc1, 0x24, 0x60, 0x4c,
                               0x95, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00};
 uint8_t* data;
-int deviceType = 0;
+uint8_t deviceType = 0;
 
 struct DeviceType {
   uint32_t value;
@@ -319,7 +319,8 @@ DeviceType android_models[] = {
     {0x92ADC9, "Ton Upgrade Netflix"},
 };
 
-int android_models_count = (sizeof(android_models) / sizeof(android_models[0]));
+uint8_t android_models_count =
+    (sizeof(android_models) / sizeof(android_models[0]));
 
 BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
 BLEAdvertising* pAdvertising;

@@ -10,8 +10,8 @@ bool checkExitPress() {
 }
 
 struct Melody {
-  int note;
-  int duration;
+  uint8_t note;
+  uint8_t duration;
 };
 
 Melody superMarioMelody[] = {
@@ -42,9 +42,9 @@ Melody superMarioMelody[] = {
     {660, 80},  {500, 80},  {430, 80},  {380, 80},  {660, 100}, {660, 100},
     {660, 100}, {510, 100}, {660, 100}, {770, 100}, {380, 100},
 };
-int superMarioMelodySize = sizeof(superMarioMelody) / sizeof(Melody);
+uint8_t superMarioMelodySize = sizeof(superMarioMelody) / sizeof(Melody);
 
-int superMarioDelay[] = {
+uint8_t superMarioDelay[] = {
     300, 300, 100, 300, 550, 575, 450, 400, 500, 300, 330, 150, 300, 200, 200,
     150, 300, 150, 350, 300, 150, 150, 500, 450, 400, 500, 300, 330, 150, 300,
     200, 200, 150, 300, 150, 350, 300, 150, 150, 500, 300, 100, 150, 150, 300,
@@ -59,7 +59,7 @@ int superMarioDelay[] = {
 };
 
 void superMarioBrossSound() {
-  for (int note = 0; note < superMarioMelodySize; note++) {
+  for (uint8_t note = 0; note < superMarioMelodySize; note++) {
     M5Cardputer.Speaker.tone(superMarioMelody[note].note,
                              superMarioMelody[note].duration);
 
@@ -76,15 +76,15 @@ Melody imperialMarchMelody[] = {
     {400, 500}, {600, 200}, {500, 500}, {750, 500}, {750, 500}, {750, 500},
     {810, 500}, {600, 200}, {470, 500}, {400, 500}, {600, 200}, {500, 500},
 };
-int imperialMarchMelodySize = sizeof(imperialMarchMelody) / sizeof(Melody);
+uint8_t imperialMarchMelodySize = sizeof(imperialMarchMelody) / sizeof(Melody);
 
-int imperialMarchDelay[] = {
+uint8_t imperialMarchDelay[] = {
     500, 500, 500, 400, 100, 500, 400, 100, 1000,
     500, 500, 500, 400, 100, 500, 400, 100, 1000,
 };
 
 void imperialMarchSound() {
-  for (int note = 0; note < imperialMarchMelodySize; note++) {
+  for (uint8_t note = 0; note < imperialMarchMelodySize; note++) {
     M5Cardputer.Speaker.tone(imperialMarchMelody[note].note,
                              imperialMarchMelody[note].duration);
 
@@ -106,9 +106,9 @@ Melody ahaTakeOnMeMelody[] = {
     {880, 188}, {880, 188}, {880, 188}, {659, 188}, {587, 188}, {740, 188},
     {740, 188}, {740, 188}, {659, 188}, {659, 188}, {740, 188}, {659, 188},
 };
-int ahaTakeOnMeMelodySize = sizeof(ahaTakeOnMeMelody) / sizeof(Melody);
+uint8_t ahaTakeOnMeMelodySize = sizeof(ahaTakeOnMeMelody) / sizeof(Melody);
 
-int ahaTakeOnMeDelay[] = {
+uint8_t ahaTakeOnMeDelay[] = {
     198, 198, 198, 198, 188, 198, 188, 198, 188, 198, 188, 198, 198,
     198, 198, 198, 198, 198, 198, 198, 188, 198, 188, 198, 188, 198,
     188, 198, 198, 198, 198, 198, 198, 198, 198, 198, 188, 198, 188,
@@ -117,7 +117,7 @@ int ahaTakeOnMeDelay[] = {
 };
 
 void ahaTakeOnMeSound() {
-  for (int note = 0, iDelay = 0; note < ahaTakeOnMeMelodySize; note++) {
+  for (uint8_t note = 0, iDelay = 0; note < ahaTakeOnMeMelodySize; note++) {
     M5Cardputer.Speaker.tone(ahaTakeOnMeMelody[note].note,
                              ahaTakeOnMeMelody[note].duration);
 
@@ -142,15 +142,15 @@ Melody jingleBellsMelody[] = {
     {553, 220}, {553, 300}, {553, 220}, {523, 220}, {523, 250}, {523, 220},
     {470, 220}, {470, 220}, {523, 300}, {470, 600},
 };
-int jingleBellsMelodySize = sizeof(jingleBellsMelody) / sizeof(Melody);
+uint8_t jingleBellsMelodySize = sizeof(jingleBellsMelody) / sizeof(Melody);
 
-int jingleBellsDelay[] = {
+uint8_t jingleBellsDelay[] = {
     250, 250, 500, 250, 250, 500, 250, 250, 250, 250, 1000,
     250, 250, 500, 250, 250, 500, 250, 250, 250, 350, 1000,
 };
 
 void jingleBellsSound() {
-  for (int note = 0; note < jingleBellsMelodySize; note++) {
+  for (uint8_t note = 0; note < jingleBellsMelodySize; note++) {
     M5Cardputer.Speaker.tone(jingleBellsMelody[note].note,
                              jingleBellsMelody[note].duration);
 
@@ -194,10 +194,10 @@ Melody ozzyOsbornCrazyTrainMelody[] = {
     {740, 175}, {659, 175}, {659, 175}, {587, 375}, {659, 175}, {587, 175},
     {554, 175}, {440, 775},
 };
-int ozzyOsbornCrazyTrainMelodySize =
+uint8_t ozzyOsbornCrazyTrainMelodySize =
     sizeof(ozzyOsbornCrazyTrainMelody) / sizeof(Melody);
 
-int ozzyOsbornCrazyTrainDelay[] = {
+uint8_t ozzyOsbornCrazyTrainDelay[] = {
     200, 200, 1200, 200,  200, 400,  200, 200, 400, 200, 200, 1200, 200, 200,
     400, 200, 200,  400,  200, 200,  200, 200, 200, 200, 200, 200,  200, 200,
     200, 200, 200,  200,  200, 200,  200, 200, 200, 200, 200, 200,  200, 200,
@@ -214,7 +214,7 @@ int ozzyOsbornCrazyTrainDelay[] = {
 };
 
 void ozzyOsbornCrazyTrainSound() {
-  for (int note = 0; note < ozzyOsbornCrazyTrainMelodySize; note++) {
+  for (uint8_t note = 0; note < ozzyOsbornCrazyTrainMelodySize; note++) {
     Serial.printf("note: %d, duration: %d\n",
                   ozzyOsbornCrazyTrainMelody[note].note,
                   ozzyOsbornCrazyTrainMelody[note].duration);
@@ -247,16 +247,16 @@ Melody starWarsMelody[] = {
     {1175, 167}, {1047, 167}, {1865, 1000}, {1397, 500},  {1245, 167},
     {1175, 167}, {1245, 167}, {1047, 667},
 };
-int starWarsMelodySize = sizeof(starWarsMelody) / sizeof(Melody);
+uint8_t starWarsMelodySize = sizeof(starWarsMelody) / sizeof(Melody);
 
-int starWarsDelay[] = {
+uint8_t starWarsDelay[] = {
     177,  177, 177,  1010, 1010, 177, 177, 177,  1010, 510, 177,  177,  177,
     1010, 510, 177,  177,  177,  677, 333, 177,  177,  177, 1010, 1010, 177,
     177,  177, 1010, 510,  177,  177, 177, 1010, 510,  177, 177,  177,  677,
 };
 
 void starWarsSound() {
-  for (int note = 0, iDelay = 0; note < starWarsMelodySize; note++) {
+  for (uint8_t note = 0, iDelay = 0; note < starWarsMelodySize; note++) {
     M5Cardputer.Speaker.tone(starWarsMelody[note].note,
                              starWarsMelody[note].duration);
 
@@ -275,19 +275,19 @@ void starWarsSound() {
   }
 }
 
-int nokiaMelody[] = {NOTE_E5,  NOTE_D5, NOTE_FS4, NOTE_GS4, NOTE_CS5,
-                     NOTE_B4,  NOTE_D4, NOTE_E4,  NOTE_B4,  NOTE_A4,
-                     NOTE_CS4, NOTE_E4, NOTE_A4};
+uint8_t nokiaMelody[] = {NOTE_E5,  NOTE_D5, NOTE_FS4, NOTE_GS4, NOTE_CS5,
+                         NOTE_B4,  NOTE_D4, NOTE_E4,  NOTE_B4,  NOTE_A4,
+                         NOTE_CS4, NOTE_E4, NOTE_A4};
 
-int nokiaDurations[] = {8, 8, 4, 4, 8, 8, 4, 4, 8, 8, 4, 4, 2};
-int nokiaDurationsSize = sizeof(nokiaDurations) / sizeof(int);
+uint8_t nokiaDurations[] = {8, 8, 4, 4, 8, 8, 4, 4, 8, 8, 4, 4, 2};
+uint8_t nokiaDurationsSize = sizeof(nokiaDurations) / sizeof(uint8_t);
 
 void nokiaSound() {
-  for (int note = 0; note < nokiaDurationsSize; note++) {
-    int duration = 1000 / nokiaDurations[note];
+  for (uint8_t note = 0; note < nokiaDurationsSize; note++) {
+    uint8_t duration = 1000 / nokiaDurations[note];
     M5Cardputer.Speaker.tone(nokiaMelody[note], duration);
 
-    int pauseBetweenNotes = duration * 1.30;
+    uint8_t pauseBetweenNotes = duration * 1.30;
 
     if (checkExitPress()) {
       return;
@@ -297,21 +297,22 @@ void nokiaSound() {
   }
 }
 
-int theSimpsonsMelody[] = {
+uint8_t theSimpsonsMelody[] = {
     NOTE_C4,  NOTE_E4,  NOTE_FS4, REST,     NOTE_A4,  NOTE_G4, NOTE_E4,
     NOTE_C4,  NOTE_A3,  NOTE_FS3, NOTE_FS3, NOTE_FS3, NOTE_G3, REST,
     NOTE_FS3, NOTE_FS3, NOTE_FS3, NOTE_G3,  NOTE_AS3, NOTE_B3, REST};
 
-int theSimpsonsDurations[] = {2, 4, 4, 32, 8, 2, 4, 4, 8, 8, 8,
-                              8, 4, 2, 8,  8, 8, 4, 2, 2, 2};
-int theSimpsonsDurationSize = sizeof(theSimpsonsDurations) / sizeof(int);
+uint8_t theSimpsonsDurations[] = {2, 4, 4, 32, 8, 2, 4, 4, 8, 8, 8,
+                                  8, 4, 2, 8,  8, 8, 4, 2, 2, 2};
+uint8_t theSimpsonsDurationSize =
+    sizeof(theSimpsonsDurations) / sizeof(uint8_t);
 
 void theSimpsonsSound() {
-  for (int note = 0; note < theSimpsonsDurationSize; note++) {
-    int duration = 1000 / theSimpsonsDurations[note];
+  for (uint8_t note = 0; note < theSimpsonsDurationSize; note++) {
+    uint8_t duration = 1000 / theSimpsonsDurations[note];
     M5Cardputer.Speaker.tone(theSimpsonsMelody[note], duration);
 
-    int pauseBetweenNotes = duration * 1.30;
+    uint8_t pauseBetweenNotes = duration * 1.30;
 
     if (checkExitPress()) {
       return;
@@ -321,26 +322,26 @@ void theSimpsonsSound() {
   }
 }
 
-int pacmanMelody[] = {NOTE_B4,  NOTE_B5,  NOTE_FS5, NOTE_DS5, NOTE_B5, NOTE_FS5,
-                      NOTE_DS5, NOTE_C5,  NOTE_C6,  NOTE_G6,  NOTE_E6, NOTE_C6,
-                      NOTE_G6,  NOTE_E6,
+uint8_t pacmanMelody[] = {
+    NOTE_B4,  NOTE_B5, NOTE_FS5, NOTE_DS5, NOTE_B5,  NOTE_FS5, NOTE_DS5,
+    NOTE_C5,  NOTE_C6, NOTE_G6,  NOTE_E6,  NOTE_C6,  NOTE_G6,  NOTE_E6,
 
-                      NOTE_B4,  NOTE_B5,  NOTE_FS5, NOTE_DS5, NOTE_B5, NOTE_FS5,
-                      NOTE_DS5, NOTE_DS5, NOTE_E5,  NOTE_F5,  NOTE_F5, NOTE_FS5,
-                      NOTE_G5,  NOTE_G5,  NOTE_GS5, NOTE_A5,  NOTE_B5};
+    NOTE_B4,  NOTE_B5, NOTE_FS5, NOTE_DS5, NOTE_B5,  NOTE_FS5, NOTE_DS5,
+    NOTE_DS5, NOTE_E5, NOTE_F5,  NOTE_F5,  NOTE_FS5, NOTE_G5,  NOTE_G5,
+    NOTE_GS5, NOTE_A5, NOTE_B5};
 
-int pacmanDurations[] = {16, 16, 16, 16, 32, 16, 8, 16, 16, 16, 16, 32, 16, 8,
+uint8_t pacmanDurations[] = {
+    16, 16, 16, 16, 32, 16, 8, 16, 16, 16, 16, 32, 16, 8,
 
-                         16, 16, 16, 16, 32, 16, 8, 32, 32, 32, 32, 32, 32, 32,
-                         32, 16, 8};
-int pacmanDurationSize = sizeof(pacmanDurations) / sizeof(int);
+    16, 16, 16, 16, 32, 16, 8, 32, 32, 32, 32, 32, 32, 32, 32, 16, 8};
+uint8_t pacmanDurationSize = sizeof(pacmanDurations) / sizeof(uint8_t);
 
 void pacmanSound() {
-  for (int note = 0; note < pacmanDurationSize; note++) {
-    int duration = 1000 / pacmanDurations[note];
+  for (uint8_t note = 0; note < pacmanDurationSize; note++) {
+    uint8_t duration = 1000 / pacmanDurations[note];
     M5Cardputer.Speaker.tone(pacmanMelody[note], duration);
 
-    int pauseBetweenNotes = duration * 1.30;
+    uint8_t pauseBetweenNotes = duration * 1.30;
 
     if (checkExitPress()) {
       return;
@@ -350,7 +351,7 @@ void pacmanSound() {
   }
 }
 
-int doomMelody[] = {
+uint8_t doomMelody[] = {
     NOTE_E2,  NOTE_E2,  NOTE_E3,  NOTE_E2,  NOTE_E2,  NOTE_D3,  NOTE_E2,
     NOTE_E2,  NOTE_C3,  NOTE_E2,  NOTE_E2,  NOTE_AS2, NOTE_E2,  NOTE_E2,
     NOTE_B2,  NOTE_C3,  NOTE_E2,  NOTE_E2,  NOTE_E3,  NOTE_E2,  NOTE_E2,
@@ -477,7 +478,7 @@ int doomMelody[] = {
     NOTE_E3,  NOTE_G3,  NOTE_C4,  NOTE_B3,  NOTE_G3,  NOTE_B3,  NOTE_G3,
     NOTE_E3};
 
-int doomDurations[] = {
+uint8_t doomDurations[] = {
     8, 8, 8, 8, 8, 8, 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
     8, 8, 8, 8, 8, 8, 8,  8,  8,  2,
 
@@ -543,14 +544,14 @@ int doomDurations[] = {
 
     8, 8, 8, 8, 8, 8, 8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,
     8, 8, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16};
-int doomDurationsSize = sizeof(doomDurations) / sizeof(int);
+uint8_t doomDurationsSize = sizeof(doomDurations) / sizeof(uint8_t);
 
 void doomSound() {
-  for (int note = 0; note < doomDurationsSize; note++) {
-    int duration = 1000 / doomDurations[note];
+  for (uint8_t note = 0; note < doomDurationsSize; note++) {
+    uint8_t duration = 1000 / doomDurations[note];
     M5Cardputer.Speaker.tone(doomMelody[note], duration);
 
-    int pauseBetweenNotes = duration * 1.30;
+    uint8_t pauseBetweenNotes = duration * 1.30;
 
     if (checkExitPress()) {
       return;
@@ -560,7 +561,7 @@ void doomSound() {
   }
 }
 
-int shapeOfYouMelody[] = {
+uint8_t shapeOfYouMelody[] = {
     NOTE_CS4, NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_CS4, NOTE_CS4,
     NOTE_E4,  NOTE_CS4, NOTE_DS4, NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_CS4,
     NOTE_B3,  NOTE_CS4, NOTE_E4,  NOTE_CS4, NOTE_CS4, NOTE_E4,  NOTE_CS4,
@@ -608,7 +609,7 @@ int shapeOfYouMelody[] = {
     NOTE_E4,  NOTE_FS4, NOTE_CS4,
 };
 
-int shapeOfYouDurations[] = {
+uint8_t shapeOfYouDurations[] = {
     2, 2, 4, 2, 2, 4, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 4, 2, 2, 4, 2, 2, 2,
     2, 8, 8, 4, 4, 8, 8, 8, 8, 8, 8, 8, 2, 8, 8, 4, 2, 8, 8, 4, 8, 8, 8, 4,
     4, 8, 8, 8, 8, 8, 4, 8, 4, 8, 8, 8, 8, 4, 2, 8, 8, 8, 8, 4, 8, 8, 8, 8,
@@ -622,14 +623,14 @@ int shapeOfYouDurations[] = {
     4, 8, 2, 8, 8, 4, 8, 8, 8, 4, 8, 4, 4, 4, 4, 4, 4, 4, 2, 8, 8, 4, 8, 8,
     8, 4, 8, 4, 4, 4, 4, 4, 4, 4, 2, 8, 8, 4, 8, 8, 8, 4, 8, 4, 4, 4, 4, 4,
     4, 4, 2, 8, 8, 4, 8, 8, 8, 4, 8, 4, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 2};
-int shapeOfYouDurationsSize = sizeof(shapeOfYouDurations) / sizeof(int);
+uint8_t shapeOfYouDurationsSize = sizeof(shapeOfYouDurations) / sizeof(uint8_t);
 
 void shapeOfYouSound() {
-  for (int note = 0; note < shapeOfYouDurationsSize; note++) {
-    int duration = 1000 / shapeOfYouDurations[note];
+  for (uint8_t note = 0; note < shapeOfYouDurationsSize; note++) {
+    uint8_t duration = 1000 / shapeOfYouDurations[note];
     M5Cardputer.Speaker.tone(shapeOfYouMelody[note], duration);
 
-    int pauseBetweenNotes = duration * 1.30;
+    uint8_t pauseBetweenNotes = duration * 1.30;
 
     if (checkExitPress()) {
       return;
@@ -639,7 +640,7 @@ void shapeOfYouSound() {
   }
 }
 
-int gameOfThronesMelody[] = {
+uint8_t gameOfThronesMelody[] = {
     NOTE_G4,  NOTE_C4,  NOTE_DS4, NOTE_F4,  NOTE_G4,  NOTE_C4,  NOTE_DS4,
     NOTE_F4,  NOTE_G4,  NOTE_C4,  NOTE_DS4, NOTE_F4,  NOTE_G4,  NOTE_C4,
     NOTE_DS4, NOTE_F4,  NOTE_G4,  NOTE_C4,  NOTE_E4,  NOTE_F4,  NOTE_G4,
@@ -670,7 +671,7 @@ int gameOfThronesMelody[] = {
     NOTE_C6,  NOTE_G5,  NOTE_GS5, NOTE_AS5, NOTE_C6,  NOTE_G5,  NOTE_GS5,
     NOTE_AS5};
 
-int gameOfThronesDurations[] = {
+uint8_t gameOfThronesDurations[] = {
     8,  8,  16, 16, 8,  8,  16, 16, 8,  8,  16, 16, 8, 8,  16, 16, 8,
     8,  16, 16, 8,  8,  16, 16, 8,  8,  16, 16, 8,  8, 16, 16, 4,  4,
 
@@ -687,14 +688,15 @@ int gameOfThronesDurations[] = {
     16, 16, 8,  8,  16, 16,
 
     4,  16, 16, 8,  8,  16, 16, 8,  16, 16, 16, 8,  8, 16, 16};
-int gameOfThronesDurationsSize = sizeof(gameOfThronesDurations) / sizeof(int);
+uint8_t gameOfThronesDurationsSize =
+    sizeof(gameOfThronesDurations) / sizeof(uint8_t);
 
 void gameOfThronesSound() {
-  for (int note = 0; note < gameOfThronesDurationsSize; note++) {
-    int duration = 1000 / gameOfThronesDurations[note];
+  for (uint8_t note = 0; note < gameOfThronesDurationsSize; note++) {
+    uint8_t duration = 1000 / gameOfThronesDurations[note];
     M5Cardputer.Speaker.tone(gameOfThronesMelody[note], duration);
 
-    int pauseBetweenNotes = duration * 1.30;
+    uint8_t pauseBetweenNotes = duration * 1.30;
 
     if (checkExitPress()) {
       return;

@@ -26,7 +26,7 @@ IRsend irsend(IR_SEND_PIN);
 
 struct Menu {
   char name[25];
-  int command;
+  uint8_t command;
 };
 
 struct QrCode {
@@ -45,13 +45,13 @@ Menu mainMenu[] = {
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
-int mainMenuSize = sizeof(mainMenu) / sizeof(Menu);
+uint8_t mainMenuSize = sizeof(mainMenu) / sizeof(Menu);
 
 Menu irDevicesMenu[] = {
   {"TV", 5},
   {TXT_BACK, 0},
 };
-int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
+uint8_t irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
 
 Menu irTvMenu[] = {
   {"Power", 7},
@@ -68,7 +68,7 @@ Menu irTvMenu[] = {
   {"Enter", 17},
   {TXT_BACK, 0},
 };
-int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
+uint8_t irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
 
 Menu wifiMenu[] = {
   {TXT_WIFI_SCAN, 4},
@@ -78,7 +78,7 @@ Menu wifiMenu[] = {
   {"Captive Portal", 5},
   {TXT_BACK, 0},
 };
-int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
+uint8_t wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
 
 Menu wifiAttackMenu[] = {
   {TXT_SIGNAL_LEVEL, 3},
@@ -87,7 +87,7 @@ Menu wifiAttackMenu[] = {
   {TXT_WIFI_COMBINED, 2},
   {TXT_BACK, 5},
 };
-int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeof(Menu);
+uint8_t wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeof(Menu);
 
 Menu bluetoothMenu[] = {
   {"AppleJuice", 1},
@@ -97,7 +97,7 @@ Menu bluetoothMenu[] = {
   {"BT Maelstrom", 5},
   {TXT_BACK, 0},
 };
-int bluetoothMenuSize = sizeof(bluetoothMenu) / sizeof(Menu);
+uint8_t bluetoothMenuSize = sizeof(bluetoothMenu) / sizeof(Menu);
 
 Menu appleJuiceMenu[] = {
   {"AirPods", 1},
@@ -131,7 +131,7 @@ Menu appleJuiceMenu[] = {
   {TXT_STP_NW_PH, 28},
   {TXT_BACK, 0},
 };
-int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
+uint8_t appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
 
 Menu soundMenu[] = {
   {"Super Mario Bross", 1},
@@ -148,7 +148,7 @@ Menu soundMenu[] = {
   {"Game Of Thrones", 12},
   {TXT_BACK, 0},
 };
-int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
+uint8_t soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -159,7 +159,7 @@ QrCode qrMenu[] = {
   {TXT_REPOSITORY, "https://github.com/henriquesebastiao/saturn"},
   {TXT_BACK, ""},
 };
-int qrMenuSize = sizeof(qrMenu) / sizeof(QrCode);
+uint8_t qrMenuSize = sizeof(qrMenu) / sizeof(QrCode);
 
 Menu settingsMenu[] = {
   {TXT_BATTERY_INFO, 19},
@@ -168,17 +168,17 @@ Menu settingsMenu[] = {
 
 // -=-=-= FUNCTIONS OF DRAWING MENUS =-=-=-
 
-void drawMenu(Menu thisMenu[], int size) {
+void drawMenu(Menu thisMenu[], uint8_t size) {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(MEDIUM_TEXT);
   DISPLAY.setTextColor(BG_COLOR);
-  int y = HEIGHT_MENU_ITEMS;
+  uint8_t y = HEIGHT_MENU_ITEMS;
   // Scrolling menu
   if (cursor < 0) {
     cursor = size - 1;  // rollover hack for up-arrow on cardputer
   }
   if (cursor > 3) {
-    for (int i = 0 + (cursor - 3); i < size; i++) {
+    for (uint8_t i = 0 + (cursor - 3); i < size; i++) {
       if (cursor == i) {
         DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
         DISPLAY.setTextColor(BG_COLOR);
@@ -192,7 +192,7 @@ void drawMenu(Menu thisMenu[], int size) {
       y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
     }
   } else {
-    for (int i = 0; i < size; i++) {
+    for (uint8_t i = 0; i < size; i++) {
       if (cursor == i) {
         DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
         DISPLAY.setTextColor(BG_COLOR);
@@ -208,17 +208,17 @@ void drawMenu(Menu thisMenu[], int size) {
   }
 }
 
-void qrDrawMenu(int size) {
+void qrDrawMenu(uint8_t size) {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(2);
   DISPLAY.setTextColor(BG_COLOR);
-  int y = HEIGHT_MENU_ITEMS;
+  uint8_t y = HEIGHT_MENU_ITEMS;
   // Scrolling menu
   if (cursor < 0) {
     cursor = size - 1;  // rollover hack for up-arrow on cardputer
   }
   if (cursor > 3) {
-    for (int i = 0 + (cursor - 3); i < size; i++) {
+    for (uint8_t i = 0 + (cursor - 3); i < size; i++) {
       if (cursor == i) {
         DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
         DISPLAY.setTextColor(BG_COLOR);
@@ -232,7 +232,7 @@ void qrDrawMenu(int size) {
       y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
     }
   } else {
-    for (int i = 0; i < size; i++) {
+    for (uint8_t i = 0; i < size; i++) {
       if (cursor == i) {
         DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
         DISPLAY.setTextColor(BG_COLOR);
@@ -453,7 +453,7 @@ void wifiMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    int option = wifiMenu[cursor].command;
+    uint8_t option = wifiMenu[cursor].command;
     rstOverride = false;
     currentProc = 21;
     isSwitching = true;
@@ -485,10 +485,10 @@ void wifiScanDrawMenu() {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(MEDIUM_TEXT);
   DISPLAY.setTextColor(BG_COLOR);
-  int y = HEIGHT_MENU_ITEMS;
+  uint8_t y = HEIGHT_MENU_ITEMS;
 
   if (cursor > 3) {
-    for (int i = 0 + (cursor - 3); i < wifict; i++) {
+    for (uint8_t i = 0 + (cursor - 3); i < wifict; i++) {
       if (cursor == i) {
         DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
         DISPLAY.setTextColor(BG_COLOR);
@@ -533,7 +533,7 @@ void wifiScanDrawMenu() {
     DISPLAY.print(TXT_BACK);
     y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
   } else {
-    for (int i = 0; i < wifict; i++) {
+    for (uint8_t i = 0; i < wifict; i++) {
       if (cursor == i) {
         DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
         DISPLAY.setTextColor(BG_COLOR);
@@ -643,11 +643,11 @@ void wifiScanResultLoop(){
     DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
     DISPLAY.setTextSize(1.5);
 
-    int y_info = 50;
+    uint8_t y_info = 50;
 
     String frequency;
 
-    int numberChannel = WiFi.channel(cursor);
+    uint8_t numberChannel = WiFi.channel(cursor);
 
     switch (numberChannel)
     {
@@ -702,7 +702,7 @@ void wifiScanResultLoop(){
 
     String infos[4] = {channelInfo, crypt, bssid, signal};
 
-    for (int i = 0; i < 4; i++) {
+    for (uint8_t i = 0; i < 4; i++) {
       DISPLAY.drawString(infos[i], DISPLAY_CENTER_X, y_info);
       y_info += 15;
     }
@@ -768,7 +768,7 @@ void wifiAttackMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    int option = wifiAttackMenu[cursor].command;
+    uint8_t option = wifiAttackMenu[cursor].command;
     rstOverride = false;
     currentProc = 23;
     isSwitching = true;
@@ -820,16 +820,16 @@ void wifiSignalLevelSetup() {
 
 void wifiSignalLevelLoop() {
   // Reescan networks
-  int networks = WiFi.scanNetworks();
-  for (int i = 0; i < networks; i++) {
+  uint8_t networks = WiFi.scanNetworks();
+  for (uint8_t i = 0; i < networks; i++) {
     if (WiFi.BSSIDstr(i) == apMac) {
       cursor = i;
       break;
     }
   }
 
-  int signalLevel = WiFi.RSSI(cursor);
-  int signalFeedbackDuration = 100;
+  uint8_t signalLevel = WiFi.RSSI(cursor);
+  uint8_t signalFeedbackDuration = 100;
   String signal = String(WiFi.RSSI(cursor)) + "dbm";
   String ssid = WiFi.SSID(cursor);
   String channel = String(WiFi.channel(cursor));
@@ -848,7 +848,7 @@ void wifiSignalLevelLoop() {
   DISPLAY.setTextSize(LARGE_TEXT);
   DISPLAY.drawString(signal, DISPLAY_CENTER_X, 100);
 
-  int frequency;
+  uint8_t frequency;
 
   if (signalLevel == 0) {
     frequency = 100;
@@ -885,7 +885,7 @@ void wifiSignalLevelLoop() {
 // -=-=-= DEAUTH =-=-=-
 
 void deauthSetup(){
-  // Start the Access point service as Hidden
+  // Start the Access pouint8_t service as Hidden
   WiFi.mode(WIFI_AP);
   WiFi.softAP(apSsidName, emptyString, channel, 1, 4, false);
   IPAddress apIP = WiFi.softAPIP();
@@ -1004,7 +1004,7 @@ void portalLoop(){
 
 void wifiBeaconSetup() {
   // Create empty SSID
-  for (int i = 0; i < 32; i++)
+  for (uint8_t i = 0; i < 32; i++)
     emptySSID[i] = ' ';
   // For random generator
   randomSeed(1);
@@ -1034,7 +1034,7 @@ void wifiBeaconSetup() {
   DISPLAY.setCursor(0, 0);
   DISPLAY.print(TXT_BEACON_ATTACK);
 
-  int ct = 0;
+  uint8_t ct = 0;
   const char *str;
   switch(beaconType) {
   case 1:
@@ -1056,8 +1056,8 @@ void wifiBeaconSetup() {
 }
 
 void wifiBeaconLoop() {
-  int i = 0;
-  int len = 0;
+  uint8_t i = 0;
+  uint8_t len = 0;
   switch(beaconType) {
     case 1:
       len = sizeof(funnySSIDs);
@@ -1108,7 +1108,7 @@ void bluetoothMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    int option = bluetoothMenu[cursor].command;
+    uint8_t option = bluetoothMenu[cursor].command;
 
     DISPLAY.fillScreen(BG_COLOR);
     DISPLAY.setTextSize(MEDIUM_TEXT);
@@ -1351,7 +1351,7 @@ void appleJuiceAdvertisingLoop(){
       packet[i++] =  0x10;  // Type ???
       esp_fill_random(&packet[i], 3);
       oAdvertisementData.addData(std::string((char *)packet, 17));
-      for (int i = 0; i < sizeof packet; i ++) {
+      for (uint8_t i = 0; i < sizeof packet; i ++) {
         Serial.printf("%02x", packet[i]);
       }
       Serial.println("");
@@ -1369,10 +1369,10 @@ void appleJuiceAdvertisingLoop(){
       packet[i++] = 0x03; // Microsoft Beacon ID
       packet[i++] = 0x00; // Microsoft Beacon Sub Scenario
       packet[i++] = 0x80; // Reserved RSSI Byte
-      for (int j = 0; j < display_name_len; j++) {
+      for (uint8_t j = 0; j < display_name_len; j++) {
         packet[i + j] = display_name[j];
       }
-      for (int i = 0; i < size; i ++) {
+      for (uint8_t i = 0; i < size; i ++) {
         Serial.printf("%02x", packet[i]);
       }
       Serial.println("");
@@ -1402,7 +1402,7 @@ void appleJuiceAdvertisingLoop(){
       packet[i++] = (rand() % 120) - 100; // -100 to +20 dBm
 
       oAdvertisementData.addData(std::string((char *)packet, 14));
-      for (int i = 0; i < sizeof packet; i ++) {
+      for (uint8_t i = 0; i < sizeof packet; i ++) {
         Serial.printf("%02x", packet[i]);
       }
       Serial.println("");
@@ -1413,7 +1413,7 @@ void appleJuiceAdvertisingLoop(){
       } else {
         oAdvertisementData.addData(std::string((char*)data, sizeof(Airpods)));
       }
-      for (int i = 0; i < sizeof(Airpods); i ++) {
+      for (uint8_t i = 0; i < sizeof(Airpods); i ++) {
         Serial.printf("%02x", data[i]);
       }      
       Serial.println("");
@@ -1496,7 +1496,7 @@ void soundMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    int option = soundMenu[cursor].command;
+    uint8_t option = soundMenu[cursor].command;
     delay(500); // Prevents audio from going on and off immediately because you haven't released the button yet
     rstOverride = false;
     isSwitching = true;
@@ -1571,7 +1571,7 @@ void voiceRecorderSetup() {
 void voiceRecorderLoop() {
   M5Cardputer.update();
   if (MIC.isEnabled()) {
-    static constexpr int shift = 6;
+    static constexpr uint8_t shift = 6;
     auto data                  = &rec_data[rec_record_idx * record_length];
     if (MIC.record(data, record_length, record_samplerate)) {
       data = &rec_data[draw_record_idx * record_length];
@@ -1636,7 +1636,7 @@ void voiceRecorderLoop() {
 
       DISPLAY.fillTriangle(70 - 8, 15 - 8, 70 - 8, 15 + 8, 70 + 8, 15, 0x1c9f);
       DISPLAY.drawString("PLAY", 120, 10);
-      int start_pos = rec_record_idx * record_length;
+      uint8_t start_pos = rec_record_idx * record_length;
 
       if (start_pos < record_size) {
         SPEAKER.playRaw(&rec_data[start_pos], record_size - start_pos, record_samplerate, false, 1, 0);
@@ -1707,17 +1707,17 @@ void qrMenuLoop() {
 }
 
 bool screen_dim_dimmed = false;
-int screen_dim_current = 0;
-int screen_dim_time = 30;
+uint8_t screen_dim_current = 0;
+uint8_t screen_dim_time = 30;
 
-void screenBrightness(int bright){
+void screenBrightness(uint8_t bright){
   #if defined(BACKLIGHT)
-    int bl = MINBRIGHT + round(((255 - MINBRIGHT) * bright / 100)); 
+    uint8_t bl = MINBRIGHT + round(((255 - MINBRIGHT) * bright / 100)); 
     analogWrite(BACKLIGHT, bl);
   #endif
 }
 
-int uptime(){
+uint8_t uptime(){
   return(int(millis() / 1000));
 }
 
@@ -1731,13 +1731,13 @@ void dimTimer(){
 
 // -=-=-= IR FUNCTIONS =-=-=-
 
-void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
-  int size_all_codes = sizeof(codes) / sizeof(uint16_t*);
+void sendIrRawCodes(uint16_t *codes[], uint8_t sizes[], String name) {
+  uint8_t size_all_codes = sizeof(codes) / sizeof(uint16_t*);
 
   bool endingEarly = false;
 
-  for (int i = 0; i < size_all_codes; i++) {
-    int size = sizes[i];
+  for (uint8_t i = 0; i < size_all_codes; i++) {
+    uint8_t size = sizes[i];
     DISPLAY.fillScreen(BG_COLOR);
     DISPLAY.setTextSize(LARGE_TEXT);
     DISPLAY.drawString(name, DISPLAY_CENTER_X, 50);
@@ -1759,13 +1759,13 @@ void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
   }
 }
 
-void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
-  int size_all_codes = sizeof(codes) / sizeof(uint16_t*);
+void sendIrProntoCodes(uint16_t *codes[], uint8_t sizes[], String name) {
+  uint8_t size_all_codes = sizeof(codes) / sizeof(uint16_t*);
 
   bool endingEarly = false;
 
-  for (int i = 0; i < size_all_codes; i++) {
-    int size = sizes[i];
+  for (uint8_t i = 0; i < size_all_codes; i++) {
+    uint8_t size = sizes[i];
     DISPLAY.fillScreen(BG_COLOR);
     DISPLAY.setTextSize(LARGE_TEXT);
     DISPLAY.drawString(name, DISPLAY_CENTER_X, 50);
@@ -1847,7 +1847,7 @@ void batteryDrawMenu(uint8_t battery) {
   DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
 }
 
-int getBatteryVoltage() {
+uint8_t getBatteryVoltage() {
     return M5.Power.getBatteryLevel();
   }
 

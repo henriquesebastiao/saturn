@@ -10,7 +10,7 @@ const uint8_t channels[] = {1, 2, 3, 4,  5, 6,
                             7, 8, 9, 10, 11};  // default for LANGUAGE_EN_US
 #endif
 const bool wpa2 = true;  // WPA2 networks
-int beaconType = 1;      // 1 = funny, 2 = rickroll, maybe more later
+uint8_t beaconType = 1;  // 1 = funny, 2 = rickroll, maybe more later
 
 /*
   SSIDs:
@@ -136,10 +136,10 @@ esp_err_t esp_wifi_80211_tx(wifi_interface_t ifx, const void* buffer, int len,
 
 const char* generateRandomName() {
   const char* charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  int len = rand() % 10 + 1;  // Generate a random length between 1 and 10
+  uint8_t len = rand() % 10 + 1;  // Generate a random length between 1 and 10
   char* randomName = (char*)malloc(
       (len + 1) * sizeof(char));  // Allocate memory for the random name
-  for (int i = 0; i < len; ++i) {
+  for (uint8_t i = 0; i < len; ++i) {
     randomName[i] =
         charset[rand() %
                 strlen(charset)];  // Select random characters from the charset
@@ -150,8 +150,8 @@ const char* generateRandomName() {
 
 char* randomSSID() {
   const char* charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  int len = rand() % 22 + 7;  // Generate a random length between 1 and 10
-  for (int i = 0; i < len; ++i) {
+  uint8_t len = rand() % 22 + 7;  // Generate a random length between 1 and 10
+  for (uint8_t i = 0; i < len; ++i) {
     randomName[i] =
         charset[rand() %
                 strlen(charset)];  // S elect random characters from the charset
@@ -243,11 +243,11 @@ void nextChannel() {
 
 void beaconSpamList(const char list[]) {
   // temp variables
-  int i = 0;
-  int j = 0;
-  int ssidNum = 1;
+  uint8_t i = 0;
+  uint8_t j = 0;
+  uint8_t ssidNum = 1;
   char tmp;
-  int ssidsLen = strlen_P(list);
+  uint8_t ssidsLen = strlen_P(list);
   bool sent = false;
 
   // go to next channel
@@ -281,7 +281,7 @@ void beaconSpamList(const char list[]) {
     beaconPacket[82] = wifi_channel;
 
     // send packet
-    for (int k = 0; k < 3; k++) {
+    for (uint8_t k = 0; k < 3; k++) {
       packetCounter +=
           esp_wifi_80211_tx(WIFI_IF_STA, beaconPacket, packetSize, 0) == 0;
       delay(1);
