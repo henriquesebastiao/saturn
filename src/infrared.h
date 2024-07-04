@@ -64,7 +64,7 @@ uint16_t *allIrPowerCodesProntoTV[] = {
     irPowerCodesProntoToshibaTV,
 };
 
-uint8_t allIrPowerCodesProntoTVLength[] = {
+int allIrPowerCodesProntoTVLength[] = {
     78,
     28,
     76,
@@ -102,7 +102,7 @@ uint8_t allIrPowerCodesProntoTVLength[] = {
 //   irPowerCodesRawTVPanasonic58JX800Series,
 // };
 
-// uint8_t allIrPowerCodesRawTVLength[] = {
+// int allIrPowerCodesRawTVLength[] = {
 //   299,
 // };
 
@@ -144,7 +144,7 @@ uint16_t *allIrMuteCodesProntoTV[] = {
     irMuteCodesProntoToshibaTV,
 };
 
-uint8_t allIrMuteCodesProntoTVLength[] = {
+int allIrMuteCodesProntoTVLength[] = {
     72,
     28,
     76,
@@ -165,7 +165,7 @@ uint8_t allIrMuteCodesProntoTVLength[] = {
 //   irMuteCodesRawTVPanasonic58JX800Series,
 // };
 
-// uint8_t allIrMuteCodesRawTVLength[] = {
+// int allIrMuteCodesRawTVLength[] = {
 //   99,
 // };
 
@@ -208,7 +208,7 @@ uint16_t *allIrVolumeUpCodesProntoTV[] = {
     irVolumeUpCodesProntoToshibaTV,
 };
 
-uint8_t allIrVolumeUpCodesProntoTVLength[] = {
+int allIrVolumeUpCodesProntoTVLength[] = {
     72,
     28,
     76,
@@ -217,7 +217,7 @@ uint8_t allIrVolumeUpCodesProntoTVLength[] = {
 // uint16_t *allIrVolumeUpCodesRawTV[] = {
 // };
 
-// uint8_t allIrVolumeUpCodesRawTVLength[] = {
+// int allIrVolumeUpCodesRawTVLength[] = {
 // };
 
 // --> VOLUME DOWN
@@ -259,7 +259,7 @@ uint16_t *allIrVolumeDownCodesProntoTV[] = {
     irVolumeDownCodesProntoToshibaTV,
 };
 
-uint8_t allIrVolumeDownCodesProntoTVLength[] = {
+int allIrVolumeDownCodesProntoTVLength[] = {
     72,
     28,
     76,
@@ -268,7 +268,7 @@ uint8_t allIrVolumeDownCodesProntoTVLength[] = {
 // uint16_t *allIrVolumeDownCodesRawTV[] = {
 // };
 
-// uint8_t allIrVolumeDownCodesRawTVLength[] = {
+// int allIrVolumeDownCodesRawTVLength[] = {
 // };
 
 // --> CHANNEL UP
@@ -310,7 +310,7 @@ uint16_t *allIrChannelUpCodesProntoTV[] = {
     irChannelUpCodesProntoToshibaTV,
 };
 
-uint8_t allIrChannelUpCodesProntoTVLength[] = {
+int allIrChannelUpCodesProntoTVLength[] = {
     72,
     28,
     76,
@@ -319,7 +319,7 @@ uint8_t allIrChannelUpCodesProntoTVLength[] = {
 // uint16_t *allIrChannelUpCodesRawTV[] = {
 // };
 
-// uint8_t allIrChannelUpCodesRawTVLength[] = {
+// int allIrChannelUpCodesRawTVLength[] = {
 // };
 
 // --> CHANNEL DOWN
@@ -361,7 +361,7 @@ uint16_t *allIrChannelDownCodesProntoTV[] = {
     irChannelDownCodesProntoToshibaTV,
 };
 
-uint8_t allIrChannelDownCodesProntoTVLength[] = {
+int allIrChannelDownCodesProntoTVLength[] = {
     72,
     28,
     76,
@@ -370,7 +370,7 @@ uint8_t allIrChannelDownCodesProntoTVLength[] = {
 // uint16_t *allIrChannelDownCodesRawTV[] = {
 // };
 
-// uint8_t allIrChannelDownCodesRawTVLength[] = {
+// int allIrChannelDownCodesRawTVLength[] = {
 // };
 
 // --> MENU
@@ -398,7 +398,7 @@ uint16_t *allIrMenuCodesProntoTV[] = {
     irMenuCodesProntoPhilipsTV,
 };
 
-uint8_t allIrMenuCodesProntoTVLength[] = {
+int allIrMenuCodesProntoTVLength[] = {
     72,
     28,
 };
@@ -406,7 +406,7 @@ uint8_t allIrMenuCodesProntoTVLength[] = {
 // uint16_t *allIrMenuCodesRawTV[] = {
 // };
 
-// uint8_t allIrMenuCodesRawTVLength[] = {
+// int allIrMenuCodesRawTVLength[] = {
 // };
 
 // --> UP
@@ -434,7 +434,7 @@ uint16_t *allIrUpCodesProntoTV[] = {
     irUpCodesProntoPhilipsTV,
 };
 
-uint8_t allIrUpCodesProntoTVLength[] = {
+int allIrUpCodesProntoTVLength[] = {
     72,
     28,
 };
@@ -442,7 +442,7 @@ uint8_t allIrUpCodesProntoTVLength[] = {
 // uint16_t *allIrUpCodesRawTV[] = {
 // };
 
-// uint8_t allIrUpCodesRawTVLength[] = {
+// int allIrUpCodesRawTVLength[] = {
 // };
 
 // --> DOWN
@@ -470,7 +470,7 @@ uint16_t *allIrDownCodesProntoTV[] = {
     irDownCodesProntoPhilipsTV,
 };
 
-uint8_t allIrDownCodesProntoTVLength[] = {
+int allIrDownCodesProntoTVLength[] = {
     72,
     28,
 };
@@ -478,7 +478,7 @@ uint8_t allIrDownCodesProntoTVLength[] = {
 // uint16_t *allIrDownCodesRawTV[] = {
 // };
 
-// uint8_t allIrDownCodesRawTVLength[] = {
+// int allIrDownCodesRawTVLength[] = {
 // };
 
 // --> LEFT
@@ -505,7 +505,7 @@ uint16_t *allIrLeftCodesProntoTV[] = {
     irLeftCodesProntoPhilipsTV,
 };
 
-uint8_t allIrLeftCodesProntoTVLength[] = {
+int allIrLeftCodesProntoTVLength[] = {
     72,
     28,
 };
@@ -513,7 +513,7 @@ uint8_t allIrLeftCodesProntoTVLength[] = {
 // uint16_t *allIrLeftCodesRawTV[] = {
 // };
 
-// uint8_t allIrLeftCodesRawTVLength[] = {
+// int allIrLeftCodesRawTVLength[] = {
 // };
 
 // --> RIGHT
@@ -540,7 +540,7 @@ uint16_t *allIrRightCodesProntoTV[] = {
     irRightCodesProntoPhilipsTV,
 };
 
-uint8_t allIrRightCodesProntoTVLength[] = {
+int allIrRightCodesProntoTVLength[] = {
     72,
     28,
 };
@@ -548,7 +548,7 @@ uint8_t allIrRightCodesProntoTVLength[] = {
 // uint16_t *allIrRightCodesRawTV[] = {
 // };
 
-// uint8_t allIrRightCodesRawTVLength[] = {
+// int allIrRightCodesRawTVLength[] = {
 // };
 
 // --> ENTER
@@ -576,7 +576,7 @@ uint16_t *allIrEnterCodesProntoTV[] = {
     irEnterCodesProntoPhilipsTV,
 };
 
-uint8_t allIrEnterCodesProntoTVLength[] = {
+int allIrEnterCodesProntoTVLength[] = {
     72,
     28,
 };
@@ -584,5 +584,5 @@ uint8_t allIrEnterCodesProntoTVLength[] = {
 // uint16_t *allIrEnterCodesRawTV[] = {
 // };
 
-// uint8_t allIrEnterCodesRawTVLength[] = {
+// int allIrEnterCodesRawTVLength[] = {
 // };
