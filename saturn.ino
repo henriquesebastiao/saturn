@@ -21,6 +21,7 @@
 #include "src/portal.h"
 #include "src/applejuice.h"
 #include "src/sounds.h"
+#include "src/macprefixes.h"
 
 IRsend irsend(IR_SEND_PIN);
 
@@ -698,21 +699,20 @@ void wifiScanResultLoop(){
     String channelInfo = TXT_WIFI_CHANNEL + String(numberChannel) + " - " + frequency;
     String crypt = TXT_WIFI_CRYPT + encryptType;
     String bssid = "MAC: " + WiFi.BSSIDstr(cursor);
+    String manufactorer = TXT_VENDOR + findManufacturer(WiFi.BSSIDstr(cursor));
     String signal = TXT_WIFI_SIGNAL + String(WiFi.RSSI(cursor)) + "dBm";
 
-    String infos[4] = {channelInfo, crypt, bssid, signal};
+    int printScanResultItemsSize = 6;
+    String infos[printScanResultItemsSize] = {channelInfo, crypt, bssid, manufactorer, signal, TXT_HOLD_ATTACK};
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < printScanResultItemsSize; i++) {
       DISPLAY.drawString(infos[i], DISPLAY_CENTER_X, y_info);
+
+      if (i == printScanResultItemsSize - 2) {
+        DISPLAY.setTextColor(RED, BG_COLOR);
+      }
       y_info += 15;
     }
-
-    DISPLAY.setCursor(0, 100);
-    DISPLAY.setTextColor(BLACK);
-
-    DISPLAY.fillRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
-    DISPLAY.drawRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
-    DISPLAY.drawString(TXT_HOLD_ATTACK, DISPLAY_CENTER_X, 120);
 
     DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
    if(checkSelectPress()){

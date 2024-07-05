@@ -16,7 +16,7 @@ monitor:
 	arduino-cli monitor --port $(PORT)
 
 format:
-	clang-format -i --style=google src/*.h
+	clang-format -i --style=google src/*.h && blue .
 
 format-raw:
 	python scripts/format_raw.py -f dev/input.txt
@@ -31,7 +31,10 @@ black:
 	black .
 
 lint:
-	cppcheck --error-exitcode=1 --force --language=c++ src/*.h
+	cppcheck --check-level=exhaustive --error-exitcode=1 --force --language=c++ src/*.h && blue --check . --diff && ruff check .
+
+mac-prefixes:
+	rm mac-prefixes && wget https://raw.githubusercontent.com/nmap/nmap/master/nmap-mac-prefixes && mv nmap-mac-prefixes mac-prefixes && rm src/macprefixes.h && python scripts/generate_mac_file.py && clang-format -i --style=google src/macprefixes.h
 
 .PHONY: html-lint
 .PHONY: upload
@@ -44,3 +47,4 @@ lint:
 .PHONY: format-ir
 .PHONY: black
 .PHONY: lint
+.PHONY: mac-prefixes
