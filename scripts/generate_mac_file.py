@@ -10,6 +10,8 @@ MANUFACTURERS = [
     'Google',
     'Asus',
     'ASUSTek',
+    'Mercury',
+    'Mercusys',
 ]
 
 
@@ -48,12 +50,12 @@ def generate_cpp_code(
 
     # Split data into blocks of up to 250 items
     chunks = [
-        filtered_data[i : i + 250] for i in range(0, len(filtered_data), 250)
+        filtered_data[i : i + 200] for i in range(0, len(filtered_data), 250)
     ]
 
     struct_def = (
         f'struct MacEntry {{\n'
-        f'    char prefix[9];\n'
+        f'    char prefix[11];\n'
         f'    char manufacturer[{max_manufacturer_len + 1}];\n'  # +1 for the null character
         f'}};\n\n'
     )
