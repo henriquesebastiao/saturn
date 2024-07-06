@@ -4,6 +4,37 @@
 
 // This code contains a lot of logic borrowed from https://github.com/n0xa/m5stick-nemo
 
+// EEPROM Usage:
+// 0 - Brightness
+// 1 - Screen Dim Time
+// 3 - Foreground Color
+// 4 - Background Color
+
+// Proccesses are defined as follows:
+// 1 - Main Menu
+// 2 - QR Codes
+// 3 - Settings
+// 4 - IR Devices
+// 5 - IR TV
+// 19 - Battery Status
+// 20 - Wi-Fi Menu
+// 21 - Wi-Fi Beacon
+// 22 - Wi-Fi Scan
+// 23 - Wi-Fi Attack Menu
+// 24 - Wi-Fi Scan Result
+// 25 - Captive Portal
+// 26 - Deauth
+// 27 - Bluetooth
+// 28 - AppleJuice
+// 29 - AppleJuice Advertising
+// 30 - Bluetooth Maelstrom
+// 31 - Sounds
+// 32 - Wi-Fi Signal Level
+// 33 - Voice Recorder
+// 34 - Dimmer Menu
+// 35 - Color Menu
+// 36 - Theme Menu
+
 #include <M5Cardputer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
@@ -165,15 +196,15 @@ QrCode qrMenu[] = {
 int qrMenuSize = sizeof(qrMenu) / sizeof(QrCode);
 
 Menu dimmerMenu[] = {
-  { TXT_BACK, screen_dim_time},
-  { TXT_NEVER, 0},
-  { ("5 " TXT_SEC), 5},
-  { ("10 " TXT_SEC), 10},
-  { ("15 " TXT_SEC), 15},
-  { ("30 " TXT_SEC), 30},
-  { ("60 " TXT_SEC), 60},
-  { ("120 " TXT_MIN), 120},
-  { ("240 " TXT_MIN), 240},
+  {TXT_BACK, screen_dim_time},
+  {TXT_NEVER, 0},
+  {("5 " TXT_SEC), 5},
+  {("10 " TXT_SEC), 10},
+  {("15 " TXT_SEC), 15},
+  {("30 " TXT_SEC), 30},
+  {("60 " TXT_SEC), 60},
+  {("120 " TXT_MIN), 120},
+  {("240 " TXT_MIN), 240},
 };
 int dimmerMenuSize = sizeof(dimmerMenu) / sizeMenu;
 
@@ -192,9 +223,52 @@ Menu numberMenu[] = {
 };
 int numberMenuSize = sizeof(numberMenu) / sizeMenu;
 
+Menu colorMenu[] = {
+  {TXT_BACK, 0},
+  {TXT_BLACK, 1},
+  {TXT_NAVY, 2},
+  {TXT_DARKGREEN, 3},
+  {TXT_DARKCYAN, 4},
+  {TXT_MAROON, 5},
+  {TXT_PURPLE, 6},
+  {TXT_OLIVE, 7},
+  {TXT_LIGHTGREY, 8},
+  {TXT_DARKGREY, 9},
+  {TXT_BLUE, 10},
+  {TXT_GREEN, 11},
+  {TXT_CYAN, 12},
+  {TXT_RED, 13},
+  {TXT_MAGENTA, 14},
+  {TXT_YELLOW, 15},
+  {TXT_WHITE, 16},
+  {TXT_ORANGE, 17},
+  {TXT_GREENYELLOW, 18},
+  {TXT_PINK, 19},
+};
+int colorMenuSize = sizeof(colorMenu) / sizeMenu;
+
+Menu themeMenu[] = {
+  {"Saturn", 10},
+  {"Nemo", 1},
+  {"Tux", 2},
+  {"Bill", 3},
+  {"Steve", 4},
+  {"Lilac", 5},
+  {"Contrast", 6},
+  {"NightShift", 7},
+  {"Camo", 8},
+  {"BubbleGum", 9},
+  {TXT_COLOR, 99},
+  {TXT_BACK, 0},
+};
+int themeMenuSize = sizeof(themeMenu) / sizeMenu;
+
 Menu settingsMenu[] = {
   {TXT_BATTERY_INFO, 19},
-  {"Brilho", 34},
+  {TXT_BRIGHTNESS_WORD, 34},
+  {TXT_COLOR_WORD, 35},
+  {TXT_THEME_WORD, 36},
+  {TXT_CLEAR_SETTINGS_WORD, 99},
   {TXT_BACK, 0},
 };
 
@@ -1826,6 +1900,8 @@ void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
   }
 }
 
+// -=-=-= BRIGHTNESS MENU =-=-=-
+
 void dimmerMenuSetup() {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(BIG_TEXT);
@@ -1881,6 +1957,237 @@ void dimmerMenuLoop() {
   }
 }
 
+// -=-=-= THEME MENU =-=-=-
+
+void setColor(bool fg, int col){
+  uint16_t color = 0x0000;
+  switch (col){
+    case 1:
+      color=0x0000;
+      break; 
+    case 2:
+      color=0x000F;
+      break;
+    case 3:
+      color=0x03E0;
+      break;
+    case 4:
+      color=0x03EF;
+      break;
+    case 5:
+      color=0x7800;
+      break;
+    case 6:
+      color=0x780F;
+      break;
+    case 7:
+      color=0x7BE0;
+      break;
+    case 8:
+      color=0xC618;
+      break;
+    case 9:
+      color=0x7BEF;
+      break;
+    case 10:
+      color=0x001F;
+      break;
+    case 11:
+      color=0x07E0;
+      break;
+    case 12:
+      color=0x07FF;
+      break;
+    case 13:
+      color=0xF800;
+      break;
+    case 14:
+      color=0xF81F;
+      break;
+    case 15:
+      color=0xFFE0;
+      break;
+    case 16:
+      color=0xFFFF;
+      break;
+    case 17:
+      color=0xFDA0;
+      break;
+    case 18:
+      color=0xB7E0;
+      break;
+    case 19:
+      color=0xFC9F;
+      break;
+  }
+  if(fg){
+    MAIN_COLOR=color;
+  }else{
+    BG_COLOR=color;
+  }
+  if(MAIN_COLOR == BG_COLOR){
+    BG_COLOR = MAIN_COLOR ^ 0xFFFF;
+  }
+  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+}
+
+void colorMenuSetup() {
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(BIG_TEXT);
+  DISPLAY.drawString(TXT_SET_FGCOLOR_1, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_SET_FGCOLOR_2, DISPLAY_CENTER_X, 80);
+
+  cursor = 0;
+  cursor=EEPROM.read(3); // get current fg color
+  rstOverride = true;
+  delay(1000);  
+  drawMenu(colorMenu, colorMenuSize);
+}
+
+void colorMenuLoop() {
+  if (checkNextPress()) {
+    setColor(EEPROM.read(5), false);
+    cursor++;
+    cursor = cursor % colorMenuSize;
+    setColor(true, cursor);
+    drawMenu(colorMenu, colorMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    Serial.printf("EEPROM WRITE (4) FGCOLOR: %d\n", cursor);
+    EEPROM.write(3, cursor);
+    EEPROM.commit();
+    cursor=EEPROM.read(4);
+    
+    DISPLAY.fillScreen(BG_COLOR);
+    DISPLAY.setTextSize(BIG_TEXT);
+    DISPLAY.drawString(TXT_SET_BGCOLOR_1, DISPLAY_CENTER_X, 50);
+    DISPLAY.drawString(TXT_SET_BGCOLOR_2, DISPLAY_CENTER_X, 80);
+
+    delay(1000);
+    setColor(false, cursor);
+    drawMenu(colorMenu, colorMenuSize);
+    while( !checkSelectPress()) {
+      if (checkNextPress()) {
+        cursor++;
+        cursor = cursor % colorMenuSize;
+        setColor(false, cursor);
+        drawMenu(colorMenu, colorMenuSize);
+        delay(250);
+       }
+    }
+    Serial.printf("EEPROM WRITE (4) BGCOLOR: %d\n", cursor);
+    EEPROM.write(4, cursor);
+    EEPROM.commit();
+    rstOverride = false;
+    isSwitching = true;
+    currentProc = 3;
+  }
+}
+
+void themeMenuSetup() {
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(BIG_TEXT);
+  DISPLAY.drawString(TXT_THEME_1, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_THEME_2, DISPLAY_CENTER_X, 80);
+
+  cursor = 0;
+  rstOverride = true;
+  delay(1000);  
+  drawMenu(themeMenu, themeMenuSize);
+}
+
+int BG=0;
+int FG=0;
+
+void themeMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % themeMenuSize;
+    switch (themeMenu[cursor].command){
+      case 0: // Saturn
+        FG=12;
+        BG=1;
+        break;       
+      case 1: // Nemo
+        FG=11;
+        BG=1;
+        break;
+      case 2: // Tux
+        FG=8;
+        BG=1;
+        break;  
+      case 3: // Bill
+        FG=16;
+        BG=10;
+        break;
+      case 4: // Steve
+        FG=1;
+        BG=8;
+        break;        
+      case 5: // Lilac
+        FG=19;
+        BG=6;
+        break;
+      case 6: // Contrast
+        FG=16;
+        BG=1;
+        break;
+      case 7: // NightShift
+        FG=5;
+        BG=1;
+         break;
+      case 8: // Camo
+        FG=1;
+        BG=7;
+        break;
+      case 9: // BubbleGum
+        FG=1;
+        BG=19;
+        break;
+      case 10:
+        FG=12; // Saturn
+        BG=1;
+      case 99:
+        FG=12; // Saturn
+        BG=1;
+        break;
+     }
+    setColor(true, FG);
+    setColor(false, BG);
+    drawMenu(themeMenu, themeMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    switch (themeMenu[cursor].command){
+      case 99:
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 35;
+        break;
+      case 0:
+        setColor(true, EEPROM.read(3));
+        setColor(false, EEPROM.read(4));
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 3;
+        break;
+      default:
+        Serial.printf("EEPROM WRITE (3) FGCOLOR: %d\n", FG);
+        EEPROM.write(3, FG);
+        Serial.printf("EEPROM WRITE (4) BGCOLOR: %d\n", BG);
+        EEPROM.write(4, BG);
+        EEPROM.commit();
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = 3;
+    }
+  }
+}
+
+
+// -=-=-= SETTINGS MENU =-=-=-
+
 void settingsMenuSetup() {
   cursor = 0;
   rstOverride = true;
@@ -1896,17 +2203,46 @@ void settingsMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    if (settingsMenu[cursor].command == 19) {
+    if (settingsMenu[cursor].command == 19) { // Batery Info
       isSwitching = true;
       currentProc = 19;
-    } else if (settingsMenu[cursor].command == 34) {
+    } else if (settingsMenu[cursor].command == 34) { // Brightness Menu
       isSwitching = true;
       currentProc = 34;
+    } else if (settingsMenu[cursor].command == 35) { // Color Menu
+      isSwitching = true;
+      currentProc = 35;
+    } else if (settingsMenu[cursor].command == 36) { // Theme Menu
+      isSwitching = true;
+      currentProc = 36;
+    } else if (settingsMenu[cursor].command == 99) { // Theme Menu
+      clearSettings();
     } else if (settingsMenu[cursor].command == 0) {
       isSwitching = true;
       currentProc = 1;
     }
   }
+}
+
+// -=-=-= CLEAR SETTINGS =-=-=-
+
+void clearSettings(){
+  for(int i = 0; i < EEPROM_SIZE; i++) {
+    EEPROM.write(i, 255);
+  }
+  EEPROM.commit();
+
+  screenBrightness(90);
+  DISPLAY.setTextSize(BIG_TEXT);
+
+  DISPLAY.fillScreen(MAIN_COLOR);
+  DISPLAY.setTextColor(BG_COLOR);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.drawString("Saturn", DISPLAY_CENTER_X, 50);
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.drawString(TXT_CLEAR_SETTINGS, DISPLAY_CENTER_X, 80);
+  delay(5000);
+  ESP.restart();
 }
 
 // -=-=-= BATTERY INFO =-=-=-
@@ -1999,14 +2335,21 @@ void setup() {
   EEPROM.begin(EEPROM_SIZE);
   Serial.printf("EEPROM 0 - Brightness: %d\n", EEPROM.read(0));
   Serial.printf("EEPROM 1 - Dim Time:   %d\n", EEPROM.read(1));
+  Serial.printf("EEPROM 3 - FGColor:    %d\n", EEPROM.read(3));
+  Serial.printf("EEPROM 4 - BGColor:    %d\n", EEPROM.read(4));
 
-  if (EEPROM.read(0) > 100 || EEPROM.read(1) > 240) {
-    EEPROM.write(0, 100);  // 100% brightness
-    EEPROM.write(1, 15);   // 15 second auto dim time
+  if (EEPROM.read(0) > 100 || EEPROM.read(1) > 240 || EEPROM.read(3) > 19 || EEPROM.read(4) > 19) {
+    EEPROM.write(0, 90);  // 90% brightness
+    EEPROM.write(1, 240);   // 240 second auto dim time
+    EEPROM.write(3, 12);   // FGColor Cyan
+    EEPROM.write(4, 1);    // BGcolor Black
     EEPROM.commit();
   }
 
   brightness = EEPROM.read(0);
+  screen_dim_time = EEPROM.read(1);
+  setColor(true, EEPROM.read(3));
+  setColor(false, EEPROM.read(4));
   
   screenBrightness(brightness);
   dimTimer();
@@ -2062,28 +2405,6 @@ void setup() {
   setupSdCard();
   bootTime = lastActivity = millis();
 }
-
-// Proccesses
-// 1 - Main Menu
-// 2 - QR Codes
-// 3 - Settings
-// 4 - IR Devices
-// 5 - IR TV
-// 19 - Battery Status
-// 20 - Wi-Fi Menu
-// 21 - Wi-Fi Beacon
-// 22 - Wi-Fi Scan
-// 23 - Wi-Fi Attack Menu
-// 24 - Wi-Fi Scan Result
-// 25 - Captive Portal
-// 26 - Deauth
-// 27 - Bluetooth
-// 28 - AppleJuice
-// 29 - AppleJuice Advertising
-// 30 - Bluetooth Maelstrom
-// 31 - Sounds
-// 32 - Wi-Fi Signal Level
-// 33 - Voice Recorder
 
 void loop() {
   // Background processes
@@ -2158,6 +2479,12 @@ void loop() {
       case 34:
         dimmerMenuSetup();
         break;
+      case 35:
+        colorMenuSetup();
+        break;
+      case 36:
+        themeMenuSetup();
+        break;
     }
   }
 
@@ -2224,6 +2551,12 @@ void loop() {
       break;
     case 34:
       dimmerMenuLoop();
+      break;
+    case 35:
+      colorMenuLoop();
+      break;
+    case 36:
+      themeMenuLoop();
       break;
   }
 }
