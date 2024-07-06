@@ -64,6 +64,13 @@
 #define TXT_SIGNAL_LEVEL "Signal Level"
 #define TXT_VOICE_RECORDER "Voice Recorder"
 #define TXT_VENDOR "Vendor: "
+#define TXT_NEVER "Never"
+#define TXT_SEC "seconds"
+#define TXT_MIN "minutes"
+#define TXT_SCREEN_SAVER_1 "Screen"
+#define TXT_SCREEN_SAVER_2 "Saver"
+#define TXT_SCREEN_BRIGHTNESS_1 "Screen"
+#define TXT_SCREEN_BRIGHTNESS_2 "Brightness"
 #endif
 
 #if defined(LANGUAGE_PT_BR)
@@ -132,4 +139,11 @@
 #define TXT_SIGNAL_LEVEL "Nivel de Sinal"
 #define TXT_VOICE_RECORDER "Gravador de Voz"
 #define TXT_VENDOR "Fabri: "
+#define TXT_NEVER "Nunca"
+#define TXT_SEC "segundos"
+#define TXT_MIN "minutos"
+#define TXT_SCREEN_SAVER_1 "Descanso"
+#define TXT_SCREEN_SAVER_2 "de Tela"
+#define TXT_SCREEN_BRIGHTNESS_1 "Brilho"
+#define TXT_SCREEN_BRIGHTNESS_2 "da Tela"
 #endif

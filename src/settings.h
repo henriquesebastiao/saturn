@@ -11,6 +11,7 @@
 #define DISPLAY_CENTER_X DISPLAY.width() / 2  // Center of the screen
 #define SMALL_TEXT 1
 #define MEDIUM_TEXT 2
+#define BIG_TEXT 3
 #define LARGE_TEXT 4
 #define SPACING_MENU_ITEMS 33  // Spacing between menu items
 #define HEIGHT_MENU_ITEMS 4    // Height of the menu items
@@ -82,3 +83,11 @@ bool activeQR = false;
 wifi_ap_record_t ap_record;
 String apSsidName = String("");
 String bssidToCheck;
+
+// Screen
+bool screen_dim_dimmed = false;
+int screen_dim_current = 0;
+int screen_dim_time = 30;
+
+// EEPROM
+#define EEPROM_SIZE 64

@@ -11,6 +11,7 @@
 #include <WebServer.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
+#include <EEPROM.h>
 
 #include "src/settings.h"
 #include "src/language.h"
@@ -29,6 +30,7 @@ struct Menu {
   char name[25];
   int command;
 };
+int sizeMenu = sizeof(Menu);
 
 struct QrCode {
   char name[13];
@@ -46,13 +48,13 @@ Menu mainMenu[] = {
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
-int mainMenuSize = sizeof(mainMenu) / sizeof(Menu);
+int mainMenuSize = sizeof(mainMenu) / sizeMenu;
 
 Menu irDevicesMenu[] = {
   {"TV", 5},
   {TXT_BACK, 0},
 };
-int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
+int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeMenu;
 
 Menu irTvMenu[] = {
   {"Power", 7},
@@ -69,7 +71,7 @@ Menu irTvMenu[] = {
   {"Enter", 17},
   {TXT_BACK, 0},
 };
-int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
+int irTvMenuSize = sizeof(irTvMenu) / sizeMenu;
 
 Menu wifiMenu[] = {
   {TXT_WIFI_SCAN, 4},
@@ -79,7 +81,7 @@ Menu wifiMenu[] = {
   {"Captive Portal", 5},
   {TXT_BACK, 0},
 };
-int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
+int wifiMenuSize = sizeof(wifiMenu) / sizeMenu;
 
 Menu wifiAttackMenu[] = {
   {TXT_SIGNAL_LEVEL, 3},
@@ -88,7 +90,7 @@ Menu wifiAttackMenu[] = {
   {TXT_WIFI_COMBINED, 2},
   {TXT_BACK, 5},
 };
-int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeof(Menu);
+int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeMenu;
 
 Menu bluetoothMenu[] = {
   {"AppleJuice", 1},
@@ -98,7 +100,7 @@ Menu bluetoothMenu[] = {
   {"BT Maelstrom", 5},
   {TXT_BACK, 0},
 };
-int bluetoothMenuSize = sizeof(bluetoothMenu) / sizeof(Menu);
+int bluetoothMenuSize = sizeof(bluetoothMenu) / sizeMenu;
 
 Menu appleJuiceMenu[] = {
   {"AirPods", 1},
@@ -132,7 +134,7 @@ Menu appleJuiceMenu[] = {
   {TXT_STP_NW_PH, 28},
   {TXT_BACK, 0},
 };
-int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
+int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeMenu;
 
 Menu soundMenu[] = {
   {"Super Mario Bross", 1},
@@ -149,7 +151,7 @@ Menu soundMenu[] = {
   {"Game Of Thrones", 12},
   {TXT_BACK, 0},
 };
-int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
+int soundMenuSize = sizeof(soundMenu) / sizeMenu;
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -162,8 +164,37 @@ QrCode qrMenu[] = {
 };
 int qrMenuSize = sizeof(qrMenu) / sizeof(QrCode);
 
+Menu dimmerMenu[] = {
+  { TXT_BACK, screen_dim_time},
+  { TXT_NEVER, 0},
+  { ("5 " TXT_SEC), 5},
+  { ("10 " TXT_SEC), 10},
+  { ("15 " TXT_SEC), 15},
+  { ("30 " TXT_SEC), 30},
+  { ("60 " TXT_SEC), 60},
+  { ("120 " TXT_MIN), 120},
+  { ("240 " TXT_MIN), 240},
+};
+int dimmerMenuSize = sizeof(dimmerMenu) / sizeMenu;
+
+Menu numberMenu[] = {
+  {"0", 0},
+  {"1", 1},
+  {"2", 2},
+  {"3", 3},
+  {"4", 4},
+  {"5", 5},
+  {"6", 6},
+  {"7", 7},
+  {"8", 8},
+  {"9", 9},
+  {"10", 10},
+};
+int numberMenuSize = sizeof(numberMenu) / sizeMenu;
+
 Menu settingsMenu[] = {
   {TXT_BATTERY_INFO, 19},
+  {"Brilho", 34},
   {TXT_BACK, 0},
 };
 
@@ -1706,10 +1737,6 @@ void qrMenuLoop() {
   }
 }
 
-bool screen_dim_dimmed = false;
-int screen_dim_current = 0;
-int screen_dim_time = 30;
-
 void screenBrightness(int bright){
   #if defined(BACKLIGHT)
     int bl = MINBRIGHT + round(((255 - MINBRIGHT) * bright / 100)); 
@@ -1727,6 +1754,17 @@ void dimTimer(){
     screen_dim_dimmed = false;
   }
   screen_dim_current = uptime() + screen_dim_time + 2;
+}
+
+void screenDimProc() {
+  if(screen_dim_time > 0){
+    if (screen_dim_dimmed == false) {
+      if (uptime() == screen_dim_current || (uptime() + 1) == screen_dim_current || (uptime() + 2) == screen_dim_current) {
+        screenBrightness(0);
+        screen_dim_dimmed = true;
+      }
+    }
+  }
 }
 
 // -=-=-= IR FUNCTIONS =-=-=-
@@ -1788,6 +1826,61 @@ void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
   }
 }
 
+void dimmerMenuSetup() {
+  DISPLAY.fillScreen(BG_COLOR);
+  DISPLAY.setTextSize(BIG_TEXT);
+  DISPLAY.drawString(TXT_SCREEN_SAVER_1, DISPLAY_CENTER_X, 50);
+  DISPLAY.drawString(TXT_SCREEN_SAVER_2, DISPLAY_CENTER_X, 80);
+
+  delay(1000);
+  cursor = 0;
+  rstOverride = true;
+  drawMenu(dimmerMenu, dimmerMenuSize);
+  delay(500);
+}
+
+void dimmerMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % dimmerMenuSize;
+    drawMenu(dimmerMenu, dimmerMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    screen_dim_time = dimmerMenu[cursor].command;
+    EEPROM.write(1, screen_dim_time);
+    EEPROM.commit();
+
+    DISPLAY.fillScreen(BG_COLOR);
+    DISPLAY.setTextSize(BIG_TEXT);
+    DISPLAY.drawString(TXT_SCREEN_BRIGHTNESS_1, DISPLAY_CENTER_X, 50);
+    DISPLAY.drawString(TXT_SCREEN_BRIGHTNESS_2, DISPLAY_CENTER_X, 80);
+
+    delay(1000);
+
+    cursor = brightness / 10;
+    drawMenu(numberMenu, numberMenuSize);
+
+    while (!checkSelectPress()) {
+      if (checkNextPress()) {
+        cursor++;
+        cursor = cursor % 11 ;
+        drawMenu(numberMenu, numberMenuSize);
+        screenBrightness(10 * cursor);
+        delay(250);
+       }
+    }
+    screenBrightness(10 * cursor);
+
+    EEPROM.write(0, 10 * cursor);
+    EEPROM.commit();
+
+    rstOverride = false;
+    isSwitching = true;
+    currentProc = 3;
+  }
+}
+
 void settingsMenuSetup() {
   cursor = 0;
   rstOverride = true;
@@ -1806,6 +1899,9 @@ void settingsMenuLoop() {
     if (settingsMenu[cursor].command == 19) {
       isSwitching = true;
       currentProc = 19;
+    } else if (settingsMenu[cursor].command == 34) {
+      isSwitching = true;
+      currentProc = 34;
     } else if (settingsMenu[cursor].command == 0) {
       isSwitching = true;
       currentProc = 1;
@@ -1899,7 +1995,22 @@ void setup() {
 
   pinMode(IR_SEND_PIN, OUTPUT);
   digitalWrite(IR_SEND_PIN, LOW);
+
+  EEPROM.begin(EEPROM_SIZE);
+  Serial.printf("EEPROM 0 - Brightness: %d\n", EEPROM.read(0));
+  Serial.printf("EEPROM 1 - Dim Time:   %d\n", EEPROM.read(1));
+
+  if (EEPROM.read(0) > 100 || EEPROM.read(1) > 240) {
+    EEPROM.write(0, 100);  // 100% brightness
+    EEPROM.write(1, 15);   // 15 second auto dim time
+    EEPROM.commit();
+  }
+
+  brightness = EEPROM.read(0);
   
+  screenBrightness(brightness);
+  dimTimer();
+
   // Boot screen
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextColor(MAIN_COLOR);
@@ -1977,6 +2088,7 @@ void setup() {
 void loop() {
   // Background processes
   switcherButtonProc();
+  screenDimProc();
   checkMenuPress();
 
   if (isSwitching) {
@@ -2043,6 +2155,9 @@ void loop() {
       case 33:
         voiceRecorderSetup();
         break;
+      case 34:
+        dimmerMenuSetup();
+        break;
     }
   }
 
@@ -2106,6 +2221,9 @@ void loop() {
       break;
     case 33:
       voiceRecorderLoop();
+      break;
+    case 34:
+      dimmerMenuLoop();
       break;
   }
 }
