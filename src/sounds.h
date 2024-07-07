@@ -1,9 +1,9 @@
 #include "pitches.h"
 
-bool checkExitPress() {
+bool checkStopSoundPress() {
   M5Cardputer.update();
   if (M5Cardputer.Keyboard.isKeyPressed(KEY_ENTER) ||
-      M5Cardputer.Keyboard.isKeyPressed('`')) {
+      M5Cardputer.Keyboard.isKeyPressed('`') || M5Cardputer.Keyboard.isKeyPressed(',')) {
     return true;
   }
   return false;
@@ -63,7 +63,7 @@ void superMarioBrossSound() {
     M5Cardputer.Speaker.tone(superMarioMelody[note].note,
                              superMarioMelody[note].duration);
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -88,7 +88,7 @@ void imperialMarchSound() {
     M5Cardputer.Speaker.tone(imperialMarchMelody[note].note,
                              imperialMarchMelody[note].duration);
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -121,7 +121,7 @@ void ahaTakeOnMeSound() {
     M5Cardputer.Speaker.tone(ahaTakeOnMeMelody[note].note,
                              ahaTakeOnMeMelody[note].duration);
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -154,7 +154,7 @@ void jingleBellsSound() {
     M5Cardputer.Speaker.tone(jingleBellsMelody[note].note,
                              jingleBellsMelody[note].duration);
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -228,7 +228,7 @@ void ozzyOsbornCrazyTrainSound() {
     M5Cardputer.Speaker.tone(ozzyOsbornCrazyTrainMelody[note].note,
                              ozzyOsbornCrazyTrainMelody[note].duration);
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -260,7 +260,7 @@ void starWarsSound() {
     M5Cardputer.Speaker.tone(starWarsMelody[note].note,
                              starWarsMelody[note].duration);
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -289,7 +289,7 @@ void nokiaSound() {
 
     int pauseBetweenNotes = duration * 1.30;
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -313,7 +313,7 @@ void theSimpsonsSound() {
 
     int pauseBetweenNotes = duration * 1.30;
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -342,7 +342,7 @@ void pacmanSound() {
 
     int pauseBetweenNotes = duration * 1.30;
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -552,7 +552,7 @@ void doomSound() {
 
     int pauseBetweenNotes = duration * 1.30;
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -631,7 +631,7 @@ void shapeOfYouSound() {
 
     int pauseBetweenNotes = duration * 1.30;
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 
@@ -696,7 +696,7 @@ void gameOfThronesSound() {
 
     int pauseBetweenNotes = duration * 1.30;
 
-    if (checkExitPress()) {
+    if (checkStopSoundPress()) {
       return;
     }
 

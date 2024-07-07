@@ -79,7 +79,6 @@ int currentProc = 1;
 bool portalActive = false;
 const byte PortalTickTimer = 1000;
 int brightness = 100;
-bool activeQR = false;
 wifi_ap_record_t ap_record;
 String apSsidName = String("");
 String bssidToCheck;
@@ -91,3 +90,8 @@ int screen_dim_time = 240;
 
 // EEPROM
 #define EEPROM_SIZE 64
+
+// Others
+bool pressedTvButton = false;
+bool showQrCode = false;
+bool showAPInfo = false;

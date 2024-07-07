@@ -7,8 +7,6 @@
 
 // info on my github: https://github.com/bmorcelli/m5stickC_Plus2-nemo
 
-#include <WiFi.h>
-
 #include "esp_system.h"
 #include "esp_wifi.h"
 
