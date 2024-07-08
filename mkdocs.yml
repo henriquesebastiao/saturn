@@ -1,0 +1,108 @@
+site_name: Saturn Firmware
+site_url: https://saturn.henriquesebastiao.com/
+repo_url: https://github.com/henriquesebastiao/saturn
+repo_name: henriquesebastiao/saturn
+
+copyright: 2024 - Henrique Sebastião
+
+nav:
+  - Saturn: index.md
+  # - Tutorial:
+  #     - Get started: tutorial/index.md
+  #     - Astronomy Picture of the Day: tutorial/apod.md
+  # - Contributing: contributing.md
+
+theme:
+  name: material
+  logo: assets/icon-cyan.svg
+  favicon: assets/icon-cyan.svg
+  font:
+    text: Roboto
+    code: Source Code Pro
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    # Palette toggle for dark mode
+    scheme: slate
+    primary: black  # TODO
+    toggle:
+      icon: material/lightbulb
+      name: Switch to light mode
+
+  features:
+    - search.suggest
+    - search.share
+    - announce.dismiss
+#    - navigation.instant
+#    - navigation.instant.prefetch
+#    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.expand
+    - navigation.path
+    - toc.follow
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - admonition
+  - attr_list
+  - tables
+  - codehilite
+  - extra
+  - pymdownx.inlinehilite
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format ''
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+plugins:
+  - macros
+  - search
+  - git-authors
+  - git-committers:
+      repository: henriquesebastiao/saturn
+      branch: main
+  - git-revision-date-localized:
+      type: date
+
+extra:
+  variables:
+    version: 0.1.0
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/henriquesebastiao/saturn
+      name: github.com/henriquesebastiao
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/hick_hs
+      name: hick_hs on Twitter
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/henriquesebastiao
+      name: Henrique Sebastião
+    - icon: fontawesome/solid/envelope
+      link: mailto:<contato@henriquesebastiao.com>
+      name: contato@henriquesebastiao.com
+    - icon: fontawesome/solid/globe
+      link: https://henriquesebastiao.com
+      name: henriquesebastiao.com
+
+extra_css:
+  - css/termynal.css
+  - css/custom.css
+
+extra_javascript:
+  - js/termynal.js
+  - js/custom.js

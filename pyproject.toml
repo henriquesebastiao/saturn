@@ -17,6 +17,17 @@ ruff = "^0.5.1"
 taskipy = "^1.13.0"
 blue = "^0.9.1"
 
+
+[tool.poetry.group.doc.dependencies]
+mkdocs-material = "^9.5.28"
+mkdocs-macros-plugin = "^1.0.5"
+jinja2 = "^3.1.4"
+pygments = "^2.18.0"
+pymdown-extensions = "^10.8.1"
+mkdocs-git-committers-plugin-2 = "^2.3.0"
+mkdocs-git-authors-plugin = "^0.9.0"
+mkdocs-git-revision-date-localized-plugin = "^1.2.6"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

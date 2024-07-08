@@ -6,6 +6,9 @@ html-lint:
 upload:
 	arduino-cli compile --fqbn m5stack:esp32:m5stack_cardputer -e --build-property build.partitions=huge_app --build-property upload.maximum_size=3145728 ./saturn.ino && arduino-cli upload --port $(PORT) --fqbn m5stack:esp32:m5stack_cardputer
 
+compiled-upload:
+	arduino-cli upload --port $(PORT) --fqbn m5stack:esp32:m5stack_cardputer
+
 compile:
 	arduino-cli compile --fqbn m5stack:esp32:m5stack_cardputer -e --build-property build.partitions=huge_app --build-property upload.maximum_size=3145728 ./saturn.ino && esptool.py --chip esp32s3 merge_bin --output build/m5stack.esp32.m5stack_cardputer/saturn.bin 0x0000 build/m5stack.esp32.m5stack_cardputer/saturn.ino.bootloader.bin 0x8000 build/m5stack.esp32.m5stack_cardputer/saturn.ino.partitions.bin 0x10000 build/m5stack.esp32.m5stack_cardputer/saturn.ino.bin
 
@@ -36,6 +39,9 @@ lint:
 mac-prefixes:
 	rm mac-prefixes && wget https://raw.githubusercontent.com/nmap/nmap/master/nmap-mac-prefixes && mv nmap-mac-prefixes mac-prefixes && rm src/macprefixes.h && python scripts/generate_mac_file.py && clang-format -i --style=google src/macprefixes.h
 
+doc:
+	mkdocs serve
+
 .PHONY: html-lint
 .PHONY: upload
 .PHONY: compile
@@ -48,3 +54,5 @@ mac-prefixes:
 .PHONY: black
 .PHONY: lint
 .PHONY: mac-prefixes
+.PHONY: doc
+.PHONY: compiled-upload
