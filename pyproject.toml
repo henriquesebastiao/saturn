@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "saturn"
+version = "0.1.0"
+description = "Firmware to do cool things with Cardputer."
+authors = ["Henrique Sebastião <contato@henriquesebastiao.com>"]
+license = "GPL-3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+esptool = "^4.7.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ignr = "^2.2"
+ruff = "^0.5.1"
+taskipy = "^1.13.0"
+blue = "^0.9.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.taskipy.tasks]
+blue = "blue --check . --diff"
+ruff = "ruff check ."

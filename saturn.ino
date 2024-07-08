@@ -4,6 +4,36 @@
 
 // This code contains a lot of logic borrowed from https://github.com/n0xa/m5stick-nemo
 
+// EEPROM Usage:
+// 0 - Brightness
+// 1 - Screen Dim Time
+// 3 - Foreground Color
+// 4 - Background Color
+
+// Proccesses are defined as follows:
+// 1 - Main Menu
+// 2 - QR Codes
+// 3 - Settings
+// 4 - IR Devices
+// 5 - IR TV
+// 19 - Battery Status
+// 20 - Wi-Fi Menu
+// 21 - Wi-Fi Beacon
+// 22 - Wi-Fi Scan
+// 23 - Wi-Fi Attack Menu
+// 24 - Wi-Fi Scan Result
+// 25 - Captive Portal
+// 26 - Deauth
+// 27 - Bluetooth
+// 28 - AppleJuice
+// 29 - AppleJuice Advertising
+// 30 - Bluetooth Maelstrom
+// 31 - Sounds
+// 32 - Wi-Fi Signal Level
+// 34 - Dimmer Menu
+// 35 - Color Menu
+// 36 - Theme Menu
+
 #include <M5Cardputer.h>
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
@@ -11,6 +41,8 @@
 #include <WebServer.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
+#include <EEPROM.h>
+#include <WiFi.h>
 
 #include "src/settings.h"
 #include "src/language.h"
@@ -21,6 +53,9 @@
 #include "src/portal.h"
 #include "src/applejuice.h"
 #include "src/sounds.h"
+#include "src/macprefixes.h"
+#include "src/functions.h"
+#include "src/processes.h"
 
 IRsend irsend(IR_SEND_PIN);
 
@@ -28,6 +63,7 @@ struct Menu {
   char name[25];
   int command;
 };
+int sizeMenu = sizeof(Menu);
 
 struct QrCode {
   char name[13];
@@ -41,17 +77,16 @@ Menu mainMenu[] = {
   {"WiFi", 20},
   {"Bluetooth", 27},
   {TXT_SOUNDS, 31},
-  {TXT_VOICE_RECORDER, 33},
   {"QR Codes", 2},
   {TXT_SETTINGS, 3},
 };
-int mainMenuSize = sizeof(mainMenu) / sizeof(Menu);
+int mainMenuSize = sizeof(mainMenu) / sizeMenu;
 
 Menu irDevicesMenu[] = {
   {"TV", 5},
   {TXT_BACK, 0},
 };
-int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeof(Menu);
+int irDevicesMenuSize = sizeof(irDevicesMenu) / sizeMenu;
 
 Menu irTvMenu[] = {
   {"Power", 7},
@@ -68,7 +103,7 @@ Menu irTvMenu[] = {
   {"Enter", 17},
   {TXT_BACK, 0},
 };
-int irTvMenuSize = sizeof(irTvMenu) / sizeof(Menu);
+int irTvMenuSize = sizeof(irTvMenu) / sizeMenu;
 
 Menu wifiMenu[] = {
   {TXT_WIFI_SCAN, 4},
@@ -78,7 +113,7 @@ Menu wifiMenu[] = {
   {"Captive Portal", 5},
   {TXT_BACK, 0},
 };
-int wifiMenuSize = sizeof(wifiMenu) / sizeof(Menu);
+int wifiMenuSize = sizeof(wifiMenu) / sizeMenu;
 
 Menu wifiAttackMenu[] = {
   {TXT_SIGNAL_LEVEL, 3},
@@ -87,7 +122,7 @@ Menu wifiAttackMenu[] = {
   {TXT_WIFI_COMBINED, 2},
   {TXT_BACK, 5},
 };
-int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeof(Menu);
+int wifiAttackMenuSize = sizeof(wifiAttackMenu) / sizeMenu;
 
 Menu bluetoothMenu[] = {
   {"AppleJuice", 1},
@@ -97,7 +132,7 @@ Menu bluetoothMenu[] = {
   {"BT Maelstrom", 5},
   {TXT_BACK, 0},
 };
-int bluetoothMenuSize = sizeof(bluetoothMenu) / sizeof(Menu);
+int bluetoothMenuSize = sizeof(bluetoothMenu) / sizeMenu;
 
 Menu appleJuiceMenu[] = {
   {"AirPods", 1},
@@ -131,7 +166,7 @@ Menu appleJuiceMenu[] = {
   {TXT_STP_NW_PH, 28},
   {TXT_BACK, 0},
 };
-int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeof(Menu);
+int appleJuiceMenuSize = sizeof(appleJuiceMenu) / sizeMenu;
 
 Menu soundMenu[] = {
   {"Super Mario Bross", 1},
@@ -148,7 +183,7 @@ Menu soundMenu[] = {
   {"Game Of Thrones", 12},
   {TXT_BACK, 0},
 };
-int soundMenuSize = sizeof(soundMenu) / sizeof(Menu);
+int soundMenuSize = sizeof(soundMenu) / sizeMenu;
 
 QrCode qrMenu[] = {
   {"Saturn", "https://youtu.be/dzNvk80XY9s"},
@@ -161,13 +196,91 @@ QrCode qrMenu[] = {
 };
 int qrMenuSize = sizeof(qrMenu) / sizeof(QrCode);
 
+Menu dimmerMenu[] = {
+  {TXT_BACK, screen_dim_time},
+  {TXT_NEVER, 0},
+  {("5 " TXT_SEC), 5},
+  {("10 " TXT_SEC), 10},
+  {("15 " TXT_SEC), 15},
+  {("30 " TXT_SEC), 30},
+  {("60 " TXT_SEC), 60},
+  {("120 " TXT_MIN), 120},
+  {("240 " TXT_MIN), 240},
+};
+int dimmerMenuSize = sizeof(dimmerMenu) / sizeMenu;
+
+Menu numberMenu[] = {
+  {"0", 0},
+  {"1", 1},
+  {"2", 2},
+  {"3", 3},
+  {"4", 4},
+  {"5", 5},
+  {"6", 6},
+  {"7", 7},
+  {"8", 8},
+  {"9", 9},
+  {"10", 10},
+};
+int numberMenuSize = sizeof(numberMenu) / sizeMenu;
+
+Menu colorMenu[] = {
+  {TXT_BACK, 0},
+  {TXT_BLACK, 1},
+  {TXT_NAVY, 2},
+  {TXT_DARKGREEN, 3},
+  {TXT_DARKCYAN, 4},
+  {TXT_MAROON, 5},
+  {TXT_PURPLE, 6},
+  {TXT_OLIVE, 7},
+  {TXT_LIGHTGREY, 8},
+  {TXT_DARKGREY, 9},
+  {TXT_BLUE, 10},
+  {TXT_GREEN, 11},
+  {TXT_CYAN, 12},
+  {TXT_RED, 13},
+  {TXT_MAGENTA, 14},
+  {TXT_YELLOW, 15},
+  {TXT_WHITE, 16},
+  {TXT_ORANGE, 17},
+  {TXT_GREENYELLOW, 18},
+  {TXT_PINK, 19},
+};
+int colorMenuSize = sizeof(colorMenu) / sizeMenu;
+
+Menu themeMenu[] = {
+  {"Saturn", 10},
+  {"Nemo", 1},
+  {"Tux", 2},
+  {"Bill", 3},
+  {"Steve", 4},
+  {"Lilac", 5},
+  {"Contrast", 6},
+  {"NightShift", 7},
+  {"Camo", 8},
+  {"BubbleGum", 9},
+  {TXT_COLOR, 99},
+  {TXT_BACK, 0},
+};
+int themeMenuSize = sizeof(themeMenu) / sizeMenu;
+
 Menu settingsMenu[] = {
   {TXT_BATTERY_INFO, 19},
+  {TXT_BRIGHTNESS_WORD, 34},
+  {TXT_COLOR_WORD, 35},
+  {TXT_THEME_WORD, 36},
+  {TXT_CLEAR_SETTINGS_WORD, 99},
   {TXT_BACK, 0},
 };
 
 // -=-=-= FUNCTIONS OF DRAWING MENUS =-=-=-
 
+/**
+ * @brief Prints a menu with rounded corners on the screen.
+ *
+ * @param thisMenu Menu to be printed.
+ * @param size Menu size.
+ */
 void drawMenu(Menu thisMenu[], int size) {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(MEDIUM_TEXT);
@@ -179,38 +292,27 @@ void drawMenu(Menu thisMenu[], int size) {
   }
   if (cursor > 3) {
     for (int i = 0 + (cursor - 3); i < size; i++) {
-      if (cursor == i) {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
-        DISPLAY.setTextColor(BG_COLOR);
-      } else {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
-        DISPLAY.setTextColor(MAIN_COLOR);
-      }
-      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
-      DISPLAY.setCursor(20, y + 16);
+      drawRoundRectMenuItems(y, i);
       DISPLAY.print(thisMenu[i].name);
       y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
     }
   } else {
     for (int i = 0; i < size; i++) {
-      if (cursor == i) {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
-        DISPLAY.setTextColor(BG_COLOR);
-      } else {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
-        DISPLAY.setTextColor(MAIN_COLOR);
-      }
-      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
-      DISPLAY.setCursor(20, y + 16);
+      drawRoundRectMenuItems(y, i);
       DISPLAY.print(thisMenu[i].name);
       y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
     }
   }
 }
 
+/**
+ * @brief Prints the QR Code menu with rounded corners on the screen.
+ *
+ * @param size Menu size.
+ */
 void qrDrawMenu(int size) {
   DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setTextSize(2);
+  DISPLAY.setTextSize(MEDIUM_TEXT);
   DISPLAY.setTextColor(BG_COLOR);
   int y = HEIGHT_MENU_ITEMS;
   // Scrolling menu
@@ -219,29 +321,13 @@ void qrDrawMenu(int size) {
   }
   if (cursor > 3) {
     for (int i = 0 + (cursor - 3); i < size; i++) {
-      if (cursor == i) {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
-        DISPLAY.setTextColor(BG_COLOR);
-      } else {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
-        DISPLAY.setTextColor(MAIN_COLOR);
-      }
-      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
-      DISPLAY.setCursor(20, y + 16);
+      drawRoundRectMenuItems(y, i);
       DISPLAY.print(qrMenu[i].name);
       y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
     }
   } else {
     for (int i = 0; i < size; i++) {
-      if (cursor == i) {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
-        DISPLAY.setTextColor(BG_COLOR);
-      } else {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
-        DISPLAY.setTextColor(MAIN_COLOR);
-      }
-      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
-      DISPLAY.setCursor(20, y + 16);
+      drawRoundRectMenuItems(y, i);
       DISPLAY.print(qrMenu[i].name);
       y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
     }
@@ -252,20 +338,24 @@ void switcherButtonProc() {
   if (!rstOverride) {
     if (checkNextPress()) {
       isSwitching = true;
-      currentProc = 1;
+      currentProc = PROC_MAIN_MENU;
     }
   }
 }
 
-void checkMenuPress() {
+void checkPreviousPress() {
   if (M5Cardputer.Keyboard.isKeyPressed('`')) {  // Return to the main menu by pressing ESC
     dimTimer();
-    if (portalActive) {
-      portalActive = false;
-    }
+
+    // Reset state variables
+    portalActive = false;
+    pressedTvButton = false;
+    showQrCode = false;
+    showAPInfo = false;
+
     isSwitching = true;
     rstOverride = false;
-    currentProc = 1;
+    currentProc = PROC_MAIN_MENU;
   } else if (M5Cardputer.Keyboard.isKeyPressed(',')) {  // Return to the previous menu by pressing ,
     dimTimer();
     if (portalActive) {
@@ -274,10 +364,67 @@ void checkMenuPress() {
     isSwitching = true;
     rstOverride = false;
 
-    if (currentProc == 5) {
-      currentProc = 4;
-    } else {
-      currentProc = 1;
+    switch (currentProc) {
+    case QR_CODE_MENU:
+      if (showQrCode) {
+        showQrCode = false;
+        currentProc = QR_CODE_MENU;
+      } else {
+        currentProc = PROC_MAIN_MENU;
+      }
+      break;
+    case PROC_IR_TV_MENU:
+      if (pressedTvButton) {
+        currentProc = PROC_IR_TV_MENU;
+        pressedTvButton = false;
+      } else {
+        currentProc = PROC_IR_MENU;
+      }
+      break;
+    case PROC_WIFI_BEACON:
+      currentProc = PROC_WIFI_MENU;
+      break;
+    case PROC_WIFI_SCAN_RESULTS:
+      if (showAPInfo) {
+        showAPInfo = false;
+        currentProc = PROC_WIFI_SCAN_RESULTS;
+      } else {
+        currentProc = PROC_WIFI_MENU;
+      }
+      break;
+    case PROC_WIFI_ATTACK_MENU:
+      currentProc = PROC_WIFI_MENU;
+      break;
+    case PROC_SIGNAL_LEVEL:
+      currentProc = PROC_WIFI_ATTACK_MENU;
+      break;
+    case PROC_CAPTIVE_PORTAL:
+      currentProc = PROC_WIFI_MENU;
+      break;
+    case PROC_APPLE_JUICE_MENU:
+      currentProc = PROC_BLUETOOTH_MENU;
+      break;
+    case PROC_SWIFT_PAIR:
+      currentProc = PROC_BLUETOOTH_MENU;
+      break;
+    case PROC_BT_MAELSTROM:
+      currentProc = PROC_BLUETOOTH_MENU;
+      break;
+    case BATTERY_MENU:
+      currentProc = PROC_SETTINGS_MENU;
+      break;
+    case PROC_DIMMER_MENU:
+      currentProc = PROC_SETTINGS_MENU;
+      break;
+    case PROC_COLOR_MENU:
+      currentProc = PROC_SETTINGS_MENU;
+      break;
+    case PROC_THEME_MENU:
+      currentProc = PROC_SETTINGS_MENU;
+      break;
+    default:
+      currentProc = PROC_MAIN_MENU;
+      break;
     }
     delay(100);
   }
@@ -357,10 +504,10 @@ void irDevicesMenuLoop() {
   if (checkSelectPress()) {
     if (irDevicesMenu[cursor].command == 0) {
       isSwitching = true;
-      currentProc = 1;
+      currentProc = PROC_MAIN_MENU;
     } else if (irDevicesMenu[cursor].command == 5) {
       isSwitching = true;
-      currentProc = 5;
+      currentProc = PROC_IR_TV_MENU;
     }
   }
 }
@@ -393,45 +540,48 @@ void irTvMenuLoop() {
     if (irTvMenu[cursor].command == 0) {
       isSwitching = true;
       digitalWrite(IR_SEND_PIN, LOW);
-      currentProc = 4;
-    } else if (irTvMenu[cursor].command == 7) {  // Power
-      irPinHigh();
-      // sendIrRawCodes(allIrPowerCodesRawTV, allIrPowerCodesRawTVLength, "POWER");
-      sendIrProntoCodes(allIrPowerCodesProntoTV, allIrPowerCodesProntoTVLength, "POWER");
-    } else if (irTvMenu[cursor].command == 10) {  // Mute
-      irPinHigh();
-      // sendIrRawCodes(allIrMuteCodesRawTV, allIrMuteCodesRawTVLength, TXT_MUTE_TXT_UP);
-      sendIrProntoCodes(allIrMuteCodesProntoTV, allIrMuteCodesProntoTVLength, TXT_MUTE_TXT_UPPER);
-    } else if (irTvMenu[cursor].command == 8) {  // Volume +
-      irPinHigh();
-      sendIrProntoCodes(allIrVolumeUpCodesProntoTV, allIrVolumeUpCodesProntoTVLength, "VOL +");
-    } else if (irTvMenu[cursor].command == 9) {  // Volume -
-      irPinHigh();
-      sendIrProntoCodes(allIrVolumeDownCodesProntoTV, allIrVolumeDownCodesProntoTVLength, "VOL -");
-    } else if (irTvMenu[cursor].command == 11) {  // Channel +
-      irPinHigh();
-      sendIrProntoCodes(allIrChannelUpCodesProntoTV, allIrChannelUpCodesProntoTVLength, TXT_CHANNEL_UP_UPPER);
-    } else if (irTvMenu[cursor].command == 12) {  // Channel -
-      irPinHigh();
-      sendIrProntoCodes(allIrChannelDownCodesProntoTV, allIrChannelDownCodesProntoTVLength, TXT_CHANNEL_DOWN_UPPER);
-    } else if (irTvMenu[cursor].command == 13) {  // Up
-      irPinHigh();
-      sendIrProntoCodes(allIrUpCodesProntoTV, allIrUpCodesProntoTVLength, TXT_UP_UPPER);
-    } else if (irTvMenu[cursor].command == 14) {  // Down
-      irPinHigh();
-      sendIrProntoCodes(allIrDownCodesProntoTV, allIrDownCodesProntoTVLength, TXT_DOWN_UPPER);
-    } else if (irTvMenu[cursor].command == 15) {  // Left
-      irPinHigh();
-      sendIrProntoCodes(allIrLeftCodesProntoTV, allIrLeftCodesProntoTVLength, TXT_LEFT_UPPER);
-    } else if (irTvMenu[cursor].command == 16) {  // Right
-      irPinHigh();
-      sendIrProntoCodes(allIrRightCodesProntoTV, allIrRightCodesProntoTVLength, TXT_RIGHT_UPPER);
-    } else if (irTvMenu[cursor].command == 17) {  // Enter
-      irPinHigh();
-      sendIrProntoCodes(allIrEnterCodesProntoTV, allIrEnterCodesProntoTVLength, "ENTER");
-    } else if (irTvMenu[cursor].command == 18) {  // Menu
-      irPinHigh();
-      sendIrProntoCodes(allIrMenuCodesProntoTV, allIrMenuCodesProntoTVLength, "MENU");
+      currentProc = PROC_IR_MENU;
+    } else {
+      pressedTvButton = true;
+      if (irTvMenu[cursor].command == 7) {  // Power
+        irPinHigh();
+        // sendIrRawCodes(allIrPowerCodesRawTV, allIrPowerCodesRawTVLength, "POWER");
+        sendIrProntoCodes(allIrPowerCodesProntoTV, allIrPowerCodesProntoTVLength, "POWER");
+      } else if (irTvMenu[cursor].command == 10) {  // Mute
+        irPinHigh();
+        // sendIrRawCodes(allIrMuteCodesRawTV, allIrMuteCodesRawTVLength, TXT_MUTE_TXT_UP);
+        sendIrProntoCodes(allIrMuteCodesProntoTV, allIrMuteCodesProntoTVLength, TXT_MUTE_TXT_UPPER);
+      } else if (irTvMenu[cursor].command == 8) {  // Volume +
+        irPinHigh();
+        sendIrProntoCodes(allIrVolumeUpCodesProntoTV, allIrVolumeUpCodesProntoTVLength, "VOL +");
+      } else if (irTvMenu[cursor].command == 9) {  // Volume -
+        irPinHigh();
+        sendIrProntoCodes(allIrVolumeDownCodesProntoTV, allIrVolumeDownCodesProntoTVLength, "VOL -");
+      } else if (irTvMenu[cursor].command == 11) {  // Channel +
+        irPinHigh();
+        sendIrProntoCodes(allIrChannelUpCodesProntoTV, allIrChannelUpCodesProntoTVLength, TXT_CHANNEL_UP_UPPER);
+      } else if (irTvMenu[cursor].command == 12) {  // Channel -
+        irPinHigh();
+        sendIrProntoCodes(allIrChannelDownCodesProntoTV, allIrChannelDownCodesProntoTVLength, TXT_CHANNEL_DOWN_UPPER);
+      } else if (irTvMenu[cursor].command == 13) {  // Up
+        irPinHigh();
+        sendIrProntoCodes(allIrUpCodesProntoTV, allIrUpCodesProntoTVLength, TXT_UP_UPPER);
+      } else if (irTvMenu[cursor].command == 14) {  // Down
+        irPinHigh();
+        sendIrProntoCodes(allIrDownCodesProntoTV, allIrDownCodesProntoTVLength, TXT_DOWN_UPPER);
+      } else if (irTvMenu[cursor].command == 15) {  // Left
+        irPinHigh();
+        sendIrProntoCodes(allIrLeftCodesProntoTV, allIrLeftCodesProntoTVLength, TXT_LEFT_UPPER);
+      } else if (irTvMenu[cursor].command == 16) {  // Right
+        irPinHigh();
+        sendIrProntoCodes(allIrRightCodesProntoTV, allIrRightCodesProntoTVLength, TXT_RIGHT_UPPER);
+      } else if (irTvMenu[cursor].command == 17) {  // Enter
+        irPinHigh();
+        sendIrProntoCodes(allIrEnterCodesProntoTV, allIrEnterCodesProntoTVLength, "ENTER");
+      } else if (irTvMenu[cursor].command == 18) {  // Menu
+        irPinHigh();
+        sendIrProntoCodes(allIrMenuCodesProntoTV, allIrMenuCodesProntoTVLength, "MENU");
+      }
     }
   }
 }
@@ -455,11 +605,11 @@ void wifiMenuLoop() {
   if (checkSelectPress()) {
     int option = wifiMenu[cursor].command;
     rstOverride = false;
-    currentProc = 21;
+    currentProc = PROC_WIFI_BEACON;
     isSwitching = true;
     switch(option) {
       case 0:  // Back
-        currentProc = 1;
+        currentProc = PROC_MAIN_MENU;
         break;
       case 1:  // Funny Beacon
         beaconType = 1;
@@ -471,10 +621,10 @@ void wifiMenuLoop() {
         beaconType = 3;
         break;
       case 4:
-        currentProc = 22;  // Wi-Fi Scan
+        currentProc = PROC_WIFI_SCAN;  // Wi-Fi Scan
         break;
       case 5:
-        currentProc = 25;  // Captive Portal
+        currentProc = PROC_CAPTIVE_PORTAL;  // Captive Portal
         break;
     }
   }
@@ -489,15 +639,7 @@ void wifiScanDrawMenu() {
 
   if (cursor > 3) {
     for (int i = 0 + (cursor - 3); i < wifict; i++) {
-      if (cursor == i) {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
-        DISPLAY.setTextColor(BG_COLOR);
-      } else {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
-        DISPLAY.setTextColor(MAIN_COLOR);
-      }
-      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
-      DISPLAY.setCursor(20, y + 16);
+      drawRoundRectMenuItems(y, i);
       if(WiFi.SSID(i).length() > 18){
         WiFi.SSID(i).toCharArray(ssid, 19);
         DISPLAY.print(ssid);
@@ -534,15 +676,7 @@ void wifiScanDrawMenu() {
     y += SPACING_MENU_ITEMS; // Move to the next position for the next menu item
   } else {
     for (int i = 0; i < wifict; i++) {
-      if (cursor == i) {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Highlight the current menu item
-        DISPLAY.setTextColor(BG_COLOR);
-      } else {
-        DISPLAY.fillRoundRect(5, y, DISPLAY.width() - 10, 30, 10, BG_COLOR);
-        DISPLAY.setTextColor(MAIN_COLOR);
-      }
-      DISPLAY.drawRoundRect(5, y, DISPLAY.width() - 10, 30, 10, MAIN_COLOR); // Draw the border of the menu item
-      DISPLAY.setCursor(20, y + 16);
+      drawRoundRectMenuItems(y, i);
       if(WiFi.SSID(i).length() > 18){
         WiFi.SSID(i).toCharArray(ssid, 19);
         DISPLAY.print(ssid);
@@ -598,12 +732,12 @@ void wifiScanResultLoop(){
     delay(250);
     if(cursor == wifict){
       rstOverride = false;
-      currentProc = 22;
+      currentProc = PROC_WIFI_SCAN;
     }
     if(cursor == wifict + 1){
       rstOverride = false;
       isSwitching = true;
-      currentProc = 20;
+      currentProc = PROC_WIFI_MENU;
     }
     String encryptType = "";
     switch (WiFi.encryptionType(cursor)) {
@@ -698,31 +832,33 @@ void wifiScanResultLoop(){
     String channelInfo = TXT_WIFI_CHANNEL + String(numberChannel) + " - " + frequency;
     String crypt = TXT_WIFI_CRYPT + encryptType;
     String bssid = "MAC: " + WiFi.BSSIDstr(cursor);
+    String manufactorer = TXT_VENDOR + findManufacturer(WiFi.BSSIDstr(cursor));
     String signal = TXT_WIFI_SIGNAL + String(WiFi.RSSI(cursor)) + "dBm";
 
-    String infos[4] = {channelInfo, crypt, bssid, signal};
+    int printScanResultItemsSize = 6;
+    String infos[printScanResultItemsSize] = {channelInfo, crypt, bssid, manufactorer, signal, TXT_HOLD_ATTACK};
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < printScanResultItemsSize; i++) {
       DISPLAY.drawString(infos[i], DISPLAY_CENTER_X, y_info);
+
+      if (i == printScanResultItemsSize - 2) {
+        DISPLAY.setTextColor(RED, BG_COLOR);
+      }
       y_info += 15;
     }
 
-    DISPLAY.setCursor(0, 100);
-    DISPLAY.setTextColor(BLACK);
-
-    DISPLAY.fillRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
-    DISPLAY.drawRoundRect(5, 110, DISPLAY.width() - 10, 20, 10, RED);
-    DISPLAY.drawString(TXT_HOLD_ATTACK, DISPLAY_CENTER_X, 120);
+    showAPInfo = true;
 
     DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
    if(checkSelectPress()){
+      showAPInfo = false;
       apMac=WiFi.BSSIDstr(cursor);
       apSsidName=WiFi.SSID(cursor);
       channel = static_cast<uint8_t>(WiFi.channel(cursor));
       uint8_t* bssid = WiFi.BSSID(cursor);
       memcpy(ap_record.bssid, bssid, 6);
       rstOverride = false;
-      currentProc = 23;
+      currentProc = PROC_WIFI_ATTACK_MENU;
       isSwitching = true;
       delay(100);
     }
@@ -732,11 +868,7 @@ void wifiScanResultLoop(){
 void wifiScanSetup() {
   rstOverride = false;  
   cursor = 0;
-  DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setTextSize(LARGE_TEXT);
-  DISPLAY.drawString(TXT_WIFI_SCAN_1, DISPLAY_CENTER_X, 50);
-  DISPLAY.drawString(TXT_WIFI_SCAN_2, DISPLAY_CENTER_X, 90);
-  delay(1000);
+  transitionScreenTwoLines(TXT_WIFI_SCAN_1, TXT_WIFI_SCAN_2);
 }
 
 void wifiScanLoop(){
@@ -770,7 +902,7 @@ void wifiAttackMenuLoop() {
   if (checkSelectPress()) {
     int option = wifiAttackMenu[cursor].command;
     rstOverride = false;
-    currentProc = 23;
+    currentProc = PROC_WIFI_ATTACK_MENU;
     isSwitching = true;
     switch(option) {
       case 0:
@@ -778,14 +910,14 @@ void wifiAttackMenuLoop() {
         isSwitching = true;
         clone_flg=true;
         target_deauth_flg=false;
-        currentProc = 25;
+        currentProc = PROC_CAPTIVE_PORTAL;
         break;
       case 1:
         rstOverride = false;
         isSwitching = true;
         target_deauth_flg=false;
         target_deauth=true;
-        currentProc = 26;
+        currentProc = PROC_DEAUTH;
         break;
       case 2:
         rstOverride = false;
@@ -793,13 +925,13 @@ void wifiAttackMenuLoop() {
         clone_flg=true;
         target_deauth_flg=true;
         target_deauth=true;
-        currentProc = 25;  // Combined TODO
+        currentProc = PROC_CAPTIVE_PORTAL;  // Combined TODO
         break;
       case 3:  // Signal Level
-        currentProc = 32;
+        currentProc = PROC_SIGNAL_LEVEL;
         break;
       case 5:
-        currentProc = 20;
+        currentProc = PROC_WIFI_MENU;
         break;
     }
   }
@@ -811,6 +943,7 @@ void wifiSignalLevelSetup() {
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextSize(MEDIUM_TEXT);
   DISPLAY.drawString(TXT_SIGNAL_LEVEL, DISPLAY_CENTER_X, 70);
+
   auto spk_cfg = SPEAKER.config();
   SPEAKER.config(spk_cfg);
   SPEAKER.begin();
@@ -878,7 +1011,7 @@ void wifiSignalLevelLoop() {
   if (checkNextPress() || checkESCPress() || checkSelectPress()) {
     rstOverride = false;
     isSwitching = true;
-    currentProc = 23;
+    currentProc = PROC_WIFI_ATTACK_MENU;
   }
 }
 
@@ -930,7 +1063,7 @@ void deauthLoop(){
     rstOverride = false;
     isSwitching = true;
     target_deauth = false;
-    currentProc = 20;
+    currentProc = PROC_WIFI_MENU;
     delay(500);
   }
 }
@@ -994,7 +1127,7 @@ void portalLoop(){
     target_deauth_flg = false;
     target_deauth = false;
     clone_flg = false;
-    currentProc = 20;
+    currentProc = PROC_WIFI_MENU;
     delay(500);
   }
   checkSelectPress();
@@ -1024,11 +1157,8 @@ void wifiBeaconSetup() {
   // Set channel
   esp_wifi_set_channel(channels[0], WIFI_SECOND_CHAN_NONE);
 
-  DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.setTextSize(LARGE_TEXT);
-  DISPLAY.drawString(TXT_BEACON_ATTACK_1, DISPLAY_CENTER_X, 50);
-  DISPLAY.drawString(TXT_BEACON_ATTACK_2, DISPLAY_CENTER_X, 80);
-  delay(1500);
+  transitionScreenTwoLines(TXT_BEACON_ATTACK_1, TXT_BEACON_ATTACK_2);
+
   DISPLAY.setTextSize(SMALL_TEXT);
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setCursor(0, 0);
@@ -1052,7 +1182,7 @@ void wifiBeaconSetup() {
     break;
   }
   DISPLAY.setTextSize(SMALL_TEXT);
-  currentProc = 21;
+  currentProc = PROC_WIFI_BEACON;
 }
 
 void wifiBeaconLoop() {
@@ -1125,11 +1255,11 @@ void bluetoothMenuLoop() {
         DISPLAY.fillScreen(BG_COLOR);
         rstOverride = false;
         isSwitching = true;
-        currentProc = 28;
+        currentProc = PROC_APPLE_JUICE_MENU;
         break;
       case 2:  // appleJuiceAdvertising
         swiftPair = true;
-        currentProc = 29; // jump straight to appleJuice Advertisement
+        currentProc = PROC_SWIFT_PAIR; // jump straight to appleJuice Advertisement
         rstOverride = false;
         isSwitching = true;
         DISPLAY.drawString(TXT_SP_RND, DISPLAY_CENTER_X, 85);
@@ -1137,7 +1267,7 @@ void bluetoothMenuLoop() {
         break;
       case 4:  // appleJuiceAdvertising
         sourApple = true;
-        currentProc = 29; // jump straight to appleJuice Advertisement
+        currentProc = PROC_SWIFT_PAIR; // jump straight to appleJuice Advertisement
         rstOverride = false;
         isSwitching = true;
         DISPLAY.drawString(TXT_SA_CRASH, DISPLAY_CENTER_X, 85);
@@ -1146,14 +1276,14 @@ void bluetoothMenuLoop() {
       case 5:  // BT Maelstrom
         rstOverride = false;
         isSwitching = true;
-        currentProc = 30; // Maelstrom
+        currentProc = PROC_BT_MAELSTROM; // Maelstrom
         DISPLAY.drawString("Bluetooth Maelstrom", DISPLAY_CENTER_X, 85);
         DISPLAY.drawString(TXT_CMB_BT_SPAM, DISPLAY_CENTER_X, 100);
         DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 115);
         break;
       case 3:  // Android Spam
         androidPair = true;
-        currentProc = 29; // jump straight to appleJuice Advertisement
+        currentProc = PROC_SWIFT_PAIR; // jump straight to appleJuice Advertisement
         rstOverride = false;
         isSwitching = true;
         DISPLAY.drawString(TXT_AD_SPAM, DISPLAY_CENTER_X, 85);
@@ -1163,7 +1293,7 @@ void bluetoothMenuLoop() {
         DISPLAY.fillScreen(BG_COLOR);
         rstOverride = false;
         isSwitching = true;
-        currentProc = 1;
+        currentProc = PROC_MAIN_MENU;
         break;
     }
   }
@@ -1289,7 +1419,7 @@ void appleJuiceLoop(){
       case 0:
         rstOverride = false;
         isSwitching = true;
-        currentProc = 27;  // Back to Bluetooth Menu
+        currentProc = PROC_BLUETOOTH_MENU;  // Back to Bluetooth Menu
         break;
     }
     if (currentProc == 28 && isSwitching == false){
@@ -1305,7 +1435,7 @@ void appleJuiceLoop(){
       DISPLAY.drawString(TXT_ADV, DISPLAY_CENTER_X, 85);
       DISPLAY.drawString(TXT_SEL_EXIT2, DISPLAY_CENTER_X, 100);
       isSwitching = true;
-      currentProc = 29; // Jump over to the AppleJuice BLE beacon loop
+      currentProc = PROC_SWIFT_PAIR; // Jump over to the AppleJuice BLE beacon loop
     }
   }
 }
@@ -1430,11 +1560,11 @@ void appleJuiceAdvertisingLoop(){
   if (checkNextPress()) {
     if (sourApple || swiftPair || androidPair || maelstrom){
       isSwitching = true;
-      currentProc = 27;
+      currentProc = PROC_BLUETOOTH_MENU;
       drawMenu(bluetoothMenu, bluetoothMenuSize);
     } else {
       isSwitching = true;
-      currentProc = 28;      
+      currentProc = PROC_APPLE_JUICE_MENU;      
       drawMenu(appleJuiceMenu, appleJuiceMenuSize);
     }
     sourApple = false;
@@ -1502,7 +1632,7 @@ void soundMenuLoop() {
     isSwitching = true;
     switch(option) {
       case 0:
-        currentProc = 1;
+        currentProc = PROC_MAIN_MENU;
         break;
       case 1:
         superMarioBrossSound();
@@ -1545,134 +1675,6 @@ void soundMenuLoop() {
   SPEAKER.end();
 }
 
-// -=-=-= VOICE RECORDER =-=-=-
-
-void voiceRecorderSetup() {
-  DISPLAY.fillScreen(BG_COLOR);
-  DISPLAY.startWrite();
-  // DISPLAY.setRotation(1);
-  DISPLAY.setTextDatum(top_center);
-  // DISPLAY.setTextColor(WHITE);
-  // DISPLAY.setFont(&fonts::FreeSansBoldOblique12pt7b);
-  DISPLAY.setTextColor(MAIN_COLOR);
-  rec_data = (typeof(rec_data))heap_caps_malloc(record_size * sizeof(int16_t), MALLOC_CAP_8BIT);
-  memset(rec_data, 0, record_size * sizeof(int16_t));
-  SPEAKER.setVolume(255);
-
-  /// Since the microphone and speaker cannot be used at the same time,
-  /// turn
-  /// off the speaker here.
-  SPEAKER.end();
-  MIC.begin();
-  DISPLAY.fillCircle(70, 15, 8, RED);
-  DISPLAY.drawString("REC", 120, 10);
-}
-
-void voiceRecorderLoop() {
-  M5Cardputer.update();
-  if (MIC.isEnabled()) {
-    static constexpr int shift = 6;
-    auto data                  = &rec_data[rec_record_idx * record_length];
-    if (MIC.record(data, record_length, record_samplerate)) {
-      data = &rec_data[draw_record_idx * record_length];
-
-      int32_t w = DISPLAY.width();
-
-      if (w > record_length - 1) {
-        w = record_length - 1;
-      }
-
-      for (int32_t x = 0; x < w; ++x) {
-        DISPLAY.writeFastVLine(x, prev_y[x], prev_h[x], TFT_BLACK);
-        int32_t y1 = (data[x] >> shift);
-        int32_t y2 = (data[x + 1] >> shift);
-
-        if (y1 > y2) {
-          int32_t tmp = y1;
-          y1 = y2;
-          y2 = tmp;
-        }
-
-        int32_t y = ((DISPLAY.height()) >> 1) + y1;
-        int32_t h = ((DISPLAY.height()) >> 1) + y2 + 1 - y;
-        prev_y[x] = y;
-        prev_h[x] = h;
-        DISPLAY.writeFastVLine(x, prev_y[x], prev_h[x], MAIN_COLOR);
-      }
-
-      DISPLAY.display();
-      DISPLAY.fillCircle(70, 15, 8, RED);
-      DISPLAY.drawString("REC", 120, 10);
-
-      if (++draw_record_idx >= record_number) {
-        draw_record_idx = 0;
-      }
-
-      if (++rec_record_idx >= record_number) {
-        rec_record_idx = 0;
-      }
-    }
-  }
-
-  if (M5Cardputer.BtnA.wasHold()) {
-    auto cfg = MIC.config();
-    cfg.noise_filter_level = (cfg.noise_filter_level + 8) & 255;
-    MIC.config(cfg);
-    DISPLAY.clear();
-    DISPLAY.fillCircle(70, 15, 8, GREEN);
-    DISPLAY.drawString("NF:" + String(cfg.noise_filter_level), 120, 3);
-  } else if (M5Cardputer.Keyboard.isKeyPressed('/')) {
-    if (SPEAKER.isEnabled()) {
-      DISPLAY.clear();
-
-      while (MIC.isRecording()) {
-        delay(1);
-      }
-
-      /// Since the microphone and speaker cannot be used at the same
-      /// time, turn off the microphone here.
-      MIC.end();
-      SPEAKER.begin();
-
-      DISPLAY.fillTriangle(70 - 8, 15 - 8, 70 - 8, 15 + 8, 70 + 8, 15, 0x1c9f);
-      DISPLAY.drawString("PLAY", 120, 10);
-      int start_pos = rec_record_idx * record_length;
-
-      if (start_pos < record_size) {
-        SPEAKER.playRaw(&rec_data[start_pos], record_size - start_pos, record_samplerate, false, 1, 0);
-      }
-
-      if (start_pos > 0) {
-        SPEAKER.playRaw(rec_data, start_pos, record_samplerate, false, 1, 0);
-      }
-
-      do {
-        delay(1);
-        M5Cardputer.update();
-      } while (SPEAKER.isPlaying());
-
-      /// Since the microphone and speaker cannot be used at the same
-      /// time, turn off the speaker here.
-      SPEAKER.end();
-      MIC.begin();
-
-      DISPLAY.clear();
-      DISPLAY.fillCircle(70, 15, 8, RED);
-      DISPLAY.drawString("REC", 120, 10);
-    }
-  }
-
-  if (checkESCPress()) {
-    if (MIC.isRecording()) {
-      MIC.end();
-    }
-    heap_caps_free(rec_data);
-    currentProc = 1;
-    isSwitching = true;
-    DISPLAY.setTextDatum(middle_center);
-  }
-}
-
 // -=-=-= QR CODES =-=-=-
 
 void qrMenuSetup() {
@@ -1691,24 +1693,20 @@ void qrMenuLoop() {
   }
   if (checkSelectPress()) {
     if (qrMenu[cursor].url.length() < 1){
-      currentProc = 1;
+      currentProc = PROC_MAIN_MENU;
       isSwitching = true;
-    }else if ( activeQR == false ) {
-      activeQR = true;
+    }else if ( showQrCode == false ) {
+      showQrCode = true;
       DISPLAY.fillScreen(WHITE);
       DISPLAY.qrcode(qrMenu[cursor].url, (DISPLAY.width() - DISPLAY.height()) / 2, 0, DISPLAY.height(), 5);
       delay(500);
     } else {
       isSwitching = true;
-      activeQR = false;
+      showQrCode = false;
       delay(250);
     }
   }
 }
-
-bool screen_dim_dimmed = false;
-int screen_dim_current = 0;
-int screen_dim_time = 30;
 
 void screenBrightness(int bright){
   #if defined(BACKLIGHT)
@@ -1727,6 +1725,17 @@ void dimTimer(){
     screen_dim_dimmed = false;
   }
   screen_dim_current = uptime() + screen_dim_time + 2;
+}
+
+void screenDimProc() {
+  if(screen_dim_time > 0){
+    if (screen_dim_dimmed == false) {
+      if (uptime() == screen_dim_current || (uptime() + 1) == screen_dim_current || (uptime() + 2) == screen_dim_current) {
+        screenBrightness(0);
+        screen_dim_dimmed = true;
+      }
+    }
+  }
 }
 
 // -=-=-= IR FUNCTIONS =-=-=-
@@ -1755,7 +1764,7 @@ void sendIrRawCodes(uint16_t *codes[], int sizes[], String name) {
     Serial.println("STOPPING PREMATURELY");
     endingEarly = true;
     digitalWrite(IR_SEND_PIN, LOW);
-    currentProc = 5;
+    currentProc = PROC_IR_TV_MENU;
   }
 }
 
@@ -1784,9 +1793,272 @@ void sendIrProntoCodes(uint16_t *codes[], int sizes[], String name) {
     Serial.println("STOPPING PREMATURELY");
     endingEarly = true;
     digitalWrite(IR_SEND_PIN, LOW);
-    currentProc = 5;
+    currentProc = PROC_IR_TV_MENU;
   }
 }
+
+// -=-=-= BRIGHTNESS MENU =-=-=-
+
+void dimmerMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  transitionScreenTwoLines(TXT_SCREEN_SAVER_1, TXT_SCREEN_SAVER_2);
+  drawMenu(dimmerMenu, dimmerMenuSize);
+  delay(500);
+}
+
+void dimmerMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % dimmerMenuSize;
+    drawMenu(dimmerMenu, dimmerMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    screen_dim_time = dimmerMenu[cursor].command;
+    EEPROM.write(1, screen_dim_time);
+    EEPROM.commit();
+
+    transitionScreenTwoLines(TXT_SCREEN_BRIGHTNESS_1, TXT_SCREEN_BRIGHTNESS_2);
+
+    cursor = brightness / 10;
+    drawMenu(numberMenu, numberMenuSize);
+
+    while (!checkSelectPress()) {
+      if (checkNextPress()) {
+        cursor++;
+        cursor = cursor % 11 ;
+        drawMenu(numberMenu, numberMenuSize);
+        screenBrightness(10 * cursor);
+        delay(250);
+       }
+    }
+    screenBrightness(10 * cursor);
+
+    EEPROM.write(0, 10 * cursor);
+    EEPROM.commit();
+
+    rstOverride = false;
+    isSwitching = true;
+    currentProc = PROC_SETTINGS_MENU;
+  }
+}
+
+// -=-=-= THEME MENU =-=-=-
+
+void setColor(bool fg, int col){
+  uint16_t color = 0x0000;
+  switch (col){
+    case 1:
+      color=0x0000;
+      break; 
+    case 2:
+      color=0x000F;
+      break;
+    case 3:
+      color=0x03E0;
+      break;
+    case 4:
+      color=0x03EF;
+      break;
+    case 5:
+      color=0x7800;
+      break;
+    case 6:
+      color=0x780F;
+      break;
+    case 7:
+      color=0x7BE0;
+      break;
+    case 8:
+      color=0xC618;
+      break;
+    case 9:
+      color=0x7BEF;
+      break;
+    case 10:
+      color=0x001F;
+      break;
+    case 11:
+      color=0x07E0;
+      break;
+    case 12:
+      color=0x07FF;
+      break;
+    case 13:
+      color=0xF800;
+      break;
+    case 14:
+      color=0xF81F;
+      break;
+    case 15:
+      color=0xFFE0;
+      break;
+    case 16:
+      color=0xFFFF;
+      break;
+    case 17:
+      color=0xFDA0;
+      break;
+    case 18:
+      color=0xB7E0;
+      break;
+    case 19:
+      color=0xFC9F;
+      break;
+  }
+  if(fg){
+    MAIN_COLOR=color;
+  }else{
+    BG_COLOR=color;
+  }
+  if(MAIN_COLOR == BG_COLOR){
+    BG_COLOR = MAIN_COLOR ^ 0xFFFF;
+  }
+  DISPLAY.setTextColor(MAIN_COLOR, BG_COLOR);
+}
+
+void colorMenuSetup() {
+  cursor = 0;
+  cursor=EEPROM.read(3); // get current fg color
+  rstOverride = true;
+  transitionScreenTwoLines(TXT_SET_FGCOLOR_1, TXT_SET_FGCOLOR_2);
+  drawMenu(colorMenu, colorMenuSize);
+}
+
+void colorMenuLoop() {
+  if (checkNextPress()) {
+    setColor(EEPROM.read(5), false);
+    cursor++;
+    cursor = cursor % colorMenuSize;
+    setColor(true, cursor);
+    drawMenu(colorMenu, colorMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    Serial.printf("EEPROM WRITE (4) FGCOLOR: %d\n", cursor);
+    EEPROM.write(3, cursor);
+    EEPROM.commit();
+    cursor=EEPROM.read(4);
+    
+    transitionScreenTwoLines(TXT_SET_BGCOLOR_1, TXT_SET_BGCOLOR_2);
+    setColor(false, cursor);
+    drawMenu(colorMenu, colorMenuSize);
+    while( !checkSelectPress()) {
+      if (checkNextPress()) {
+        cursor++;
+        cursor = cursor % colorMenuSize;
+        setColor(false, cursor);
+        drawMenu(colorMenu, colorMenuSize);
+        delay(250);
+       }
+    }
+    Serial.printf("EEPROM WRITE (4) BGCOLOR: %d\n", cursor);
+    EEPROM.write(4, cursor);
+    EEPROM.commit();
+    rstOverride = false;
+    isSwitching = true;
+    currentProc = PROC_SETTINGS_MENU;
+  }
+}
+
+void themeMenuSetup() {
+  cursor = 0;
+  rstOverride = true;
+  transitionScreenTwoLines(TXT_THEME_1, TXT_THEME_2);
+  drawMenu(themeMenu, themeMenuSize);
+}
+
+int BG=0;
+int FG=0;
+
+void themeMenuLoop() {
+  if (checkNextPress()) {
+    cursor++;
+    cursor = cursor % themeMenuSize;
+    switch (themeMenu[cursor].command){
+      case 0: // Saturn
+        FG=12;
+        BG=1;
+        break;       
+      case 1: // Nemo
+        FG=11;
+        BG=1;
+        break;
+      case 2: // Tux
+        FG=8;
+        BG=1;
+        break;  
+      case 3: // Bill
+        FG=16;
+        BG=10;
+        break;
+      case 4: // Steve
+        FG=1;
+        BG=8;
+        break;        
+      case 5: // Lilac
+        FG=19;
+        BG=6;
+        break;
+      case 6: // Contrast
+        FG=16;
+        BG=1;
+        break;
+      case 7: // NightShift
+        FG=5;
+        BG=1;
+         break;
+      case 8: // Camo
+        FG=1;
+        BG=7;
+        break;
+      case 9: // BubbleGum
+        FG=1;
+        BG=19;
+        break;
+      case 10:
+        FG=12; // Saturn
+        BG=1;
+      case 99:
+        FG=12; // Saturn
+        BG=1;
+        break;
+     }
+    setColor(true, FG);
+    setColor(false, BG);
+    drawMenu(themeMenu, themeMenuSize);
+    delay(250);
+  }
+  if (checkSelectPress()) {
+    switch (themeMenu[cursor].command){
+      case 99:
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = PROC_COLOR_MENU;
+        break;
+      case 0:
+        setColor(true, EEPROM.read(3));
+        setColor(false, EEPROM.read(4));
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = PROC_SETTINGS_MENU;
+        break;
+      default:
+        Serial.printf("EEPROM WRITE (3) FGCOLOR: %d\n", FG);
+        EEPROM.write(3, FG);
+        Serial.printf("EEPROM WRITE (4) BGCOLOR: %d\n", BG);
+        EEPROM.write(4, BG);
+        EEPROM.commit();
+        rstOverride = false;
+        isSwitching = true;
+        currentProc = PROC_SETTINGS_MENU;
+    }
+  }
+}
+
+
+// -=-=-= SETTINGS MENU =-=-=-
 
 void settingsMenuSetup() {
   cursor = 0;
@@ -1803,14 +2075,46 @@ void settingsMenuLoop() {
     delay(250);
   }
   if (checkSelectPress()) {
-    if (settingsMenu[cursor].command == 19) {
+    if (settingsMenu[cursor].command == 19) { // Batery Info
       isSwitching = true;
-      currentProc = 19;
+      currentProc = BATTERY_MENU;
+    } else if (settingsMenu[cursor].command == 34) { // Brightness Menu
+      isSwitching = true;
+      currentProc = PROC_DIMMER_MENU;
+    } else if (settingsMenu[cursor].command == 35) { // Color Menu
+      isSwitching = true;
+      currentProc = PROC_COLOR_MENU;
+    } else if (settingsMenu[cursor].command == 36) { // Theme Menu
+      isSwitching = true;
+      currentProc = PROC_THEME_MENU;
+    } else if (settingsMenu[cursor].command == 99) { // Theme Menu
+      clearSettings();
     } else if (settingsMenu[cursor].command == 0) {
       isSwitching = true;
-      currentProc = 1;
+      currentProc = PROC_MAIN_MENU;
     }
   }
+}
+
+// -=-=-= CLEAR SETTINGS =-=-=-
+
+void clearSettings(){
+  for(int i = 0; i < EEPROM_SIZE; i++) {
+    EEPROM.write(i, 255);
+  }
+  EEPROM.commit();
+
+  screenBrightness(90);
+  DISPLAY.setTextSize(BIG_TEXT);
+
+  DISPLAY.fillScreen(MAIN_COLOR);
+  DISPLAY.setTextColor(BG_COLOR);
+  DISPLAY.setTextSize(LARGE_TEXT);
+  DISPLAY.drawString("Saturn", DISPLAY_CENTER_X, 50);
+  DISPLAY.setTextSize(SMALL_TEXT);
+  DISPLAY.drawString(TXT_CLEAR_SETTINGS, DISPLAY_CENTER_X, 80);
+  delay(5000);
+  ESP.restart();
 }
 
 // -=-=-= BATTERY INFO =-=-=-
@@ -1874,7 +2178,7 @@ void batteryLoop() {
     if(M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) { // If any key is pressed
       rstOverride = false;
       isSwitching = true;
-      currentProc = 1;
+      currentProc = PROC_MAIN_MENU;
       break;
     }
   }
@@ -1899,7 +2203,29 @@ void setup() {
 
   pinMode(IR_SEND_PIN, OUTPUT);
   digitalWrite(IR_SEND_PIN, LOW);
+
+  EEPROM.begin(EEPROM_SIZE);
+  Serial.printf("EEPROM 0 - Brightness: %d\n", EEPROM.read(0));
+  Serial.printf("EEPROM 1 - Dim Time:   %d\n", EEPROM.read(1));
+  Serial.printf("EEPROM 3 - FGColor:    %d\n", EEPROM.read(3));
+  Serial.printf("EEPROM 4 - BGColor:    %d\n", EEPROM.read(4));
+
+  if (EEPROM.read(0) > 100 || EEPROM.read(1) > 240 || EEPROM.read(3) > 19 || EEPROM.read(4) > 19) {
+    EEPROM.write(0, 90);  // 90% brightness
+    EEPROM.write(1, 240);   // 240 second auto dim time
+    EEPROM.write(3, 12);   // FGColor Cyan
+    EEPROM.write(4, 1);    // BGcolor Black
+    EEPROM.commit();
+  }
+
+  brightness = EEPROM.read(0);
+  screen_dim_time = EEPROM.read(1);
+  setColor(true, EEPROM.read(3));
+  setColor(false, EEPROM.read(4));
   
+  screenBrightness(brightness);
+  dimTimer();
+
   // Boot screen
   DISPLAY.fillScreen(BG_COLOR);
   DISPLAY.setTextColor(MAIN_COLOR);
@@ -1952,32 +2278,11 @@ void setup() {
   bootTime = lastActivity = millis();
 }
 
-// Proccesses
-// 1 - Main Menu
-// 2 - QR Codes
-// 3 - Settings
-// 4 - IR Devices
-// 5 - IR TV
-// 19 - Battery Status
-// 20 - Wi-Fi Menu
-// 21 - Wi-Fi Beacon
-// 22 - Wi-Fi Scan
-// 23 - Wi-Fi Attack Menu
-// 24 - Wi-Fi Scan Result
-// 25 - Captive Portal
-// 26 - Deauth
-// 27 - Bluetooth
-// 28 - AppleJuice
-// 29 - AppleJuice Advertising
-// 30 - Bluetooth Maelstrom
-// 31 - Sounds
-// 32 - Wi-Fi Signal Level
-// 33 - Voice Recorder
-
 void loop() {
   // Background processes
   switcherButtonProc();
-  checkMenuPress();
+  screenDimProc();
+  checkPreviousPress();
 
   if (isSwitching) {
     isSwitching = false;
@@ -2040,8 +2345,14 @@ void loop() {
       case 32:
         wifiSignalLevelSetup();
         break;
-      case 33:
-        voiceRecorderSetup();
+      case 34:
+        dimmerMenuSetup();
+        break;
+      case 35:
+        colorMenuSetup();
+        break;
+      case 36:
+        themeMenuSetup();
         break;
     }
   }
@@ -2104,8 +2415,14 @@ void loop() {
     case 32:
       wifiSignalLevelLoop();
       break;
-    case 33:
-      voiceRecorderLoop();
+    case 34:
+      dimmerMenuLoop();
+      break;
+    case 35:
+      colorMenuLoop();
+      break;
+    case 36:
+      themeMenuLoop();
       break;
   }
 }
