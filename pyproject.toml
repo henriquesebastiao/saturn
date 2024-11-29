@@ -13,7 +13,7 @@ esptool = "^4.7.0"
 
 [tool.poetry.group.dev.dependencies]
 ignr = "^2.2"
-ruff = "^0.7.0"
+ruff = "^0.8.1"
 taskipy = "^1.13.0"
 blue = "^0.9.1"
 
