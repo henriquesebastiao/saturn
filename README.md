@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml)
 [![Build](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml)
+[![Version](https://img.shields.io/badge/Arduino-00878F?style=flat&logo=arduino&logoColor=white)](https://github.com/henriquesebastiao/saturn/)
 [![Version](https://img.shields.io/badge/version-1.2.1-blue)](https://github.com/henriquesebastiao/saturn/tags)
 [![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
 
@@ -33,9 +34,17 @@ Other sources were also borrowed:
 - https://github.com/hibit-dev/buzzer/tree/master
 - https://github.com/henriquesebastiao/RouterBOARD-Scripts
 
+### Other recommended projects
+
+If you liked this project, I recommend you check out the others listed below, you will probably find a lot of value in them too. Developed by the Brazilian community 🇧🇷.
+
+- [Bruce](https://github.com/pr3y/Bruce) - A firmware with several offensive features for red team activities.
+- [Launcher](https://github.com/bmorcelli/M5Stick-Launcher) - A firmware to flash other binaries to your device in a standalone manner.
+
 ### An advance warning
 
-This project is still in its initial phase and is being developed for my own learning, therefore, it may not generate the expected result at some point. The code is still under development and may contain bugs and flaws. If you find something that doesn't seem to be working correctly, don't hesitate to open an issue reporting the error you experienced. I will do my best to help you.
+> [!WARNING]
+> This project is still in its initial phase and is being developed for my own learning, therefore, it may not generate the expected result at some point. The code is still under development and may contain bugs and flaws. If you find something that doesn't seem to be working correctly, don't hesitate to open an issue reporting the error you experienced. I will do my best to help you.
 
 ## Features
 
@@ -47,6 +56,7 @@ Implementation of the main remote control buttons for some types of devices.
 
 - TVs (Samsung, Philips, Toshiba)
 
+> [!NOTE]
 > Currently, tests have only been carried out on a Samsung TV. Contributions are welcome to add support for new manufacturers and devices.
 
 #### Buttons implemented
@@ -238,4 +248,5 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) 
 
 ## Disclaimer
 
-The functionalities present in this firmware are for educational purposes only, being tested only in controlled and isolated environments. The maintainers are not responsible for any misuse of this tool.
+> [!IMPORTANT]
+> The functionalities present in this firmware are for educational purposes only, being tested only in controlled and isolated environments. The maintainers are not responsible for any misuse of this tool.
