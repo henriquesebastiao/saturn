@@ -3,10 +3,10 @@
 </h1>
 
 [![CI](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml)
-[![Build](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/build.yml)
-[![Version](https://img.shields.io/badge/Arduino-00878F?style=flat&logo=arduino&logoColor=white)](https://github.com/henriquesebastiao/saturn/)
-[![Version](https://img.shields.io/badge/version-1.2.1-blue)](https://github.com/henriquesebastiao/saturn/tags)
-[![License](https://img.shields.io/github/license/henriquesebastiao/saturn)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
+[![Static Badge](https://img.shields.io/badge/status-stable-%232FBF50)](https://github.com/henriquesebastiao/saturn/)
+[![GitHub Release](https://img.shields.io/github/v/release/henriquesebastiao/saturn?color=blue)](https://github.com/henriquesebastiao/saturn/releases)
+[![GitHub License](https://img.shields.io/github/license/henriquesebastiao/saturn?color=blue)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=henriquesebastiao%2Fsaturn&label=repository%20visits&countColor=%231182c3&style=flat)](https://github.com/henriquesebastiao/saturn)
 
 <p>
   Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
