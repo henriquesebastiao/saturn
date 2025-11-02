@@ -3,17 +3,15 @@
 </h1>
 
 [![CI](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml/badge.svg)](https://github.com/henriquesebastiao/saturn/actions/workflows/ci.yml)
-[![Static Badge](https://img.shields.io/badge/status-stable-%232FBF50)](https://github.com/henriquesebastiao/saturn/)
 [![GitHub Release](https://img.shields.io/github/v/release/henriquesebastiao/saturn?color=blue)](https://github.com/henriquesebastiao/saturn/releases)
 [![GitHub License](https://img.shields.io/github/license/henriquesebastiao/saturn?color=blue)](https://github.com/henriquesebastiao/saturn/blob/main/LICENSE)
-[![Visitors](https://api.visitorbadge.io/api/visitors?path=henriquesebastiao%2Fsaturn&label=repository%20visits&countColor=%231182c3&style=flat)](https://github.com/henriquesebastiao/saturn)
 
 <p>
   Saturn aims to be a simple and functional firmware that implements several functionalities for vulnerability analysis and even simple day-to-day tasks that can be performed with an ESP32.
 </p>
 
 <p>
-  <img src="img/boot-screen.jpg" alt="Typesense Demo" width="300" />
+  <img src="img/boot-screen.jpg" alt="Typesense Demo" width="500" />
 </p>
 
 ### Credits
@@ -34,12 +32,21 @@ Other sources were also borrowed:
 - https://github.com/hibit-dev/buzzer/tree/master
 - https://github.com/henriquesebastiao/RouterBOARD-Scripts
 
-### Other recommended projects
+## Other recommended projects
 
 If you liked this project, I recommend you check out the others listed below, you will probably find a lot of value in them too. Developed by the Brazilian community 🇧🇷.
 
-- [Bruce](https://github.com/pr3y/Bruce) - A firmware with several offensive features for red team activities.
+> [!IMPORTANT]
+> If you are looking for firmware with features geared towards vulnerability testing and Red Team, check out the [🦈 Bruce](https://github.com/pr3y/Bruce) project. They have a very engaged and caring community and maintain the continuous development of the project, which promotes its ongoing improvement.
+
+> [!WARNING]
+> Bearing in mind that the community does a sensational job on other firmwares, focusing mainly on offensive activities, the Saturn may eventually receive an update that removes the functionalities that already exist in other firmwares, in order to maintain its focus on implementing other functionalities and improvements to those that already exist and will be maintained.
+
 - [Launcher](https://github.com/bmorcelli/M5Stick-Launcher) - A firmware to flash other binaries to your device in a standalone manner.
+
+### External antenna on Cardputer
+
+If you want to know more about the procedure for installing an external antenna on the Cardputer, see this [repository](https://github.com/henriquesebastiao/external-cardputer-antenna).
 
 ### An advance warning
 
